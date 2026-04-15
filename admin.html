@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Home Healthcare — Admin Dashboard · All 10 Screens</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+
+/* ── COLOUR SYSTEM: Deep Violet ─────────────
+   Sidebar  #1A1030   Accent #7C3AED / #A78BFA
+   Surface  #F8F6FF   Border #EDE8F8
+────────────────────────────────────────── */
+:root{
+  --v:#7C3AED; --v2:#8B5CF6; --v3:#A78BFA; --vL:#C4B5FD;
+  --side:#1A1030; --side2:#25163A;
+  --surf:#F8F6FF; --srf2:#EDE8F8; --bdr:#EDE8F8;
+  --txt:#1A1030; --txt2:#7A6AA8; --txt3:#B8A8D8;
+  --red:#DC2626; --green:#059669; --amb:#D97706;
+  --blue:#1148A4; --teal:#0891B2;
+}
+body{background:linear-gradient(150deg,#06030F,#0E0820 40%,#080514);min-height:100vh;font-family:'Nunito',sans-serif;padding:36px 24px 72px;}
+
+/* ── PAGE HEADER ── */
+.ph{text-align:center;margin-bottom:44px;}
+.phb{display:inline-flex;align-items:center;gap:8px;background:rgba(124,58,237,.16);border:1px solid rgba(124,58,237,.4);border-radius:99px;padding:7px 20px;margin-bottom:18px;}
+.phd{width:7px;height:7px;border-radius:50%;background:var(--v3);animation:blink 1.6s infinite;}
+.phn{font-size:11px;font-weight:800;color:var(--v3);letter-spacing:1.4px;}
+.pht{font-family:'Sora',sans-serif;font-size:36px;font-weight:800;color:#fff;line-height:1.1;margin-bottom:10px;}
+.pht em{font-style:normal;background:linear-gradient(135deg,#A78BFA,#7C3AED);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.phs{font-size:14px;color:rgba(255,255,255,.42);max-width:620px;margin:0 auto 20px;}
+.fpills{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;}
+.fp{display:inline-flex;align-items:center;gap:6px;padding:6px 13px;border-radius:99px;font-size:11px;font-weight:800;background:rgba(124,58,237,.14);border:1px solid rgba(124,58,237,.35);color:var(--vL);}
+
+/* ── SCREEN ROWS ── */
+.row{display:flex;align-items:flex-start;justify-content:center;gap:24px;flex-wrap:wrap;margin-bottom:52px;}
+
+/* ── BROWSER SHELL ── */
+.browser{background:#1A1D26;border-radius:14px;overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.06);flex-shrink:0;}
+
+/* ── BROWSER CHROME ── */
+.bbar{background:#242836;padding:10px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.06);}
+.bdots{display:flex;gap:5px;}
+.bdot{width:11px;height:11px;border-radius:50%;}
+.burl{flex:1;background:rgba(255,255,255,.06);border-radius:7px;padding:6px 12px;font-size:11px;color:rgba(255,255,255,.35);font-family:'JetBrains Mono',monospace;display:flex;align-items:center;gap:6px;}
+.bacts{display:flex;gap:6px;}
+.bact{width:26px;height:26px;border-radius:6px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;font-size:11px;}
+
+/* ── PORTAL INNER ── */
+.inner{display:flex;min-height:640px;}
+
+/* ── SIDEBAR ── */
+.sb{width:208px;background:var(--side);display:flex;flex-direction:column;flex-shrink:0;border-right:1px solid rgba(255,255,255,.06);}
+.sbl{padding:18px 16px 14px;border-bottom:1px solid rgba(255,255,255,.08);}
+.sbl-n{font-family:'Sora',sans-serif;font-size:13px;font-weight:800;color:var(--v3);}
+.sbl-s{font-size:10px;color:rgba(255,255,255,.3);margin-top:3px;}
+.sbp{padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;gap:9px;align-items:center;}
+.sbav{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,var(--v),var(--v3));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#fff;font-family:'Sora',sans-serif;flex-shrink:0;}
+.sbnav{padding:8px;flex:1;overflow-y:auto;}
+.sbg{font-size:9px;font-weight:700;color:rgba(255,255,255,.28);letter-spacing:1px;padding:6px 8px;margin-bottom:3px;margin-top:10px;}
+.sbg:first-child{margin-top:0;}
+.ni{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:9px;margin-bottom:2px;cursor:pointer;}
+.ni.on{background:rgba(167,139,250,.18);border:1px solid rgba(167,139,250,.28);}
+.ni.on .nl{color:var(--v3);font-weight:700;}
+.nl{font-size:12px;font-weight:600;color:rgba(255,255,255,.52);}
+.nb{margin-left:auto;font-size:9px;font-weight:800;padding:1px 7px;border-radius:99px;}
+.nbv{background:rgba(167,139,250,.2);color:var(--vL);}
+.nbr{background:rgba(220,38,38,.2);color:#FCA5A5;}
+
+/* ── MAIN ── */
+.main{flex:1;background:var(--surf);display:flex;flex-direction:column;overflow:hidden;}
+.topbar{background:#fff;padding:13px 22px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--bdr);flex-shrink:0;}
+.tbt{font-family:'Sora',sans-serif;font-size:17px;font-weight:800;color:var(--txt);}
+.tbs{font-size:11px;color:var(--txt2);margin-top:2px;}
+.content{padding:18px 22px;flex:1;overflow-y:auto;}
+.content::-webkit-scrollbar{width:4px;}
+.content::-webkit-scrollbar-thumb{background:var(--srf2);border-radius:99px;}
+
+/* ── PRIMITIVES ── */
+.card{background:#fff;border-radius:13px;border:1.5px solid var(--bdr);padding:16px;}
+.cv{background:#fff;border-radius:13px;border:2px solid rgba(124,58,237,.3);padding:16px;}
+.cr{background:#fff;border-radius:13px;border:1.5px solid #FECACA;padding:16px;}
+.cg{background:#fff;border-radius:13px;border:1.5px solid #D1FAE5;padding:16px;}
+.ca{background:#fff;border-radius:13px;border:1.5px solid #FDE68A;padding:16px;}
+.btn-v{background:linear-gradient(135deg,var(--v),var(--v2));color:#fff;border:none;border-radius:9px;padding:9px 16px;font-size:12px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;box-shadow:0 3px 12px rgba(124,58,237,.28);}
+.btn-o{background:transparent;color:var(--txt);border:1.5px solid var(--bdr);border-radius:9px;padding:8px 14px;font-size:12px;font-weight:700;font-family:'Nunito',sans-serif;cursor:pointer;}
+.btn-r{background:linear-gradient(135deg,#991B1B,var(--red));color:#fff;border:none;border-radius:9px;padding:9px 16px;font-size:12px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;}
+.btn-g{background:linear-gradient(135deg,#047A40,var(--green));color:#fff;border:none;border-radius:9px;padding:9px 16px;font-size:12px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;}
+.inp{background:var(--surf);border:1.5px solid var(--bdr);border-radius:9px;padding:9px 12px;font-size:12px;color:var(--txt);font-family:'Nunito',sans-serif;width:100%;}
+/* tags */
+.tg{display:inline-flex;align-items:center;padding:3px 9px;border-radius:99px;font-size:9px;font-weight:800;white-space:nowrap;}
+.tv{background:#EDE9FE;color:var(--v);}
+.tr{background:#FEE2E2;color:var(--red);}
+.tg2{background:#DCFCE7;color:#16A34A;}
+.ta{background:#FEF3C7;color:#D97706;}
+.tb2{background:#EBF1FF;color:#1148A4;}
+.tt{background:#E0F8FC;color:#0891B2;}
+/* grids */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+/* section title */
+.st{font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:var(--txt);}
+/* divider */
+.sdiv{display:flex;align-items:center;gap:14px;margin:40px auto 28px;max-width:1400px;}
+.sdl{flex:1;height:1px;background:rgba(124,58,237,.1);}
+.sdt{font-size:10px;font-weight:800;color:rgba(167,139,250,.28);letter-spacing:2px;white-space:nowrap;}
+/* screen label */
+.sl{text-align:center;margin-top:12px;}
+.sn{display:inline-flex;align-items:center;gap:6px;background:rgba(124,58,237,.18);border:1px solid rgba(124,58,237,.35);border-radius:99px;padding:5px 14px;font-size:11px;font-weight:800;color:var(--vL);}
+.sst{font-size:12px;color:rgba(255,255,255,.3);margin-top:5px;font-weight:600;}
+
+/* chart bar */
+.bar{display:flex;flex-direction:column;align-items:center;gap:5px;flex:1;}
+.bar-fill{width:100%;border-radius:6px 6px 0 0;}
+
+/* bf = bar-fill shorthand (P2 charts) */
+.bf{width:100%;border-radius:6px 6px 0 0;}
+/* btn-gd = gold button (billing chase) */
+.btn-gd{background:linear-gradient(135deg,#78550A,#C8995A);color:#fff;border:none;border-radius:9px;padding:9px 16px;font-size:12px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;}
+/* toggle switch (AI config screen) */
+.toggle{width:42px;height:24px;border-radius:99px;position:relative;cursor:pointer;flex-shrink:0;}
+.toggle-on{background:var(--v);}
+.toggle-off{background:#D0C0E8;}
+.toggle-knob{width:18px;height:18px;border-radius:50%;background:#fff;position:absolute;top:3px;box-shadow:0 1px 4px rgba(0,0,0,.2);}
+.toggle-on .toggle-knob{right:3px;}
+.toggle-off .toggle-knob{left:3px;}
+/* extra badge colour */
+.nbg{background:rgba(5,150,105,.2);color:#6EE7B7;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+
+.home-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: inline-block;
+    padding: 12px 28px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 15px;
+    border-radius: 30px;
+    background: linear-gradient(135deg, #022C1A, #8b56f1);
+    overflow: hidden;
+    transition: all 0.4s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* Shine animation */
+.home-btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #022C1A, #8b56f1);
+    transition: 0.5s;
+}
+
+.home-btn:hover::before {
+    left: 100%;
+}
+
+/* Hover effect */
+.home-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+/* Click effect */
+.home-btn:active {
+    transform: scale(0.95);
+}
+</style>
+</head>
+<body>
+
+
+    <div>
+      <a href="./index.html" class="home-btn">← Back to Home</a>
+    </div>
+<!-- PAGE HEADER -->
+<div class="ph">
+  <div class="phb"><div class="phd"></div><span class="phn">ADMIN DASHBOARD — ALL 10 SCREENS</span><div class="phd"></div></div>
+  <div class="pht">Admin Portal —<br/><em>All 10 Operational Screens</em></div>
+  <div class="phs">Complete Admin Dashboard — Dashboard overview, Staff Management, Staff Profile, Patient Records, Patient Detail, Scheduling, Billing & Invoices, Invoice Detail, AI & RPM Configuration with DHA Compliance, and Analytics with System Status.</div>
+  <div class="fpills">
+    <div class="fp">📊 Dashboard</div>
+    <div class="fp">👥 Staff Management</div>
+    <div class="fp">👤 Staff Profile</div>
+    <div class="fp">🏥 Patient Records</div>
+    <div class="fp">📋 Patient Detail</div>
+    <div class="fp">📅 Scheduling</div>
+    <div class="fp">💰 Billing & Invoices</div>
+    <div class="fp">🧾 Invoice Detail</div>
+    <div class="fp">🤖 AI Config + Compliance</div>
+    <div class="fp">📈 Analytics + System</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     SCREEN 1 — DASHBOARD
+════════════════════════════════════════ -->
+<div style="display:flex;flex-direction:column;align-items:center;margin-bottom:32px;">
+<div class="browser" style="width:1100px;max-width:calc(100vw - 48px);">
+  <div class="bbar"><div class="bdots"><div class="bdot" style="background:#FF5F57;"></div><div class="bdot" style="background:#FFBD2E;"></div><div class="bdot" style="background:#28C840;"></div></div><div class="burl"><span>🔒</span>admin.homehealthcare.ae/dashboard</div><div class="bacts"><div class="bact">🔔</div><div class="bact">⚙️</div></div></div>
+  <div class="inner">
+    <!-- SIDEBAR -->
+    <div class="sb">
+      <div class="sbl"><div class="sbl-n">🏥 HomeHealthcare</div><div class="sbl-s">Admin Control Centre</div></div>
+      <div class="sbp"><div class="sbav">ZR</div><div><div style="font-size:12px;font-weight:700;color:#fff;">Zarar Rehman</div><div style="font-size:10px;color:rgba(255,255,255,.45);">Super Admin</div><div style="display:flex;align-items:center;gap:4px;margin-top:2px;"><div style="width:6px;height:6px;border-radius:50%;background:var(--v3);"></div><span style="font-size:9px;color:var(--v3);font-weight:600;">Admin</span></div></div></div>
+      <div class="sbnav">
+        <div class="sbg">OVERVIEW</div>
+        <div class="ni on"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg><span class="nl" style="color:var(--v3);font-weight:700;">Dashboard</span></div>
+        <div class="ni"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span class="nl">Analytics</span></div>
+        <div class="sbg">OPERATIONS</div>
+        <div class="ni"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><span class="nl">Staff Management</span><div class="nb nbv">52</div></div>
+        <div class="ni"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span class="nl">Patient Records</span></div>
+        <div class="ni"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/></svg><span class="nl">Scheduling</span></div>
+        <div class="ni"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg><span class="nl">Billing & Invoices</span><div class="nb nbr">7</div></div>
+        <div class="sbg">PLATFORM</div>
+        <div class="ni"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><span class="nl">AI & RPM Config</span></div>
+        <div class="ni"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span class="nl">Compliance</span></div>
+        <div class="ni"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg><span class="nl">Settings</span></div>
+      </div>
+    </div>
+    <!-- MAIN -->
+    <div class="main">
+      <div class="topbar">
+        <div><div class="tbt">Good Morning, Zarar 👋</div><div class="tbs">Thursday, April 2, 2026 · All core systems operational · 3 alerts need review</div></div>
+        <div style="display:flex;gap:10px;">
+          <div style="background:#FEF3C7;border:1px solid #FDE68A;border-radius:9px;padding:7px 14px;font-size:12px;font-weight:700;color:#D97706;cursor:pointer;">⚠ 3 credential renewals due</div>
+          <button class="btn-v">+ Add Staff</button>
+        </div>
+      </div>
+      <div class="content">
+        <!-- KPI row -->
+        <div class="g4" style="margin-bottom:18px;">
+          <div class="card"><div style="font-size:10px;color:var(--txt2);font-weight:600;letter-spacing:.5px;margin-bottom:5px;">TOTAL PATIENTS</div><div style="font-family:'Sora',sans-serif;font-size:28px;font-weight:800;color:var(--txt);">1,284</div><div style="font-size:11px;color:var(--green);margin-top:4px;">↑ 12% this month</div></div>
+          <div class="card"><div style="font-size:10px;color:var(--txt2);font-weight:600;letter-spacing:.5px;margin-bottom:5px;">ACTIVE STAFF</div><div style="font-family:'Sora',sans-serif;font-size:28px;font-weight:800;color:var(--txt);">52</div><div style="font-size:11px;color:var(--v);margin-top:4px;">18 nurses · 14 doctors</div></div>
+          <div class="card"><div style="font-size:10px;color:var(--txt2);font-weight:600;letter-spacing:.5px;margin-bottom:5px;">APRIL REVENUE</div><div style="font-family:'Sora',sans-serif;font-size:28px;font-weight:800;color:var(--green);">AED 284K</div><div style="font-size:11px;color:var(--green);margin-top:4px;">↑ 18% vs last month</div></div>
+          <div class="card" style="border-color:#FECACA;"><div style="font-size:10px;color:var(--txt2);font-weight:600;letter-spacing:.5px;margin-bottom:5px;">OVERDUE INVOICES</div><div style="font-family:'Sora',sans-serif;font-size:28px;font-weight:800;color:var(--red);">7</div><div style="font-size:11px;color:var(--red);margin-top:4px;">AED 18,400 outstanding</div></div>
+        </div>
+        <!-- Chart + Staff -->
+        <div class="g2" style="margin-bottom:18px;">
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;"><div class="st">Services Booked — April 2026</div><div style="font-size:11px;color:var(--v);cursor:pointer;">Full report →</div></div>
+            <div style="display:flex;align-items:flex-end;gap:10px;height:110px;padding:0 4px;margin-bottom:8px;">
+              <div class="bar"><div class="bar-fill" style="background:linear-gradient(0deg,#1148A4,#2273E8);height:100px;"></div><div style="font-size:8px;color:var(--txt2);">Tele</div><div style="font-size:10px;font-weight:700;color:var(--txt);">384</div></div>
+              <div class="bar"><div class="bar-fill" style="background:linear-gradient(0deg,#0891B2,#06B6D4);height:78px;"></div><div style="font-size:8px;color:var(--txt2);">Nursing</div><div style="font-size:10px;font-weight:700;color:var(--txt);">298</div></div>
+              <div class="bar"><div class="bar-fill" style="background:linear-gradient(0deg,#16A34A,#22C55E);height:62px;"></div><div style="font-size:8px;color:var(--txt2);">Lab</div><div style="font-size:10px;font-weight:700;color:var(--txt);">245</div></div>
+              <div class="bar"><div class="bar-fill" style="background:linear-gradient(0deg,#E8850A,#F59E0B);height:48px;"></div><div style="font-size:8px;color:var(--txt2);">Pharmacy</div><div style="font-size:10px;font-weight:700;color:var(--txt);">198</div></div>
+              <div class="bar"><div class="bar-fill" style="background:linear-gradient(0deg,#059669,#10B981);height:40px;"></div><div style="font-size:8px;color:var(--txt2);">RPM</div><div style="font-size:10px;font-weight:700;color:var(--txt);">176</div></div>
+              <div class="bar"><div class="bar-fill" style="background:linear-gradient(0deg,#7C3AED,#A78BFA);height:30px;"></div><div style="font-size:8px;color:var(--txt2);">Physio</div><div style="font-size:10px;font-weight:700;color:var(--txt);">124</div></div>
+              <div class="bar"><div class="bar-fill" style="background:linear-gradient(0deg,#DC2626,#EF4444);height:18px;"></div><div style="font-size:8px;color:var(--txt2);">Fauri</div><div style="font-size:10px;font-weight:700;color:var(--txt);">59</div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="st" style="margin-bottom:14px;">Staff On Duty Today</div>
+            <div style="display:flex;flex-direction:column;gap:9px;">
+              <div style="display:flex;gap:10px;align-items:center;"><div style="width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#1148A4,#2273E8);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0;">BH</div><div style="flex:1;"><div style="font-size:12px;font-weight:700;color:var(--txt);">Dr. Bilal Hussain</div><div style="font-size:10px;color:var(--txt2);">Cardiologist · 8 patients</div></div><div class="tg tg2">● Active</div></div>
+              <div style="display:flex;gap:10px;align-items:center;"><div style="width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#059669,#10B981);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0;">AK</div><div style="flex:1;"><div style="font-size:12px;font-weight:700;color:var(--txt);">Nurse Aisha Khan</div><div style="font-size:10px;color:var(--txt2);">RN Wound Care · 4 visits</div></div><div class="tg tt">● On Visit</div></div>
+              <div style="display:flex;gap:10px;align-items:center;"><div style="width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#7C3AED,#A78BFA);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0;">SA</div><div style="flex:1;"><div style="font-size:12px;font-weight:700;color:var(--txt);">Sara Ahmed, DPT</div><div style="font-size:10px;color:var(--txt2);">Physiotherapist · 3 sessions</div></div><div class="tg tv">● Session</div></div>
+              <div style="display:flex;gap:10px;align-items:center;opacity:.6;"><div style="width:34px;height:34px;border-radius:10px;background:#E8E0F0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--txt3);flex-shrink:0;">ZH</div><div style="flex:1;"><div style="font-size:12px;font-weight:700;color:var(--txt);">Zaid Hameed</div><div style="font-size:10px;color:var(--txt2);">Delivery Rider · Available</div></div><div style="background:#F0F0F0;color:#9A9A9A;font-size:9px;font-weight:700;padding:3px 9px;border-radius:99px;">Standby</div></div>
+            </div>
+            <div style="margin-top:12px;text-align:center;font-size:12px;font-weight:700;color:var(--v);cursor:pointer;">View all 52 staff →</div>
+          </div>
+        </div>
+        <!-- System status -->
+        <div class="card" style="padding:14px 18px;display:flex;gap:20px;align-items:center;flex-wrap:wrap;">
+          <div class="st" style="flex-shrink:0;font-size:13px;">System Status:</div>
+          <div style="display:flex;gap:5px;align-items:center;"><div style="width:8px;height:8px;border-radius:50%;background:#22C55E;animation:pulse 2s infinite;"></div><span style="font-size:11px;color:var(--txt);">Patient App <b style="color:#22C55E;">Operational</b></span></div>
+          <div style="display:flex;gap:5px;align-items:center;"><div style="width:8px;height:8px;border-radius:50%;background:#22C55E;animation:pulse 2s infinite;"></div><span style="font-size:11px;color:var(--txt);">Nurse App <b style="color:#22C55E;">Operational</b></span></div>
+          <div style="display:flex;gap:5px;align-items:center;"><div style="width:8px;height:8px;border-radius:50%;background:#22C55E;animation:pulse 2s infinite;"></div><span style="font-size:11px;color:var(--txt);">Doctor Portal <b style="color:#22C55E;">Operational</b></span></div>
+          <div style="display:flex;gap:5px;align-items:center;"><div style="width:8px;height:8px;border-radius:50%;background:#22C55E;animation:pulse 2s infinite;"></div><span style="font-size:11px;color:var(--txt);">RPM Engine <b style="color:#22C55E;">Operational</b></span></div>
+          <div style="display:flex;gap:5px;align-items:center;"><div style="width:8px;height:8px;border-radius:50%;background:#F59E0B;animation:blink 1.5s infinite;"></div><span style="font-size:11px;color:var(--txt);">Insurance Gateway <b style="color:#D97706;">Maintenance</b></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="sl"><div class="sn">⚙️ Screen 1</div><div class="sst">Dashboard · KPIs · Service Chart · Staff On Duty · System Status</div></div>
+</div>
+
+<div class="sdiv"><div class="sdl"></div><div class="sdt">SCREENS 2 & 3 — STAFF</div><div class="sdl"></div></div>
+
+<!-- ═══ ROW: Screens 2 & 3 ═══ -->
+<div class="row">
+
+<!-- ════ SCREEN 2 — STAFF MANAGEMENT ════ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="browser" style="width:860px;max-width:calc(100vw - 48px);">
+  <div class="bbar"><div class="bdots"><div class="bdot" style="background:#FF5F57;"></div><div class="bdot" style="background:#FFBD2E;"></div><div class="bdot" style="background:#28C840;"></div></div><div class="burl"><span>🔒</span>admin.homehealthcare.ae/staff</div><div class="bacts"><div class="bact">🔔</div></div></div>
+  <div class="inner">
+    <div class="sb">
+      <div class="sbl"><div class="sbl-n">🏥 HomeHealthcare</div><div class="sbl-s">Admin Control Centre</div></div>
+      <div class="sbp"><div class="sbav">ZR</div><div><div style="font-size:12px;font-weight:700;color:#fff;">Zarar Rehman</div><div style="font-size:10px;color:rgba(255,255,255,.45);">Super Admin</div></div></div>
+      <div class="sbnav">
+        <div class="sbg">OVERVIEW</div>
+        <div class="ni"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/></svg><span class="nl">Dashboard</span></div>
+        <div class="sbg">OPERATIONS</div>
+        <div class="ni on"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><span class="nl" style="color:var(--v3);font-weight:700;">Staff Management</span><div class="nb nbv">52</div></div>
+        <div class="ni"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span class="nl">Patient Records</span></div>
+        <div class="ni"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/></svg><span class="nl">Scheduling</span></div>
+        <div class="ni"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/></svg><span class="nl">Billing & Invoices</span><div class="nb nbr">7</div></div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="topbar">
+        <div><div class="tbt">Staff Management</div><div class="tbs">52 staff · 18 nurses · 14 doctors · 8 physios · 12 admin & support</div></div>
+        <div style="display:flex;gap:8px;"><button class="btn-o">📥 Export</button><button class="btn-v">+ Add Staff</button></div>
+      </div>
+      <div class="content">
+        <!-- Search + filters -->
+        <div style="display:flex;gap:10px;margin-bottom:16px;">
+          <input class="inp" placeholder="🔍  Search by name, role, DHA number..." style="flex:1;"/>
+          <select class="inp" style="width:140px;height:38px;"><option>All Roles</option><option>Doctors</option><option>Nurses</option><option>Physios</option></select>
+          <select class="inp" style="width:120px;height:38px;"><option>All Status</option><option>Active</option><option>Off Duty</option><option>Onboarding</option></select>
+        </div>
+        <!-- Role summary -->
+        <div class="g4" style="margin-bottom:18px;">
+          <div style="background:#EBF1FF;border:1.5px solid #BFDBFE;border-radius:12px;padding:12px;text-align:center;cursor:pointer;"><div style="font-family:'Sora',sans-serif;font-size:22px;font-weight:800;color:#1148A4;">14</div><div style="font-size:11px;color:#3A6BC0;margin-top:3px;">Doctors</div></div>
+          <div style="background:#ECFDF5;border:1.5px solid #6EE7B7;border-radius:12px;padding:12px;text-align:center;cursor:pointer;"><div style="font-family:'Sora',sans-serif;font-size:22px;font-weight:800;color:var(--green);">18</div><div style="font-size:11px;color:#15803D;margin-top:3px;">Nurses</div></div>
+          <div style="background:#EDE9FE;border:1.5px solid #C4B5FD;border-radius:12px;padding:12px;text-align:center;cursor:pointer;"><div style="font-family:'Sora',sans-serif;font-size:22px;font-weight:800;color:var(--v);">8</div><div style="font-size:11px;color:#6D3BD0;margin-top:3px;">Physios</div></div>
+          <div style="background:var(--surf);border:1.5px solid var(--bdr);border-radius:12px;padding:12px;text-align:center;cursor:pointer;"><div style="font-family:'Sora',sans-serif;font-size:22px;font-weight:800;color:var(--txt);">12</div><div style="font-size:11px;color:var(--txt2);margin-top:3px;">Admin & Support</div></div>
+        </div>
+        <!-- Staff table -->
+        <div class="card" style="padding:0;overflow:hidden;">
+          <div style="display:grid;grid-template-columns:2fr 1.3fr 1fr 1fr .9fr 1.2fr;padding:10px 16px;background:var(--surf);border-bottom:1px solid var(--bdr);">
+            <div style="font-size:10px;font-weight:700;color:var(--txt2);letter-spacing:.5px;">STAFF MEMBER</div>
+            <div style="font-size:10px;font-weight:700;color:var(--txt2);letter-spacing:.5px;">ROLE / DHA #</div>
+            <div style="font-size:10px;font-weight:700;color:var(--txt2);letter-spacing:.5px;">STATUS</div>
+            <div style="font-size:10px;font-weight:700;color:var(--txt2);letter-spacing:.5px;">TODAY</div>
+            <div style="font-size:10px;font-weight:700;color:var(--txt2);letter-spacing:.5px;">RATING</div>
+            <div style="font-size:10px;font-weight:700;color:var(--txt2);letter-spacing:.5px;">ACTIONS</div>
+          </div>
+          <!-- Row 1 — Doctor Active -->
+          <div style="display:grid;grid-template-columns:2fr 1.3fr 1fr 1fr .9fr 1.2fr;padding:12px 16px;border-bottom:1px solid var(--bdr);align-items:center;">
+            <div style="display:flex;gap:9px;align-items:center;"><div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#1148A4,#2273E8);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0;">BH</div><div><div style="font-size:13px;font-weight:700;color:var(--txt);">Dr. Bilal Hussain</div><div style="font-size:10px;color:var(--txt2);"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="88eae1e4e9e4c8e0e7e5ede0ede9e4fce0ebe9faeda6e9ed">[email&#160;protected]</a></div></div></div>
+            <div><div style="font-size:12px;color:var(--txt);">Cardiologist</div><div style="font-size:10px;color:var(--txt2);">DHA #44102</div></div>
+            <div><div class="tg tg2">● Active</div></div>
+            <div style="font-size:12px;color:var(--txt);">8 patients</div>
+            <div style="font-size:12px;font-weight:700;color:var(--txt);">4.9 ⭐</div>
+            <div style="display:flex;gap:5px;"><button class="btn-o" style="padding:5px 10px;font-size:10px;">View</button><button class="btn-o" style="padding:5px 10px;font-size:10px;color:var(--v);border-color:var(--vL);">Edit</button></div>
+          </div>
+          <!-- Row 2 — Nurse On Visit -->
+          <div style="display:grid;grid-template-columns:2fr 1.3fr 1fr 1fr .9fr 1.2fr;padding:12px 16px;border-bottom:1px solid var(--bdr);align-items:center;background:#F8FFF8;">
+            <div style="display:flex;gap:9px;align-items:center;"><div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#059669,#10B981);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0;">AK</div><div><div style="font-size:13px;font-weight:700;color:var(--txt);">Nurse Aisha Khan</div><div style="font-size:10px;color:var(--txt2);"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="50313923383110383f3d353835313c2438333122357e3135">[email&#160;protected]</a></div></div></div>
+            <div><div style="font-size:12px;color:var(--txt);">RN · Wound Care</div><div style="font-size:10px;color:var(--txt2);">DHA #12045</div></div>
+            <div><div class="tg tt">● On Visit</div></div>
+            <div style="font-size:12px;color:var(--txt);">4 visits</div>
+            <div style="font-size:12px;font-weight:700;color:var(--txt);">4.9 ⭐</div>
+            <div style="display:flex;gap:5px;"><button class="btn-o" style="padding:5px 10px;font-size:10px;">View</button><button class="btn-o" style="padding:5px 10px;font-size:10px;color:var(--v);border-color:var(--vL);">Edit</button></div>
+          </div>
+          <!-- Row 3 — Physio Session -->
+          <div style="display:grid;grid-template-columns:2fr 1.3fr 1fr 1fr .9fr 1.2fr;padding:12px 16px;border-bottom:1px solid var(--bdr);align-items:center;">
+            <div style="display:flex;gap:9px;align-items:center;"><div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#7C3AED,#A78BFA);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0;">SA</div><div><div style="font-size:13px;font-weight:700;color:var(--txt);">Sara Ahmed, DPT</div><div style="font-size:10px;color:var(--txt2);"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d5a6b4a7b495bdbab8b0bdb0b4b9a1bdb6b4a7b0fbb4b0">[email&#160;protected]</a></div></div></div>
+            <div><div style="font-size:12px;color:var(--txt);">Physiotherapist</div><div style="font-size:10px;color:var(--txt2);">DHA #22031</div></div>
+            <div><div class="tg tv">● Session</div></div>
+            <div style="font-size:12px;color:var(--txt);">3 sessions</div>
+            <div style="font-size:12px;font-weight:700;color:var(--txt);">4.8 ⭐</div>
+            <div style="display:flex;gap:5px;"><button class="btn-o" style="padding:5px 10px;font-size:10px;">View</button><button class="btn-o" style="padding:5px 10px;font-size:10px;color:var(--v);border-color:var(--vL);">Edit</button></div>
+          </div>
+          <!-- Row 4 — Standby -->
+          <div style="display:grid;grid-template-columns:2fr 1.3fr 1fr 1fr .9fr 1.2fr;padding:12px 16px;border-bottom:1px solid var(--bdr);align-items:center;opacity:.7;">
+            <div style="display:flex;gap:9px;align-items:center;"><div style="width:36px;height:36px;border-radius:10px;background:#E8E0F0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--txt3);flex-shrink:0;">ZH</div><div><div style="font-size:13px;font-weight:700;color:var(--txt);">Zaid Hameed</div><div style="font-size:10px;color:var(--txt2);"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="176d767e73577f787a727f72767b637f74766572397672">[email&#160;protected]</a></div></div></div>
+            <div><div style="font-size:12px;color:var(--txt);">Delivery Rider</div><div style="font-size:10px;color:var(--txt2);">ID #R-009</div></div>
+            <div><div style="background:#F0F0F0;color:#9A9A9A;font-size:9px;font-weight:700;padding:3px 9px;border-radius:99px;">Standby</div></div>
+            <div style="font-size:12px;color:var(--txt2);">Available</div>
+            <div style="font-size:12px;color:var(--txt2);">4.7 ⭐</div>
+            <div style="display:flex;gap:5px;"><button class="btn-o" style="padding:5px 10px;font-size:10px;">View</button><button class="btn-o" style="padding:5px 10px;font-size:10px;color:var(--v);border-color:var(--vL);">Edit</button></div>
+          </div>
+          <!-- Row 5 — Onboarding -->
+          <div style="display:grid;grid-template-columns:2fr 1.3fr 1fr 1fr .9fr 1.2fr;padding:12px 16px;align-items:center;background:#FFFBEB;">
+            <div style="display:flex;gap:9px;align-items:center;"><div style="width:36px;height:36px;border-radius:10px;background:#FEF3C7;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#D97706;flex-shrink:0;">NA</div><div><div style="font-size:13px;font-weight:700;color:var(--txt);">Nadia Al-Amri, RN</div><div style="font-size:10px;color:var(--txt2);"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a5cbc4c1ccc4e5cdcac8c0cdc0c4c9d1cdc6c4d7c08bc4c0">[email&#160;protected]</a></div></div></div>
+            <div><div style="font-size:12px;color:var(--txt);">RN · General</div><div style="font-size:10px;color:var(--amb);">DHA Pending</div></div>
+            <div><div class="tg ta">⏳ Onboarding</div></div>
+            <div style="font-size:12px;color:var(--txt2);">Not started</div>
+            <div style="font-size:12px;color:var(--txt2);">New</div>
+            <div style="display:flex;gap:5px;"><button class="btn-v" style="padding:5px 12px;font-size:10px;">Approve</button><button class="btn-o" style="padding:5px 10px;font-size:10px;">Reject</button></div>
+          </div>
+        </div>
+        <div style="text-align:center;margin-top:12px;font-size:12px;font-weight:700;color:var(--v);cursor:pointer;">Showing 5 of 52 staff · Load more →</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="sl"><div class="sn">⚙️ Screen 2</div><div class="sst">Staff Management · Directory · Role Filters · Table View · Approve Onboarding</div></div>
+</div>
+
+<!-- ════ SCREEN 3 — STAFF PROFILE ════ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="browser" style="width:520px;max-width:calc(100vw - 48px);">
+  <div class="bbar"><div class="bdots"><div class="bdot" style="background:#FF5F57;"></div><div class="bdot" style="background:#FFBD2E;"></div><div class="bdot" style="background:#28C840;"></div></div><div class="burl"><span>🔒</span>admin.homehealthcare.ae/staff/AK-12045</div><div class="bacts"><div class="bact">🔔</div></div></div>
+  <div class="inner">
+    <div class="sb">
+      <div class="sbl"><div class="sbl-n">🏥 HomeHealthcare</div><div class="sbl-s">Admin Control Centre</div></div>
+      <div class="sbp"><div class="sbav">ZR</div><div><div style="font-size:12px;font-weight:700;color:#fff;">Zarar Rehman</div><div style="font-size:10px;color:rgba(255,255,255,.45);">Super Admin</div></div></div>
+      <div class="sbnav">
+        <div class="sbg">OPERATIONS</div>
+        <div class="ni on"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><span class="nl" style="color:var(--v3);font-weight:700;">Staff Profile</span></div>
+        <div class="ni"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/></svg><span class="nl">Scheduling</span></div>
+        <div class="ni"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/></svg><span class="nl">Billing & Invoices</span></div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="topbar" style="padding:10px 18px;">
+        <div><div class="tbt" style="font-size:15px;">Staff Profile</div><div class="tbs">Nurse Aisha Khan · DHA #12045</div></div>
+        <div style="display:flex;gap:6px;"><button class="btn-o" style="font-size:11px;padding:7px 11px;">Edit</button><button class="btn-r" style="font-size:11px;padding:7px 11px;">Deactivate</button></div>
+      </div>
+      <div class="content" style="padding:14px 18px;">
+        <!-- Profile card -->
+        <div class="cv" style="margin-bottom:14px;">
+          <div style="display:flex;gap:13px;align-items:center;margin-bottom:13px;">
+            <div style="width:54px;height:54px;border-radius:17px;background:linear-gradient(135deg,#059669,#10B981);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;font-family:'Sora',sans-serif;flex-shrink:0;border:2px solid rgba(255,255,255,.4);">AK</div>
+            <div style="flex:1;"><div style="font-family:'Sora',sans-serif;font-size:16px;font-weight:800;color:var(--txt);">Nurse Aisha Khan</div><div style="font-size:12px;color:var(--txt2);margin-top:2px;">RN · Wound Care Specialist · DHA #12045</div><div style="display:flex;gap:6px;margin-top:6px;"><div class="tg tg2">● Active</div><div class="tg tt">On Visit</div></div></div>
+            <div style="text-align:right;"><div style="font-family:'Sora',sans-serif;font-size:22px;font-weight:800;color:var(--txt);">4.9 ⭐</div><div style="font-size:10px;color:var(--txt2);">284 visits</div></div>
+          </div>
+          <div style="height:1px;background:var(--bdr);margin-bottom:13px;"></div>
+          <div class="g2" style="font-size:11px;gap:8px;">
+            <div><div style="color:var(--txt2);margin-bottom:2px;">Email</div><div style="font-weight:700;color:var(--txt);"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7110180219105f1a19101f31191e1c141914101d0519121003145f1014">[email&#160;protected]</a></div></div>
+            <div><div style="color:var(--txt2);margin-bottom:2px;">Phone</div><div style="font-weight:700;color:var(--txt);">+971-55-XXX-XXXX</div></div>
+            <div><div style="color:var(--txt2);margin-bottom:2px;">Joined</div><div style="font-weight:700;color:var(--txt);">Jan 15, 2023</div></div>
+            <div><div style="color:var(--txt2);margin-bottom:2px;">Zone</div><div style="font-weight:700;color:var(--txt);">DHA Phase 1 & 2</div></div>
+            <div><div style="color:var(--txt2);margin-bottom:2px;">Shift</div><div style="font-weight:700;color:var(--txt);">Morning · 07:00–15:00</div></div>
+            <div><div style="color:var(--txt2);margin-bottom:2px;">Contract</div><div style="font-weight:700;color:var(--txt);">Full-time · Permanent</div></div>
+          </div>
+        </div>
+        <!-- KPI mini cards -->
+        <div class="g3" style="margin-bottom:14px;">
+          <div class="card" style="padding:12px;text-align:center;"><div style="font-family:'Sora',sans-serif;font-size:20px;font-weight:800;color:var(--green);">284</div><div style="font-size:10px;color:var(--txt2);margin-top:2px;">Total Visits</div></div>
+          <div class="card" style="padding:12px;text-align:center;"><div style="font-family:'Sora',sans-serif;font-size:20px;font-weight:800;color:var(--v);">98%</div><div style="font-size:10px;color:var(--txt2);margin-top:2px;">Completion Rate</div></div>
+          <div class="card" style="padding:12px;text-align:center;"><div style="font-family:'Sora',sans-serif;font-size:20px;font-weight:800;color:var(--amb);">AED 58K</div><div style="font-size:10px;color:var(--txt2);margin-top:2px;">Revenue Generated</div></div>
+        </div>
+        <!-- Credentials with expiry warnings -->
+        <div class="card" style="padding:14px;margin-bottom:14px;">
+          <div class="st" style="font-size:13px;margin-bottom:10px;">📜 Credentials & Certifications</div>
+          <div style="display:flex;flex-direction:column;gap:7px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:var(--surf);border-radius:9px;font-size:11px;"><span style="font-weight:600;color:var(--txt);">DHA Nursing License #12045</span><div class="tg tg2">Valid · Exp. Jan 2026</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:var(--surf);border-radius:9px;font-size:11px;"><span style="font-weight:600;color:var(--txt);">BLS Certification (AHA)</span><div class="tg tg2">Valid · Exp. Mar 2025</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:#FEF3C7;border-radius:9px;font-size:11px;border:1.5px solid #FDE68A;"><span style="font-weight:600;color:var(--txt);">Wound Care Specialist Cert.</span><div class="tg ta">⚠ Expires May 2024</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:var(--surf);border-radius:9px;font-size:11px;"><span style="font-weight:600;color:var(--txt);">WMS Software Certification</span><div class="tg tg2">Valid · Exp. Dec 2025</div></div>
+          </div>
+        </div>
+        <!-- Today's visits -->
+        <div class="card" style="padding:14px;">
+          <div class="st" style="font-size:13px;margin-bottom:10px;">Today's Visits (4)</div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;padding:7px 9px;background:#F0FDF4;border-radius:9px;"><span style="font-weight:600;color:var(--txt);">Sara Al-Khalid · Injection</span><div class="tg tg2">Done ✓</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;padding:7px 9px;background:#ECFDF5;border-radius:9px;border:1.5px solid #6EE7B7;"><span style="font-weight:700;color:var(--green);">Muhammad Ali · Wound Dressing</span><div class="tg tt">● Now</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;padding:7px 9px;background:var(--surf);border-radius:9px;"><span style="font-weight:600;color:var(--txt);">Ahmed Hassan · Vitals</span><div style="font-size:9px;color:var(--txt2);">10:30 AM</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;padding:7px 9px;background:var(--surf);border-radius:9px;"><span style="font-weight:600;color:var(--txt);">Fatima Malik · IV Infusion</span><div style="font-size:9px;color:var(--txt2);">1:00 PM</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="sl"><div class="sn">⚙️ Screen 3</div><div class="sst">Staff Profile · KPIs · Credentials + Expiry Alerts · Today's Visits</div></div>
+</div>
+
+</div><!-- end row -->
+
+<div class="sdiv"><div class="sdl"></div><div class="sdt">SCREENS 4 & 5 — PATIENT RECORDS</div><div class="sdl"></div></div>
+
+<!-- ═══ ROW: Screens 4 & 5 ═══ -->
+<div class="row">
+
+<!-- ════ SCREEN 4 — PATIENT RECORDS ════ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="browser" style="width:720px;max-width:calc(100vw - 48px);">
+  <div class="bbar"><div class="bdots"><div class="bdot" style="background:#FF5F57;"></div><div class="bdot" style="background:#FFBD2E;"></div><div class="bdot" style="background:#28C840;"></div></div><div class="burl"><span>🔒</span>admin.homehealthcare.ae/patients</div><div class="bacts"><div class="bact">🔔</div></div></div>
+  <div class="inner">
+    <div class="sb">
+      <div class="sbl"><div class="sbl-n">🏥 HomeHealthcare</div><div class="sbl-s">Admin Control Centre</div></div>
+      <div class="sbp"><div class="sbav">ZR</div><div><div style="font-size:12px;font-weight:700;color:#fff;">Zarar Rehman</div><div style="font-size:10px;color:rgba(255,255,255,.45);">Super Admin</div></div></div>
+      <div class="sbnav">
+        <div class="sbg">OPERATIONS</div>
+        <div class="ni"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/></svg><span class="nl">Staff Management</span></div>
+        <div class="ni on"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span class="nl" style="color:var(--v3);font-weight:700;">Patient Records</span></div>
+        <div class="ni"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/></svg><span class="nl">Scheduling</span></div>
+        <div class="ni"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/></svg><span class="nl">Billing & Invoices</span><div class="nb nbr">7</div></div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="topbar" style="padding:12px 18px;">
+        <div><div class="tbt">Patient Records</div><div class="tbs">1,284 registered patients · Digital Health Passports · DHA compliant</div></div>
+        <div style="display:flex;gap:7px;"><button class="btn-o" style="font-size:11px;padding:7px 12px;">📥 Export</button><button class="btn-v" style="font-size:11px;padding:7px 12px;">+ Register Patient</button></div>
+      </div>
+      <div class="content" style="padding:14px 18px;">
+        <!-- Search -->
+        <div style="display:flex;gap:8px;margin-bottom:14px;">
+          <input class="inp" placeholder="🔍  Search by name, MRN, Emirates ID, condition..." style="flex:1;"/>
+          <select class="inp" style="width:130px;height:36px;"><option>All Conditions</option><option>Hypertension</option><option>Diabetes</option><option>Post-discharge</option></select>
+          <select class="inp" style="width:130px;height:36px;"><option>All Care Plans</option><option>One-Time</option><option>Subscription</option><option>Home Admission</option></select>
+        </div>
+        <!-- Summary stats -->
+        <div class="g3" style="margin-bottom:14px;">
+          <div style="background:#EDE9FE;border:1.5px solid #C4B5FD;border-radius:12px;padding:12px;text-align:center;"><div style="font-family:'Sora',sans-serif;font-size:22px;font-weight:800;color:var(--v);">1,284</div><div style="font-size:11px;color:#6D3BD0;margin-top:2px;">Total Patients</div></div>
+          <div style="background:#ECFDF5;border:1.5px solid #6EE7B7;border-radius:12px;padding:12px;text-align:center;"><div style="font-family:'Sora',sans-serif;font-size:22px;font-weight:800;color:var(--green);">342</div><div style="font-size:11px;color:#15803D;margin-top:2px;">Active Care Plans</div></div>
+          <div style="background:#FEF3C7;border:1.5px solid #FDE68A;border-radius:12px;padding:12px;text-align:center;"><div style="font-family:'Sora',sans-serif;font-size:22px;font-weight:800;color:var(--amb);">89</div><div style="font-size:11px;color:#78350F;margin-top:2px;">New This Month</div></div>
+        </div>
+        <!-- Patient table -->
+        <div class="card" style="padding:0;overflow:hidden;">
+          <div style="display:grid;grid-template-columns:1.8fr 1.1fr 1fr 1fr .8fr;padding:9px 14px;background:var(--surf);border-bottom:1px solid var(--bdr);">
+            <div style="font-size:10px;font-weight:700;color:var(--txt2);letter-spacing:.5px;">PATIENT</div>
+            <div style="font-size:10px;font-weight:700;color:var(--txt2);letter-spacing:.5px;">CONDITIONS</div>
+            <div style="font-size:10px;font-weight:700;color:var(--txt2);letter-spacing:.5px;">CARE PLAN</div>
+            <div style="font-size:10px;font-weight:700;color:var(--txt2);letter-spacing:.5px;">LAST VISIT</div>
+            <div style="font-size:10px;font-weight:700;color:var(--txt2);letter-spacing:.5px;">ACTION</div>
+          </div>
+          <!-- Rows -->
+          <div style="display:grid;grid-template-columns:1.8fr 1.1fr 1fr 1fr .8fr;padding:11px 14px;border-bottom:1px solid var(--bdr);align-items:center;background:#FEF2F2;">
+            <div style="display:flex;gap:9px;align-items:center;"><div style="width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#FFD580,#FF9A3C);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0;">MA</div><div><div style="font-size:12px;font-weight:700;color:var(--txt);">Muhammad Ali</div><div style="font-size:10px;color:var(--txt2);">MRN 226589</div></div></div>
+            <div style="font-size:10px;color:var(--txt);line-height:1.5;">Hypertension<br/>Diabetes T2</div>
+            <div><div class="tg tr" style="margin-bottom:3px;">🏥 Home Admit</div></div>
+            <div style="font-size:11px;color:var(--txt);">Today · Wound</div>
+            <button class="btn-o" style="padding:5px 10px;font-size:10px;">View →</button>
+          </div>
+          <div style="display:grid;grid-template-columns:1.8fr 1.1fr 1fr 1fr .8fr;padding:11px 14px;border-bottom:1px solid var(--bdr);align-items:center;">
+            <div style="display:flex;gap:9px;align-items:center;"><div style="width:32px;height:32px;border-radius:9px;background:#E0E8F8;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#1148A4;flex-shrink:0;">SK</div><div><div style="font-size:12px;font-weight:700;color:var(--txt);">Sara Khalid</div><div style="font-size:10px;color:var(--txt2);">MRN 198240</div></div></div>
+            <div style="font-size:10px;color:var(--txt);">Diabetes T2</div>
+            <div><div class="tg tv">Subscription</div></div>
+            <div style="font-size:11px;color:var(--txt);">Apr 1 · Tele</div>
+            <button class="btn-o" style="padding:5px 10px;font-size:10px;">View →</button>
+          </div>
+          <div style="display:grid;grid-template-columns:1.8fr 1.1fr 1fr 1fr .8fr;padding:11px 14px;border-bottom:1px solid var(--bdr);align-items:center;">
+            <div style="display:flex;gap:9px;align-items:center;"><div style="width:32px;height:32px;border-radius:9px;background:#E0E8F8;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#1148A4;flex-shrink:0;">FM</div><div><div style="font-size:12px;font-weight:700;color:var(--txt);">Fatima Malik</div><div style="font-size:10px;color:var(--txt2);">MRN 204771</div></div></div>
+            <div style="font-size:10px;color:var(--txt);line-height:1.5;">Diabetes T2<br/>Obesity</div>
+            <div><div class="tg tb2">One-Time</div></div>
+            <div style="font-size:11px;color:var(--txt);">Mar 30 · Lab</div>
+            <button class="btn-o" style="padding:5px 10px;font-size:10px;">View →</button>
+          </div>
+          <div style="display:grid;grid-template-columns:1.8fr 1.1fr 1fr 1fr .8fr;padding:11px 14px;border-bottom:1px solid var(--bdr);align-items:center;opacity:.8;">
+            <div style="display:flex;gap:9px;align-items:center;"><div style="width:32px;height:32px;border-radius:9px;background:#E0E8F8;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#1148A4;flex-shrink:0;">AH</div><div><div style="font-size:12px;font-weight:700;color:var(--txt);">Ahmed Hassan</div><div style="font-size:10px;color:var(--txt2);">MRN 183560</div></div></div>
+            <div style="font-size:10px;color:var(--txt);">Post-discharge</div>
+            <div><div class="tg tv">Subscription</div></div>
+            <div style="font-size:11px;color:var(--txt);">Mar 29</div>
+            <button class="btn-o" style="padding:5px 10px;font-size:10px;">View →</button>
+          </div>
+          <div style="display:grid;grid-template-columns:1.8fr 1.1fr 1fr 1fr .8fr;padding:11px 14px;align-items:center;opacity:.7;">
+            <div style="display:flex;gap:9px;align-items:center;"><div style="width:32px;height:32px;border-radius:9px;background:#E0E8F8;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#1148A4;flex-shrink:0;">ZA</div><div><div style="font-size:12px;font-weight:700;color:var(--txt);">Zaid Amer</div><div style="font-size:10px;color:var(--txt2);">MRN 219440</div></div></div>
+            <div style="font-size:10px;color:var(--txt);">Cardiac</div>
+            <div><div class="tg tb2">One-Time</div></div>
+            <div style="font-size:11px;color:var(--txt);">Mar 25</div>
+            <button class="btn-o" style="padding:5px 10px;font-size:10px;">View →</button>
+          </div>
+        </div>
+        <div style="text-align:center;margin-top:12px;font-size:12px;font-weight:700;color:var(--v);cursor:pointer;">Showing 5 of 1,284 · Load more →</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="sl"><div class="sn">⚙️ Screen 4</div><div class="sst">Patient Records · Search + Filters · Care Plan Types · Table View</div></div>
+</div>
+
+<!-- ════ SCREEN 5 — PATIENT DETAIL ════ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="browser" style="width:520px;max-width:calc(100vw - 48px);">
+  <div class="bbar"><div class="bdots"><div class="bdot" style="background:#FF5F57;"></div><div class="bdot" style="background:#FFBD2E;"></div><div class="bdot" style="background:#28C840;"></div></div><div class="burl"><span>🔒</span>admin.homehealthcare.ae/patients/226589</div><div class="bacts"><div class="bact">🔔</div></div></div>
+  <div class="inner">
+    <div class="sb">
+      <div class="sbl"><div class="sbl-n">🏥 HomeHealthcare</div><div class="sbl-s">Admin Control Centre</div></div>
+      <div class="sbp"><div class="sbav">ZR</div><div><div style="font-size:12px;font-weight:700;color:#fff;">Zarar Rehman</div><div style="font-size:10px;color:rgba(255,255,255,.45);">Super Admin</div></div></div>
+      <div class="sbnav">
+        <div class="sbg">OPERATIONS</div>
+        <div class="ni"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/></svg><span class="nl">Staff Management</span></div>
+        <div class="ni on"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span class="nl" style="color:var(--v3);font-weight:700;">Patient Records</span></div>
+        <div class="ni"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/></svg><span class="nl">Billing & Invoices</span></div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="topbar" style="padding:10px 18px;">
+        <div><div class="tbt" style="font-size:15px;">Muhammad Ali · MRN 226589</div><div class="tbs">Digital Health Passport · Admin view</div></div>
+        <div style="display:flex;gap:6px;"><button class="btn-o" style="font-size:11px;padding:7px 11px;">📋 Report</button><button class="btn-r" style="font-size:11px;padding:7px 11px;">Suspend</button></div>
+      </div>
+      <div class="content" style="padding:14px 18px;">
+        <!-- Patient card -->
+        <div class="cv" style="margin-bottom:13px;">
+          <div style="display:flex;gap:12px;align-items:center;margin-bottom:12px;">
+            <div style="width:50px;height:50px;border-radius:15px;background:linear-gradient(135deg,#FFD580,#FF9A3C);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#fff;font-family:'Sora',sans-serif;flex-shrink:0;">MA</div>
+            <div style="flex:1;"><div style="font-family:'Sora',sans-serif;font-size:15px;font-weight:800;color:var(--txt);">Muhammad Ali</div><div style="font-size:11px;color:var(--txt2);margin-top:2px;">MRN 226589 · Emirates ID: 784-1980-XXXXXXX-X</div><div style="display:flex;gap:5px;margin-top:6px;flex-wrap:wrap;"><div class="tg tr">⚠ BP Critical</div><div class="tg ta">Diabetes T2</div><div class="tg tr">🏥 Home Admission</div></div></div>
+          </div>
+          <div style="height:1px;background:var(--bdr);margin-bottom:11px;"></div>
+          <div class="g2" style="font-size:11px;gap:8px;">
+            <div><span style="color:var(--txt2);">DOB:</span> <b>14 Mar 1980 (44 yrs)</b></div>
+            <div><span style="color:var(--txt2);">Blood:</span> <b>B+</b></div>
+            <div><span style="color:var(--txt2);">Insurance:</span> <b>DHA Shield Gold</b></div>
+            <div><span style="color:var(--txt2);">Doctor:</span> <b>Dr. Bilal Hussain</b></div>
+            <div><span style="color:var(--txt2);">Zone:</span> <b>DHA Phase 2</b></div>
+            <div><span style="color:var(--txt2);">Registered:</span> <b>Jan 2024</b></div>
+          </div>
+        </div>
+        <!-- Services summary -->
+        <div class="card" style="padding:13px;margin-bottom:13px;">
+          <div class="st" style="font-size:13px;margin-bottom:10px;">Services History</div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 9px;background:#F0FDF4;border-radius:9px;font-size:11px;"><span style="font-weight:600;">Home Nursing · Wound Dressing × 7</span><div class="tg tv">Subscription</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 9px;background:var(--surf);border-radius:9px;font-size:11px;"><span style="font-weight:600;">Tele-Consultation × 3</span><div class="tg tb2">One-Time</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 9px;background:var(--surf);border-radius:9px;font-size:11px;"><span style="font-weight:600;">Lab — CBC + HbA1c</span><div class="tg tb2">One-Time</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 9px;background:#FEF2F2;border-radius:9px;font-size:11px;"><span style="font-weight:600;">Home Admission (30-day proposed)</span><div class="tg ta">⏳ Pending acceptance</div></div>
+          </div>
+        </div>
+        <!-- Billing summary -->
+        <div class="card" style="padding:13px;">
+          <div class="st" style="font-size:13px;margin-bottom:10px;">Billing Summary</div>
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;">
+            <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--bdr);"><span style="color:var(--txt2);">Total invoiced (all time)</span><span style="font-weight:700;color:var(--txt);">AED 2,184</span></div>
+            <div style="display:flex;justify-content:space-between;padding:6px 0;"><span style="color:var(--txt2);">Outstanding</span><span style="font-weight:700;color:var(--red);">AED 432 ⚠</span></div>
+          </div>
+          <div style="display:flex;gap:7px;margin-top:12px;">
+            <button class="btn-v" style="flex:1;font-size:11px;padding:9px;">View All Invoices →</button>
+            <button class="btn-o" style="flex:1;font-size:11px;padding:8px;">📋 Care Plan History</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="sl"><div class="sn">⚙️ Screen 5</div><div class="sst">Patient Detail · Health Passport · Services History · Billing Summary</div></div>
+</div>
+
+</div><!-- end row -->
+
+
+<div class="sdiv"><div class="sdl"></div><div class="sdt">SCREENS 6 – 10 · SCHEDULING, BILLING & PLATFORM</div><div class="sdl"></div></div>
+
+
+<div class="sdiv"><div class="sdl"></div><div class="sdt">SCREENS 6 & 7 — SCHEDULING & BILLING</div><div class="sdl"></div></div>
+
+<!-- ═══ ROW: Screens 6 + 7 ═══ -->
+<div class="row">
+
+<!-- ════ SCREEN 6 — SCHEDULING ════ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="browser" style="width:780px;max-width:calc(100vw - 48px);">
+  <div class="bbar"><div class="bdots"><div class="bdot" style="background:#FF5F57;"></div><div class="bdot" style="background:#FFBD2E;"></div><div class="bdot" style="background:#28C840;"></div></div><div class="burl"><span>🔒</span>admin.homehealthcare.ae/scheduling</div><div class="bacts"><div class="bact">🔔</div></div></div>
+  <div class="inner">
+    <div class="sb">
+      <div class="sbl"><div class="sbl-n">🏥 HomeHealthcare</div><div class="sbl-s">Admin Control Centre</div></div>
+      <div class="sbp"><div class="sbav">ZR</div><div><div style="font-size:12px;font-weight:700;color:#fff;">Zarar Rehman</div><div style="font-size:10px;color:rgba(255,255,255,.45);">Super Admin</div></div></div>
+      <div class="sbnav">
+        <div class="sbg">OPERATIONS</div>
+        <div class="ni"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/></svg><span class="nl">Staff Management</span></div>
+        <div class="ni"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span class="nl">Patient Records</span></div>
+        <div class="ni on"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span class="nl" style="color:var(--v3);font-weight:700;">Scheduling</span></div>
+        <div class="ni"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/></svg><span class="nl">Billing & Invoices</span><div class="nb nbr">7</div></div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="topbar">
+        <div><div class="tbt">Scheduling</div><div class="tbs">Week of April 2–6, 2026 · 124 appointments · 3 unassigned</div></div>
+        <div style="display:flex;gap:8px;"><button class="btn-o">Set Shifts</button><button class="btn-v">+ Book Slot</button></div>
+      </div>
+      <div class="content">
+        <!-- Week selector -->
+        <div style="display:flex;gap:6px;margin-bottom:18px;">
+          <div style="flex-shrink:0;text-align:center;padding:9px 14px;border-radius:11px;background:var(--surf);border:1.5px solid var(--bdr);cursor:pointer;min-width:60px;">
+            <div style="font-size:9px;font-weight:700;color:var(--txt2);">MON</div><div style="font-family:'Sora',sans-serif;font-size:17px;font-weight:800;color:var(--txt);">2</div><div style="font-size:9px;color:var(--txt2);margin-top:1px;">26 appts</div>
+          </div>
+          <div style="flex-shrink:0;text-align:center;padding:9px 14px;border-radius:11px;background:var(--v);cursor:pointer;min-width:60px;box-shadow:0 4px 14px rgba(124,58,237,.28);">
+            <div style="font-size:9px;font-weight:700;color:rgba(255,255,255,.65);">TUE</div><div style="font-family:'Sora',sans-serif;font-size:17px;font-weight:800;color:#fff;">3</div><div style="font-size:9px;color:var(--vL);margin-top:1px;font-weight:700;">Today</div>
+          </div>
+          <div style="flex-shrink:0;text-align:center;padding:9px 14px;border-radius:11px;background:var(--surf);border:1.5px solid var(--bdr);cursor:pointer;min-width:60px;">
+            <div style="font-size:9px;font-weight:700;color:var(--txt2);">WED</div><div style="font-family:'Sora',sans-serif;font-size:17px;font-weight:800;color:var(--txt);">4</div><div style="font-size:9px;color:var(--txt2);margin-top:1px;">28 appts</div>
+          </div>
+          <div style="flex-shrink:0;text-align:center;padding:9px 14px;border-radius:11px;background:var(--surf);border:1.5px solid var(--bdr);cursor:pointer;min-width:60px;">
+            <div style="font-size:9px;font-weight:700;color:var(--txt2);">THU</div><div style="font-family:'Sora',sans-serif;font-size:17px;font-weight:800;color:var(--txt);">5</div><div style="font-size:9px;color:var(--txt2);margin-top:1px;">24 appts</div>
+          </div>
+          <div style="flex-shrink:0;text-align:center;padding:9px 14px;border-radius:11px;background:var(--surf);border:1.5px solid var(--bdr);cursor:pointer;min-width:60px;">
+            <div style="font-size:9px;font-weight:700;color:var(--txt2);">FRI</div><div style="font-family:'Sora',sans-serif;font-size:17px;font-weight:800;color:var(--txt);">6</div><div style="font-size:9px;color:var(--green);margin-top:1px;">3 open</div>
+          </div>
+        </div>
+
+        <!-- Schedule grid -->
+        <div class="card" style="padding:0;overflow:hidden;margin-bottom:16px;">
+          <!-- Header -->
+          <div style="display:grid;grid-template-columns:150px repeat(5,1fr);padding:9px 14px;background:var(--surf);border-bottom:1px solid var(--bdr);">
+            <div style="font-size:10px;font-weight:700;color:var(--txt2);">STAFF</div>
+            <div style="font-size:10px;font-weight:700;color:var(--txt2);text-align:center;">08:00</div>
+            <div style="font-size:10px;font-weight:700;color:var(--txt2);text-align:center;">09:30</div>
+            <div style="font-size:10px;font-weight:700;color:var(--txt2);text-align:center;">11:00</div>
+            <div style="font-size:10px;font-weight:700;color:var(--txt2);text-align:center;">13:00</div>
+            <div style="font-size:10px;font-weight:700;color:var(--txt2);text-align:center;">14:30</div>
+          </div>
+          <!-- Dr. Bilal row -->
+          <div style="display:grid;grid-template-columns:150px repeat(5,1fr);padding:11px 14px;border-bottom:1px solid var(--bdr);align-items:center;">
+            <div style="display:flex;gap:7px;align-items:center;"><div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#1148A4,#2273E8);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;flex-shrink:0;">BH</div><div style="font-size:11px;font-weight:700;color:var(--txt);">Dr. Bilal</div></div>
+            <div style="padding:0 2px;"><div style="background:#EDE9FE;border-radius:7px;padding:5px 7px;text-align:center;font-size:9px;font-weight:700;color:var(--v);">Sara Khalid ✓</div></div>
+            <div style="padding:0 2px;"><div style="background:#FEE2E2;border-radius:7px;padding:5px 7px;text-align:center;font-size:9px;font-weight:700;color:var(--red);">🚨 M. Ali</div></div>
+            <div style="padding:0 2px;"><div style="background:#EDE9FE;border-radius:7px;padding:5px 7px;text-align:center;font-size:9px;font-weight:700;color:var(--v);">A. Hassan</div></div>
+            <div style="padding:0 2px;"><div style="background:#EDE9FE;border-radius:7px;padding:5px 7px;text-align:center;font-size:9px;font-weight:700;color:var(--v);">F. Malik</div></div>
+            <div style="padding:0 2px;"><div style="background:#F0FDF4;border-radius:7px;padding:5px 7px;text-align:center;font-size:9px;color:var(--txt3);border:1px dashed #6EE7B7;">Free</div></div>
+          </div>
+          <!-- Nurse Aisha row -->
+          <div style="display:grid;grid-template-columns:150px repeat(5,1fr);padding:11px 14px;border-bottom:1px solid var(--bdr);align-items:center;background:#F8FFF8;">
+            <div style="display:flex;gap:7px;align-items:center;"><div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#059669,#10B981);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;flex-shrink:0;">AK</div><div style="font-size:11px;font-weight:700;color:var(--txt);">Nurse Aisha</div></div>
+            <div style="padding:0 2px;"><div style="background:#DCFCE7;border-radius:7px;padding:5px 7px;text-align:center;font-size:9px;font-weight:700;color:#16A34A;">S. Al-Khalid ✓</div></div>
+            <div style="padding:0 2px;"><div style="background:#ECFDF5;border-radius:7px;padding:5px 7px;text-align:center;font-size:9px;font-weight:700;color:var(--green);border:1.5px solid #6EE7B7;">M. Ali ●</div></div>
+            <div style="padding:0 2px;"><div style="background:#F0FDF4;border-radius:7px;padding:5px 7px;text-align:center;font-size:9px;color:var(--txt2);border:1px dashed #6EE7B7;">A. Hassan</div></div>
+            <div style="padding:0 2px;"><div style="background:#F0FDF4;border-radius:7px;padding:5px 7px;text-align:center;font-size:9px;color:var(--txt2);border:1px dashed #6EE7B7;">F. Malik</div></div>
+            <div style="padding:0 2px;"><div style="background:var(--surf);border-radius:7px;padding:5px 7px;text-align:center;font-size:9px;color:var(--txt3);">Off</div></div>
+          </div>
+          <!-- Sara Ahmed row -->
+          <div style="display:grid;grid-template-columns:150px repeat(5,1fr);padding:11px 14px;align-items:center;">
+            <div style="display:flex;gap:7px;align-items:center;"><div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#7C3AED,#A78BFA);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;flex-shrink:0;">SA</div><div style="font-size:11px;font-weight:700;color:var(--txt);">Sara (DPT)</div></div>
+            <div style="padding:0 2px;"><div style="background:#F0F0F0;border-radius:7px;padding:5px 7px;text-align:center;font-size:9px;color:var(--txt3);">Off</div></div>
+            <div style="padding:0 2px;"><div style="background:#EDE9FE;border-radius:7px;padding:5px 7px;text-align:center;font-size:9px;font-weight:700;color:var(--v);">Back Rehab</div></div>
+            <div style="padding:0 2px;"><div style="background:#EDE9FE;border-radius:7px;padding:5px 7px;text-align:center;font-size:9px;font-weight:700;color:var(--v);">Knee Rehab</div></div>
+            <div style="padding:0 2px;"><div style="background:#EDE9FE;border-radius:7px;padding:5px 7px;text-align:center;font-size:9px;font-weight:700;color:var(--v);">Stroke Rehab</div></div>
+            <div style="padding:0 2px;"><div style="background:#F0FDF4;border-radius:7px;padding:5px 7px;text-align:center;font-size:9px;color:var(--txt2);border:1px dashed #6EE7B7;">Free</div></div>
+          </div>
+        </div>
+
+        <!-- Unassigned alert -->
+        <div style="background:#FEF3C7;border:1.5px solid #FDE68A;border-radius:12px;padding:13px 16px;margin-bottom:14px;display:flex;gap:11px;align-items:center;">
+          <div style="font-size:22px;flex-shrink:0;">⚠️</div>
+          <div style="flex:1;"><div style="font-size:13px;font-weight:800;color:#92400E;">3 Appointments Unassigned Tomorrow</div><div style="font-size:11px;color:#A16207;margin-top:2px;">9:00 AM · 11:00 AM · 2:00 PM — No nurse allocated. Assign manually or let AI auto-match by zone and specialty.</div></div>
+          <button class="btn-v" style="flex-shrink:0;">🤖 Auto-Assign</button>
+        </div>
+
+        <!-- Summary row -->
+        <div class="g4">
+          <div class="card" style="padding:13px;text-align:center;"><div style="font-family:'Sora',sans-serif;font-size:22px;font-weight:800;color:var(--txt);">28</div><div style="font-size:10px;color:var(--txt2);margin-top:2px;">Today's visits</div></div>
+          <div class="card" style="padding:13px;text-align:center;"><div style="font-family:'Sora',sans-serif;font-size:22px;font-weight:800;color:var(--green);">21</div><div style="font-size:10px;color:var(--txt2);margin-top:2px;">Completed</div></div>
+          <div class="card" style="padding:13px;text-align:center;"><div style="font-family:'Sora',sans-serif;font-size:22px;font-weight:800;color:var(--amb);">4</div><div style="font-size:10px;color:var(--txt2);margin-top:2px;">In progress</div></div>
+          <div class="card" style="padding:13px;text-align:center;border-color:#FDE68A;"><div style="font-family:'Sora',sans-serif;font-size:22px;font-weight:800;color:var(--red);">3</div><div style="font-size:10px;color:var(--txt2);margin-top:2px;">Unassigned</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="sl"><div class="sn">⚙️ Screen 6</div><div class="sst">Scheduling · Staff × Time Grid · Unassigned Alert · Auto-Assign AI</div></div>
+</div>
+
+<!-- ════ SCREEN 7 — BILLING & INVOICES ════ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="browser" style="width:620px;max-width:calc(100vw - 48px);">
+  <div class="bbar"><div class="bdots"><div class="bdot" style="background:#FF5F57;"></div><div class="bdot" style="background:#FFBD2E;"></div><div class="bdot" style="background:#28C840;"></div></div><div class="burl"><span>🔒</span>admin.homehealthcare.ae/billing</div><div class="bacts"><div class="bact">🔔</div></div></div>
+  <div class="inner">
+    <div class="sb">
+      <div class="sbl"><div class="sbl-n">🏥 HomeHealthcare</div><div class="sbl-s">Admin Control Centre</div></div>
+      <div class="sbp"><div class="sbav">ZR</div><div><div style="font-size:12px;font-weight:700;color:#fff;">Zarar Rehman</div><div style="font-size:10px;color:rgba(255,255,255,.45);">Super Admin</div></div></div>
+      <div class="sbnav">
+        <div class="sbg">OPERATIONS</div>
+        <div class="ni"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/></svg><span class="nl">Scheduling</span></div>
+        <div class="ni on"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="2" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg><span class="nl" style="color:var(--v3);font-weight:700;">Billing & Invoices</span><div class="nb nbr">7</div></div>
+        <div class="sbg">PLATFORM</div>
+        <div class="ni"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span class="nl">Analytics</span></div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="topbar" style="padding:12px 18px;">
+        <div><div class="tbt">Billing & Invoices</div><div class="tbs">April 2026 · AED 284K revenue · 7 overdue · 4 insurance claims pending</div></div>
+        <div style="display:flex;gap:7px;"><button class="btn-o" style="font-size:11px;padding:7px 12px;">📥 Export</button><button class="btn-v" style="font-size:11px;padding:7px 12px;">+ New Invoice</button></div>
+      </div>
+      <div class="content" style="padding:14px 18px;">
+        <!-- Revenue KPIs -->
+        <div class="g2" style="margin-bottom:14px;">
+          <div class="card" style="padding:13px;"><div style="font-size:10px;color:var(--txt2);font-weight:600;letter-spacing:.5px;margin-bottom:4px;">APRIL REVENUE</div><div style="font-family:'Sora',sans-serif;font-size:26px;font-weight:800;color:var(--green);">AED 284K</div><div style="font-size:11px;color:var(--green);margin-top:3px;">↑ 18% vs March</div></div>
+          <div class="cr" style="padding:13px;"><div style="font-size:10px;color:var(--txt2);font-weight:600;letter-spacing:.5px;margin-bottom:4px;">OUTSTANDING</div><div style="font-family:'Sora',sans-serif;font-size:26px;font-weight:800;color:var(--red);">AED 18,400</div><div style="font-size:11px;color:var(--red);margin-top:3px;">7 overdue invoices</div></div>
+        </div>
+        <!-- Filter -->
+        <div style="display:flex;gap:8px;margin-bottom:14px;">
+          <input class="inp" placeholder="🔍  Invoice #, patient, amount..." style="flex:1;"/>
+          <select class="inp" style="width:130px;height:36px;"><option>All Status</option><option>Paid</option><option>Pending</option><option>Overdue</option><option>Insurance</option></select>
+        </div>
+        <!-- Invoice table -->
+        <div class="card" style="padding:0;overflow:hidden;">
+          <div style="display:grid;grid-template-columns:1.1fr 1.2fr 1fr 1fr 1fr 1fr;padding:9px 14px;background:var(--surf);border-bottom:1px solid var(--bdr);">
+            <div style="font-size:10px;font-weight:700;color:var(--txt2);letter-spacing:.4px;">INVOICE #</div>
+            <div style="font-size:10px;font-weight:700;color:var(--txt2);letter-spacing:.4px;">PATIENT</div>
+            <div style="font-size:10px;font-weight:700;color:var(--txt2);letter-spacing:.4px;">SERVICE</div>
+            <div style="font-size:10px;font-weight:700;color:var(--txt2);letter-spacing:.4px;">AMOUNT</div>
+            <div style="font-size:10px;font-weight:700;color:var(--txt2);letter-spacing:.4px;">STATUS</div>
+            <div style="font-size:10px;font-weight:700;color:var(--txt2);letter-spacing:.4px;">ACTIONS</div>
+          </div>
+          <!-- Row 1 overdue -->
+          <div style="display:grid;grid-template-columns:1.1fr 1.2fr 1fr 1fr 1fr 1fr;padding:11px 14px;border-bottom:1px solid var(--bdr);align-items:center;background:#FEF2F2;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--red);">INV-2604-001</div>
+            <div style="font-size:12px;font-weight:600;color:var(--txt);">Muhammad Ali</div>
+            <div style="font-size:11px;color:var(--txt2);">Nursing × 7</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--txt);">AED 840</div>
+            <div><div class="tg tr">⚠ Overdue</div></div>
+            <div style="display:flex;gap:4px;"><button class="btn-o" style="padding:4px 8px;font-size:10px;">View</button><button class="btn-r" style="padding:4px 8px;font-size:10px;">Remind</button></div>
+          </div>
+          <!-- Row 2 paid -->
+          <div style="display:grid;grid-template-columns:1.1fr 1.2fr 1fr 1fr 1fr 1fr;padding:11px 14px;border-bottom:1px solid var(--bdr);align-items:center;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--txt);">INV-2604-002</div>
+            <div style="font-size:12px;font-weight:600;color:var(--txt);">Sara Khalid</div>
+            <div style="font-size:11px;color:var(--txt2);">Tele × 2</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--txt);">AED 400</div>
+            <div><div class="tg tg2">✓ Paid</div></div>
+            <div style="display:flex;gap:4px;"><button class="btn-o" style="padding:4px 8px;font-size:10px;">View</button><button class="btn-o" style="padding:4px 8px;font-size:10px;">PDF</button></div>
+          </div>
+          <!-- Row 3 insurance -->
+          <div style="display:grid;grid-template-columns:1.1fr 1.2fr 1fr 1fr 1fr 1fr;padding:11px 14px;border-bottom:1px solid var(--bdr);align-items:center;background:#FFFBEB;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--txt);">INV-2604-003</div>
+            <div style="font-size:12px;font-weight:600;color:var(--txt);">Ahmed Hassan</div>
+            <div style="font-size:11px;color:var(--txt2);">RPM 30d</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--txt);">AED 5,400</div>
+            <div><div class="tg ta">🏦 Insurance</div></div>
+            <div style="display:flex;gap:4px;"><button class="btn-o" style="padding:4px 8px;font-size:10px;">View</button><button class="btn-gd" style="padding:4px 8px;font-size:10px;">Chase</button></div>
+          </div>
+          <!-- Row 4 pending -->
+          <div style="display:grid;grid-template-columns:1.1fr 1.2fr 1fr 1fr 1fr 1fr;padding:11px 14px;border-bottom:1px solid var(--bdr);align-items:center;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--txt);">INV-2604-004</div>
+            <div style="font-size:12px;font-weight:600;color:var(--txt);">Fatima Malik</div>
+            <div style="font-size:11px;color:var(--txt2);">Lab Services</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--txt);">AED 320</div>
+            <div><div class="tg tv">⏳ Pending</div></div>
+            <div style="display:flex;gap:4px;"><button class="btn-o" style="padding:4px 8px;font-size:10px;">View</button><button class="btn-v" style="padding:4px 8px;font-size:10px;">Send</button></div>
+          </div>
+          <!-- Row 5 paid -->
+          <div style="display:grid;grid-template-columns:1.1fr 1.2fr 1fr 1fr 1fr 1fr;padding:11px 14px;align-items:center;">
+            <div style="font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--txt);">INV-2604-005</div>
+            <div style="font-size:12px;font-weight:600;color:var(--txt);">Zaid Amer</div>
+            <div style="font-size:11px;color:var(--txt2);">Physio × 8</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--txt);">AED 960</div>
+            <div><div class="tg tg2">✓ Paid</div></div>
+            <div style="display:flex;gap:4px;"><button class="btn-o" style="padding:4px 8px;font-size:10px;">View</button><button class="btn-o" style="padding:4px 8px;font-size:10px;">PDF</button></div>
+          </div>
+        </div>
+        <div style="text-align:center;margin-top:12px;font-size:12px;font-weight:700;color:var(--v);cursor:pointer;">Showing 5 of 318 invoices · Load more →</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="sl"><div class="sn">⚙️ Screen 7</div><div class="sst">Billing & Invoices · Revenue KPIs · Status Filtering · Actions per Row</div></div>
+</div>
+
+</div><!-- end row -->
+
+<div class="sdiv"><div class="sdl"></div><div class="sdt">SCREEN 8 — INVOICE DETAIL</div><div class="sdl"></div></div>
+
+<!-- ═══ SCREEN 8 — INVOICE DETAIL ═══ -->
+<div style="display:flex;flex-direction:column;align-items:center;margin-bottom:52px;">
+<div class="browser" style="width:900px;max-width:calc(100vw - 48px);">
+  <div class="bbar"><div class="bdots"><div class="bdot" style="background:#FF5F57;"></div><div class="bdot" style="background:#FFBD2E;"></div><div class="bdot" style="background:#28C840;"></div></div><div class="burl"><span>🔒</span>admin.homehealthcare.ae/billing/INV-2604-001</div><div class="bacts"><div class="bact">🔔</div></div></div>
+  <div class="inner">
+    <div class="sb">
+      <div class="sbl"><div class="sbl-n">🏥 HomeHealthcare</div><div class="sbl-s">Admin Control Centre</div></div>
+      <div class="sbp"><div class="sbav">ZR</div><div><div style="font-size:12px;font-weight:700;color:#fff;">Zarar Rehman</div><div style="font-size:10px;color:rgba(255,255,255,.45);">Super Admin</div></div></div>
+      <div class="sbnav">
+        <div class="sbg">OPERATIONS</div>
+        <div class="ni"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><span class="nl">Patient Records</span></div>
+        <div class="ni on"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="2" stroke-linecap="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg><span class="nl" style="color:var(--v3);font-weight:700;">Invoice Detail</span></div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="topbar">
+        <div><div class="tbt">Invoice INV-2604-001</div><div class="tbs">Muhammad Ali · Overdue · AED 840 · Due Apr 8, 2026</div></div>
+        <div style="display:flex;gap:8px;"><button class="btn-o">🖨 Print</button><button class="btn-o">📤 Send to Patient</button><button class="btn-r">⚠ Chase Payment</button></div>
+      </div>
+      <div class="content">
+        <div class="g2">
+          <!-- LEFT: Invoice document -->
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <!-- Letterhead -->
+            <div style="background:linear-gradient(135deg,var(--side),var(--side2));border-radius:14px;padding:20px 22px;display:flex;justify-content:space-between;align-items:flex-start;">
+              <div><div style="font-family:'Sora',sans-serif;font-size:16px;font-weight:800;color:var(--v3);">🏥 HomeHealthcare</div><div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:3px;">DHA Phase 2, Dubai · UAE</div><div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:1px;">TRN: 100123456700003</div></div>
+              <div style="text-align:right;"><div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:.5px;margin-bottom:3px;">INVOICE</div><div style="font-family:'JetBrains Mono',monospace;font-size:18px;font-weight:700;color:var(--v3);">INV-2604-001</div><div style="font-size:11px;color:rgba(255,255,255,.45);margin-top:4px;">Issued: April 1, 2026</div><div style="font-size:11px;color:rgba(255,255,255,.45);">Due: April 8, 2026</div></div>
+            </div>
+            <!-- Billed to / Provided by -->
+            <div class="g2" style="gap:12px;">
+              <div class="card" style="padding:14px;"><div style="font-size:10px;font-weight:700;color:var(--txt2);letter-spacing:.5px;margin-bottom:8px;">BILLED TO</div><div style="font-size:13px;font-weight:700;color:var(--txt);">Muhammad Ali</div><div style="font-size:11px;color:var(--txt2);margin-top:4px;line-height:1.8;">MRN: 226589<br/>Villa 14, Street 8<br/>DHA Phase 2, Dubai<br/>+971-50-XXX-XXXX</div></div>
+              <div class="card" style="padding:14px;"><div style="font-size:10px;font-weight:700;color:var(--txt2);letter-spacing:.5px;margin-bottom:8px;">CARE PROVIDED BY</div><div style="font-size:13px;font-weight:700;color:var(--txt);">Nurse Aisha Khan, RN</div><div style="font-size:11px;color:var(--txt2);margin-top:4px;line-height:1.8;">DHA Reg. #12045<br/>Wound Care Specialist<br/>Under Dr. Bilal Hussain<br/>DHA #44102</div></div>
+            </div>
+            <!-- Line items table -->
+            <div class="card" style="padding:0;overflow:hidden;">
+              <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:9px 14px;background:var(--surf);border-bottom:1px solid var(--bdr);">
+                <div style="font-size:10px;font-weight:700;color:var(--txt2);letter-spacing:.4px;">SERVICE / DESCRIPTION</div>
+                <div style="font-size:10px;font-weight:700;color:var(--txt2);letter-spacing:.4px;">QTY</div>
+                <div style="font-size:10px;font-weight:700;color:var(--txt2);letter-spacing:.4px;">UNIT RATE</div>
+                <div style="font-size:10px;font-weight:700;color:var(--txt2);letter-spacing:.4px;text-align:right;">TOTAL</div>
+              </div>
+              <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:11px 14px;border-bottom:1px solid var(--bdr);align-items:center;">
+                <div><div style="font-size:12px;font-weight:600;color:var(--txt);">Home Nursing Visit — Wound Dressing</div><div style="font-size:10px;color:var(--txt2);margin-top:2px;">Subscription Plan · Mar 27 – Apr 2</div></div>
+                <div style="font-size:12px;color:var(--txt);">7 visits</div>
+                <div style="font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--txt);">AED 100</div>
+                <div style="font-size:12px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--txt);text-align:right;">AED 700</div>
+              </div>
+              <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:11px 14px;border-bottom:1px solid var(--bdr);align-items:center;">
+                <div><div style="font-size:12px;font-weight:600;color:var(--txt);">Wound Dressing Materials</div><div style="font-size:10px;color:var(--txt2);margin-top:2px;">Hydrocolloid dressings × 7, saline, steri-strips</div></div>
+                <div style="font-size:12px;color:var(--txt);">1 pack</div>
+                <div style="font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--txt);">AED 80</div>
+                <div style="font-size:12px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--txt);text-align:right;">AED 80</div>
+              </div>
+              <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:11px 14px;border-bottom:1px solid var(--bdr);align-items:center;">
+                <div><div style="font-size:12px;font-weight:600;color:var(--txt);">WMS Photo Documentation (7 sessions)</div><div style="font-size:10px;color:var(--txt2);margin-top:2px;">AI wound analysis, healing progression report</div></div>
+                <div style="font-size:12px;color:var(--txt);">7</div>
+                <div style="font-size:12px;font-family:'JetBrains Mono',monospace;color:var(--txt);">AED 0</div>
+                <div style="font-size:12px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--green);text-align:right;">Included</div>
+              </div>
+              <!-- Subtotals -->
+              <div style="padding:13px 14px;background:var(--surf);">
+                <div style="display:flex;justify-content:space-between;font-size:12px;padding:4px 0;"><span style="color:var(--txt2);">Subtotal</span><span style="font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--txt);">AED 780</span></div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;padding:4px 0;"><span style="color:var(--txt2);">VAT (5%)</span><span style="font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--txt);">AED 39</span></div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;padding:4px 0;"><span style="color:var(--txt2);">Insurance Credit</span><span style="font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--green);">– AED 0</span></div>
+                <div style="height:1px;background:var(--bdr);margin:8px 0;"></div>
+                <div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-family:'Sora',sans-serif;font-size:14px;font-weight:800;color:var(--txt);">TOTAL DUE</span><span style="font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--red);">AED 840</span></div>
+                <div style="font-size:10px;color:var(--red);margin-top:4px;text-align:right;font-weight:700;">⚠ Overdue since Apr 8 · Please pay immediately</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT: Payment + actions panel -->
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <!-- Status -->
+            <div class="cr">
+              <div style="font-size:12px;font-weight:800;color:var(--red);margin-bottom:8px;">Payment Status</div>
+              <div style="font-size:28px;font-weight:900;color:var(--red);font-family:'Sora',sans-serif;margin-bottom:4px;">OVERDUE</div>
+              <div style="font-size:11px;color:#9A5050;">Due Apr 8 · Now Apr 2 · 6 days remaining</div>
+              <div style="height:5px;background:#FEE2E2;border-radius:99px;overflow:hidden;margin-top:10px;"><div style="width:0%;height:100%;background:var(--red);border-radius:99px;"></div></div>
+              <div style="font-size:10px;color:#9A5050;margin-top:4px;">AED 0 of AED 840 paid</div>
+            </div>
+            <!-- Payment history -->
+            <div class="card">
+              <div class="st" style="font-size:13px;margin-bottom:10px;">Payment Activity</div>
+              <div style="display:flex;flex-direction:column;gap:7px;font-size:11px;color:var(--txt2);">
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 9px;background:var(--surf);border-radius:9px;"><span>Invoice sent</span><span style="font-weight:600;color:var(--txt);">Apr 1</span></div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 9px;background:var(--surf);border-radius:9px;"><span>SMS reminder #1</span><span style="font-weight:600;color:var(--txt);">Apr 7</span></div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 9px;background:#FEF2F2;border-radius:9px;border:1px solid #FECACA;"><span style="color:var(--red);">Due date passed</span><span style="font-weight:700;color:var(--red);">Apr 8</span></div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 9px;background:var(--surf);border-radius:9px;"><span>WhatsApp reminder</span><span style="font-weight:600;color:var(--txt);">Today 9 AM</span></div>
+              </div>
+            </div>
+            <!-- Actions -->
+            <div class="card">
+              <div class="st" style="font-size:13px;margin-bottom:10px;">Actions</div>
+              <div style="display:flex;flex-direction:column;gap:8px;">
+                <button class="btn-r" style="width:100%;padding:10px;">📲 Send WhatsApp Reminder</button>
+                <button class="btn-v" style="width:100%;padding:10px;">🔗 Generate Payment Link</button>
+                <button class="btn-g" style="width:100%;padding:10px;">✓ Mark as Paid (Manual)</button>
+                <button class="btn-o" style="width:100%;padding:9px;font-size:11px;">📧 Email Formal Notice</button>
+                <button class="btn-o" style="width:100%;padding:9px;font-size:11px;color:var(--red);border-color:#FECACA;">🏦 Refer to Collections</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="sl"><div class="sn">⚙️ Screen 8</div><div class="sst">Invoice Detail · Line Items · VAT · Payment Status · Full Action Panel</div></div>
+</div>
+
+<div class="sdiv"><div class="sdl"></div><div class="sdt">SCREENS 9 & 10 — PLATFORM & ANALYTICS</div><div class="sdl"></div></div>
+
+<!-- ═══ ROW: Screens 9 + 10 ═══ -->
+<div class="row">
+
+<!-- ════ SCREEN 9 — AI & RPM CONFIG + COMPLIANCE ════ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="browser" style="width:700px;max-width:calc(100vw - 48px);">
+  <div class="bbar"><div class="bdots"><div class="bdot" style="background:#FF5F57;"></div><div class="bdot" style="background:#FFBD2E;"></div><div class="bdot" style="background:#28C840;"></div></div><div class="burl"><span>🔒</span>admin.homehealthcare.ae/platform/ai-config</div><div class="bacts"><div class="bact">🔔</div></div></div>
+  <div class="inner">
+    <div class="sb">
+      <div class="sbl"><div class="sbl-n">🏥 HomeHealthcare</div><div class="sbl-s">Admin Control Centre</div></div>
+      <div class="sbp"><div class="sbav">ZR</div><div><div style="font-size:12px;font-weight:700;color:#fff;">Zarar Rehman</div><div style="font-size:10px;color:rgba(255,255,255,.45);">Super Admin</div></div></div>
+      <div class="sbnav">
+        <div class="sbg">OVERVIEW</div>
+        <div class="ni"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/></svg><span class="nl">Dashboard</span></div>
+        <div class="sbg">PLATFORM</div>
+        <div class="ni on"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="2" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><span class="nl" style="color:var(--v3);font-weight:700;">AI & RPM Config</span></div>
+        <div class="ni"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span class="nl">Compliance</span></div>
+        <div class="ni"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg><span class="nl">Integrations</span></div>
+        <div class="ni"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span class="nl">Analytics</span></div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="topbar" style="padding:12px 18px;">
+        <div><div class="tbt">AI & RPM Configuration</div><div class="tbs">Platform-wide AI settings · Alert thresholds · DHA compliance · Audit trail</div></div>
+        <button class="btn-v" style="font-size:11px;padding:7px 14px;">💾 Save Changes</button>
+      </div>
+      <div class="content" style="padding:14px 18px;">
+
+        <!-- RPM THRESHOLDS -->
+        <div class="cv" style="margin-bottom:14px;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+            <div style="width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--v),var(--v3));display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">📡</div>
+            <div class="st">RPM Alert Thresholds</div>
+            <div class="tg tv" style="margin-left:auto;">Live · Applied to 42 patients</div>
+          </div>
+          <div class="g2" style="gap:10px;margin-bottom:12px;">
+            <div style="background:var(--surf);border-radius:10px;padding:11px 13px;">
+              <div style="font-size:10px;font-weight:700;color:var(--txt2);margin-bottom:6px;">BLOOD PRESSURE — WARNING</div>
+              <div style="display:flex;gap:8px;align-items:center;"><input class="inp" style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;" value="140/90" /><span style="font-size:11px;color:var(--txt2);">mmHg</span></div>
+            </div>
+            <div style="background:#FEF2F2;border-radius:10px;padding:11px 13px;border:1px solid #FECACA;">
+              <div style="font-size:10px;font-weight:700;color:var(--red);margin-bottom:6px;">BLOOD PRESSURE — CRITICAL</div>
+              <div style="display:flex;gap:8px;align-items:center;"><input class="inp" style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;border-color:#FECACA;" value="160/100" /><span style="font-size:11px;color:var(--txt2);">mmHg</span></div>
+            </div>
+            <div style="background:var(--surf);border-radius:10px;padding:11px 13px;">
+              <div style="font-size:10px;font-weight:700;color:var(--txt2);margin-bottom:6px;">SpO₂ — WARNING LEVEL</div>
+              <div style="display:flex;gap:8px;align-items:center;"><input class="inp" style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;" value="93%" /><span style="font-size:11px;color:var(--txt2);">oxygen</span></div>
+            </div>
+            <div style="background:#FEF2F2;border-radius:10px;padding:11px 13px;border:1px solid #FECACA;">
+              <div style="font-size:10px;font-weight:700;color:var(--red);margin-bottom:6px;">SpO₂ — CRITICAL LEVEL</div>
+              <div style="display:flex;gap:8px;align-items:center;"><input class="inp" style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;border-color:#FECACA;" value="88%" /><span style="font-size:11px;color:var(--txt2);">oxygen</span></div>
+            </div>
+            <div style="background:var(--surf);border-radius:10px;padding:11px 13px;">
+              <div style="font-size:10px;font-weight:700;color:var(--txt2);margin-bottom:6px;">BLOOD GLUCOSE — FASTING HIGH</div>
+              <div style="display:flex;gap:8px;align-items:center;"><input class="inp" style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;" value="126" /><span style="font-size:11px;color:var(--txt2);">mg/dL</span></div>
+            </div>
+            <div style="background:var(--surf);border-radius:10px;padding:11px 13px;">
+              <div style="font-size:10px;font-weight:700;color:var(--txt2);margin-bottom:6px;">HEART RATE — ELEVATED</div>
+              <div style="display:flex;gap:8px;align-items:center;"><input class="inp" style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;" value="100" /><span style="font-size:11px;color:var(--txt2);">bpm</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI SETTINGS -->
+        <div class="card" style="margin-bottom:14px;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+            <div style="width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,#4C1D95,var(--v));display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;">🤖</div>
+            <div class="st">AI Engine Settings</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:11px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 13px;background:var(--surf);border-radius:10px;">
+              <div><div style="font-size:13px;font-weight:700;color:var(--txt);">AI Triage for New Symptoms</div><div style="font-size:11px;color:var(--txt2);margin-top:1px;">Patients can self-report symptoms and AI triages before doctor review</div></div>
+              <div class="toggle toggle-on"><div class="toggle-knob"></div></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 13px;background:var(--surf);border-radius:10px;">
+              <div><div style="font-size:13px;font-weight:700;color:var(--txt);">AI Care Plan Suggestions</div><div style="font-size:11px;color:var(--txt2);margin-top:1px;">AI suggests subscription plans and home admission — always requires doctor approval</div></div>
+              <div class="toggle toggle-on"><div class="toggle-knob"></div></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 13px;background:var(--surf);border-radius:10px;">
+              <div><div style="font-size:13px;font-weight:700;color:var(--txt);">Auto-notify Doctor on Critical Alert</div><div style="font-size:11px;color:var(--txt2);margin-top:1px;">Push + SMS to doctor when patient crosses critical RPM threshold</div></div>
+              <div class="toggle toggle-on"><div class="toggle-knob"></div></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 13px;background:var(--surf);border-radius:10px;">
+              <div><div style="font-size:13px;font-weight:700;color:var(--txt);">AI Autonomous Drug Dispensing</div><div style="font-size:11px;color:var(--txt2);margin-top:1px;">Allow AI to place pharmacy orders without doctor sign-off</div></div>
+              <div class="toggle toggle-off" style="background:#E0D0F0;"><div class="toggle-knob" style="left:3px;right:auto;"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DHA COMPLIANCE -->
+        <div style="background:linear-gradient(135deg,#EBF1FF,#F0F5FF);border:1.5px solid #BFDBFE;border-radius:14px;padding:15px;">
+          <div style="display:flex;align-items:center;gap:9px;margin-bottom:12px;">
+            <div style="font-size:20px;">🛡</div>
+            <div class="st" style="color:#1148A4;">DHA Compliance Status</div>
+            <div class="tg tg2" style="margin-left:auto;">✓ Compliant</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:7px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:#fff;border-radius:9px;font-size:11px;"><span style="font-weight:600;color:var(--txt);">Patient Data Encryption (AES-256)</span><div class="tg tg2">✓ Active</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:#fff;border-radius:9px;font-size:11px;"><span style="font-weight:600;color:var(--txt);">Audit Trail Logging</span><div class="tg tg2">✓ Active · 90-day retention</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:#fff;border-radius:9px;font-size:11px;"><span style="font-weight:600;color:var(--txt);">DHA Staff License Verification</span><div class="tg tg2">✓ All 52 verified</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:#FEF3C7;border-radius:9px;font-size:11px;border:1px solid #FDE68A;"><span style="font-weight:600;color:var(--txt);">3 Credential Renewals Due</span><div class="tg ta">⚠ Action Needed</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:#fff;border-radius:9px;font-size:11px;"><span style="font-weight:600;color:var(--txt);">Insurance Gateway Integration</span><div class="tg ta">⚠ Maintenance Mode</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="sl"><div class="sn">⚙️ Screen 9</div><div class="sst">AI & RPM Config · Alert Thresholds · AI Toggles · DHA Compliance Panel</div></div>
+</div>
+
+<!-- ════ SCREEN 10 — ANALYTICS + SYSTEM STATUS ════ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="browser" style="width:700px;max-width:calc(100vw - 48px);">
+  <div class="bbar"><div class="bdots"><div class="bdot" style="background:#FF5F57;"></div><div class="bdot" style="background:#FFBD2E;"></div><div class="bdot" style="background:#28C840;"></div></div><div class="burl"><span>🔒</span>admin.homehealthcare.ae/analytics</div><div class="bacts"><div class="bact">🔔</div></div></div>
+  <div class="inner">
+    <div class="sb">
+      <div class="sbl"><div class="sbl-n">🏥 HomeHealthcare</div><div class="sbl-s">Admin Control Centre</div></div>
+      <div class="sbp"><div class="sbav">ZR</div><div><div style="font-size:12px;font-weight:700;color:#fff;">Zarar Rehman</div><div style="font-size:10px;color:rgba(255,255,255,.45);">Super Admin</div></div></div>
+      <div class="sbnav">
+        <div class="sbg">OVERVIEW</div>
+        <div class="ni"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/></svg><span class="nl">Dashboard</span></div>
+        <div class="ni on"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span class="nl" style="color:var(--v3);font-weight:700;">Analytics</span></div>
+        <div class="sbg">PLATFORM</div>
+        <div class="ni"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><span class="nl">AI & RPM Config</span></div>
+        <div class="ni"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/></svg><span class="nl">Settings</span></div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="topbar" style="padding:12px 18px;">
+        <div><div class="tbt">Platform Analytics</div><div class="tbs">April 2026 · All services · System health monitoring</div></div>
+        <div style="display:flex;gap:7px;"><select style="background:var(--surf);border:1.5px solid var(--bdr);border-radius:8px;padding:6px 11px;font-size:11px;font-weight:700;color:var(--txt);font-family:'Nunito',sans-serif;cursor:pointer;"><option>April 2026</option><option>March 2026</option><option>Q1 2026</option></select><button class="btn-o" style="font-size:11px;padding:7px 12px;">📥 Export PDF</button></div>
+      </div>
+      <div class="content" style="padding:14px 18px;">
+
+        <!-- Platform KPIs -->
+        <div class="g4" style="margin-bottom:18px;">
+          <div class="card" style="padding:13px;"><div style="font-size:10px;color:var(--txt2);font-weight:600;letter-spacing:.4px;margin-bottom:4px;">TOTAL BOOKINGS</div><div style="font-family:'Sora',sans-serif;font-size:24px;font-weight:800;color:var(--txt);">1,484</div><div style="font-size:11px;color:var(--green);margin-top:3px;">↑ 16% vs March</div></div>
+          <div class="card" style="padding:13px;"><div style="font-size:10px;color:var(--txt2);font-weight:600;letter-spacing:.4px;margin-bottom:4px;">COMPLETION RATE</div><div style="font-family:'Sora',sans-serif;font-size:24px;font-weight:800;color:var(--green);">97.4%</div><div style="font-size:11px;color:var(--green);margin-top:3px;">↑ 0.3% vs March</div></div>
+          <div class="card" style="padding:13px;"><div style="font-size:10px;color:var(--txt2);font-weight:600;letter-spacing:.4px;margin-bottom:4px;">AVG SATISFACTION</div><div style="font-family:'Sora',sans-serif;font-size:24px;font-weight:800;color:var(--amb);">4.8 ⭐</div><div style="font-size:11px;color:var(--amb);margin-top:3px;">Across all services</div></div>
+          <div class="card" style="padding:13px;"><div style="font-size:10px;color:var(--txt2);font-weight:600;letter-spacing:.4px;margin-bottom:4px;">REVENUE / VISIT</div><div style="font-family:'Sora',sans-serif;font-size:24px;font-weight:800;color:var(--v);">AED 191</div><div style="font-size:11px;color:var(--v);margin-top:3px;">↑ 8% vs March</div></div>
+        </div>
+
+        <!-- Service breakdown chart -->
+        <div class="card" style="margin-bottom:14px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;"><div class="st">Service Breakdown — April 2026</div><div style="font-size:11px;color:var(--v);cursor:pointer;">Details →</div></div>
+          <div style="display:flex;align-items:flex-end;gap:12px;height:110px;padding:0 4px;margin-bottom:8px;">
+            <div class="bar"><div class="bf" style="background:linear-gradient(0deg,#1148A4,#2273E8);height:100px;"></div><div style="font-size:8px;color:var(--txt2);">Tele</div><div style="font-size:10px;font-weight:700;color:var(--txt);">384</div></div>
+            <div class="bar"><div class="bf" style="background:linear-gradient(0deg,#0891B2,#06B6D4);height:75px;"></div><div style="font-size:8px;color:var(--txt2);">Nursing</div><div style="font-size:10px;font-weight:700;color:var(--txt);">298</div></div>
+            <div class="bar"><div class="bf" style="background:linear-gradient(0deg,#16A34A,#22C55E);height:60px;"></div><div style="font-size:8px;color:var(--txt2);">Lab</div><div style="font-size:10px;font-weight:700;color:var(--txt);">245</div></div>
+            <div class="bar"><div class="bf" style="background:linear-gradient(0deg,#E8850A,#F59E0B);height:46px;"></div><div style="font-size:8px;color:var(--txt2);">Pharmacy</div><div style="font-size:10px;font-weight:700;color:var(--txt);">198</div></div>
+            <div class="bar"><div class="bf" style="background:linear-gradient(0deg,#059669,#10B981);height:38px;"></div><div style="font-size:8px;color:var(--txt2);">RPM</div><div style="font-size:10px;font-weight:700;color:var(--txt);">176</div></div>
+            <div class="bar"><div class="bf" style="background:linear-gradient(0deg,#7C3AED,#A78BFA);height:28px;"></div><div style="font-size:8px;color:var(--txt2);">Physio</div><div style="font-size:10px;font-weight:700;color:var(--txt);">124</div></div>
+            <div class="bar"><div class="bf" style="background:linear-gradient(0deg,#DC2626,#EF4444);height:17px;"></div><div style="font-size:8px;color:var(--txt2);">Fauri</div><div style="font-size:10px;font-weight:700;color:var(--txt);">59</div></div>
+          </div>
+        </div>
+
+        <!-- Patient outcomes -->
+        <div class="card" style="margin-bottom:14px;">
+          <div class="st" style="margin-bottom:12px;">Patient Outcome Metrics</div>
+          <div style="display:flex;flex-direction:column;gap:9px;">
+            <div><div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:12px;"><span style="color:var(--txt);">Condition improvement rate</span><span style="font-weight:800;color:var(--green);">88%</span></div><div style="height:6px;background:var(--srf2);border-radius:99px;overflow:hidden;"><div style="width:88%;height:100%;background:linear-gradient(90deg,var(--green),#22C55E);border-radius:99px;"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:12px;"><span style="color:var(--txt);">Hospital readmission avoidance</span><span style="font-weight:800;color:var(--blue);">76%</span></div><div style="height:6px;background:var(--srf2);border-radius:99px;overflow:hidden;"><div style="width:76%;height:100%;background:linear-gradient(90deg,var(--blue),#2273E8);border-radius:99px;"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:12px;"><span style="color:var(--txt);">Care plan adherence (patients)</span><span style="font-weight:800;color:var(--v);">83%</span></div><div style="height:6px;background:var(--srf2);border-radius:99px;overflow:hidden;"><div style="width:83%;height:100%;background:linear-gradient(90deg,var(--v),var(--v3));border-radius:99px;"></div></div></div>
+            <div><div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:12px;"><span style="color:var(--txt);">Medication adherence (MAAS)</span><span style="font-weight:800;color:var(--amb);">71%</span></div><div style="height:6px;background:var(--srf2);border-radius:99px;overflow:hidden;"><div style="width:71%;height:100%;background:linear-gradient(90deg,var(--amb),#FCD34D);border-radius:99px;"></div></div></div>
+          </div>
+        </div>
+
+        <!-- System Status -->
+        <div style="background:linear-gradient(135deg,var(--side),var(--side2));border-radius:14px;padding:16px;">
+          <div style="font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:var(--v3);margin-bottom:14px;">⚡ Live System Status</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 12px;background:rgba(255,255,255,.06);border-radius:10px;"><div style="display:flex;gap:8px;align-items:center;"><div style="width:7px;height:7px;border-radius:50%;background:#22C55E;animation:pulse 2s infinite;"></div><span style="font-size:12px;font-weight:600;color:#fff;">Patient Mobile App (iOS + Android)</span></div><div class="tg tg2">Operational</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 12px;background:rgba(255,255,255,.06);border-radius:10px;"><div style="display:flex;gap:8px;align-items:center;"><div style="width:7px;height:7px;border-radius:50%;background:#22C55E;animation:pulse 2s infinite;"></div><span style="font-size:12px;font-weight:600;color:#fff;">Nurse Mobile App (iOS + Android)</span></div><div class="tg tg2">Operational</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 12px;background:rgba(255,255,255,.06);border-radius:10px;"><div style="display:flex;gap:8px;align-items:center;"><div style="width:7px;height:7px;border-radius:50%;background:#22C55E;animation:pulse 2s infinite;"></div><span style="font-size:12px;font-weight:600;color:#fff;">Doctor Web Portal</span></div><div class="tg tg2">Operational</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 12px;background:rgba(255,255,255,.06);border-radius:10px;"><div style="display:flex;gap:8px;align-items:center;"><div style="width:7px;height:7px;border-radius:50%;background:#22C55E;animation:pulse 2s infinite;"></div><span style="font-size:12px;font-weight:600;color:#fff;">RPM Engine & IoT Gateway</span></div><div class="tg tg2">Operational</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 12px;background:rgba(255,255,255,.06);border-radius:10px;"><div style="display:flex;gap:8px;align-items:center;"><div style="width:7px;height:7px;border-radius:50%;background:#22C55E;animation:pulse 2s infinite;"></div><span style="font-size:12px;font-weight:600;color:#fff;">AI Triage Engine</span></div><div class="tg tg2">Operational</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 12px;background:rgba(255,255,255,.06);border-radius:10px;border:1px solid rgba(245,158,11,.2);"><div style="display:flex;gap:8px;align-items:center;"><div style="width:7px;height:7px;border-radius:50%;background:#F59E0B;animation:blink 1.4s infinite;"></div><span style="font-size:12px;font-weight:600;color:#fff;">Insurance Gateway</span></div><div class="tg ta">⚠ Maintenance</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 12px;background:rgba(255,255,255,.06);border-radius:10px;"><div style="display:flex;gap:8px;align-items:center;"><div style="width:7px;height:7px;border-radius:50%;background:#22C55E;animation:pulse 2s infinite;"></div><span style="font-size:12px;font-weight:600;color:#fff;">EMR Sync Engine</span></div><div class="tg tg2">Operational</div></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.07);font-size:11px;color:rgba(255,255,255,.4);">
+            <span>Uptime this month: <b style="color:var(--vL);">99.97%</b></span>
+            <span>Last incident: Mar 12 (resolved)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="sl"><div class="sn">⚙️ Screen 10</div><div class="sst">Analytics · Platform KPIs · Service Chart · Patient Outcomes · System Status</div></div>
+</div>
+
+</div><!-- end row -->
+
+
+</body>
+</html>
