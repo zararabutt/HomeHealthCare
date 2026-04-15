@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Home Healthcare — Patient App</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Sora:wght@400;600;700;800&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:linear-gradient(135deg,#C8D8F0 0%,#DCE8F8 50%,#C8D0EC 100%);
+  display:flex;align-items:center;justify-content:center;
+  min-height:100vh;font-family:'Nunito',sans-serif;padding:28px 16px;
+}
+
+/* PHONE SHELL */
+.phone{
+  width:390px;min-height:848px;background:#EEF3FB;
+  border-radius:52px;overflow:hidden;
+  box-shadow:0 70px 140px rgba(0,0,0,.28),0 0 0 1.5px #B8C8E0,inset 0 0 0 1px #fff;
+  position:relative;display:flex;flex-direction:column;
+}
+
+/* STATUS BAR */
+.statusbar{
+  height:48px;background:#1148A4;
+  display:flex;align-items:flex-end;justify-content:space-between;
+  padding:0 26px 10px;flex-shrink:0;
+}
+.statusbar .time{font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:#fff;}
+.statusbar .icons{display:flex;gap:6px;align-items:center;}
+
+/* HEADER */
+.header{
+  background:linear-gradient(155deg,#0D3D9C 0%,#1554C0 45%,#1E6BE0 100%);
+  padding:14px 22px 34px;position:relative;overflow:hidden;flex-shrink:0;
+}
+.header::before{content:'';position:absolute;top:-80px;right:-50px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.06);}
+.header::after{content:'';position:absolute;bottom:-50px;left:30px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.04);}
+
+.loc-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;position:relative;z-index:1;}
+.loc-label{font-size:10px;color:rgba(255,255,255,.65);font-weight:700;letter-spacing:.8px;text-transform:uppercase;}
+.loc-addr{display:flex;align-items:center;gap:5px;font-size:14px;font-weight:800;color:#fff;margin-top:3px;}
+.header-icons{display:flex;gap:9px;}
+.icon-btn{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.14);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;border:1px solid rgba(255,255,255,.18);}
+.badge{position:absolute;top:-2px;right:-2px;width:16px;height:16px;background:#FF3B30;border-radius:50%;border:2px solid #1148A4;font-size:8px;font-weight:900;color:#fff;display:flex;align-items:center;justify-content:center;}
+
+/* PATIENT CARD */
+.patient-card{background:rgba(255,255,255,.16);backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.25);border-radius:22px;padding:14px 16px;display:flex;align-items:center;gap:14px;position:relative;z-index:1;}
+.avatar-wrap{position:relative;flex-shrink:0;}
+.avatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#FFD580,#FF9A3C);display:flex;align-items:center;justify-content:center;font-size:21px;font-weight:900;color:#fff;font-family:'Sora',sans-serif;border:2.5px solid rgba(255,255,255,.5);box-shadow:0 4px 16px rgba(0,0,0,.2);}
+.online-dot{position:absolute;bottom:2px;right:2px;width:13px;height:13px;background:#2ECC71;border-radius:50%;border:2.5px solid rgba(255,255,255,.5);}
+.patient-name{font-size:17px;font-weight:900;color:#fff;letter-spacing:-.2px;font-family:'Sora',sans-serif;}
+.mrn-row{display:flex;align-items:center;gap:6px;margin-top:4px;}
+.mrn-label{font-size:11px;color:rgba(255,255,255,.6);font-weight:600;}
+.mrn-value{font-size:11px;color:rgba(255,255,255,.95);font-weight:800;background:rgba(255,255,255,.15);padding:2px 9px;border-radius:99px;}
+.view-btn{background:#fff;color:#1148A4;border:none;border-radius:99px;padding:8px 15px;font-size:11px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;white-space:nowrap;box-shadow:0 3px 12px rgba(0,0,0,.14);flex-shrink:0;}
+
+/* HEALTH BAND */
+.health-band{display:flex;gap:9px;padding:0 18px;margin-top:-20px;position:relative;z-index:10;flex-shrink:0;}
+.hchip{flex:1;background:#fff;border-radius:16px;padding:12px 7px;box-shadow:0 6px 24px rgba(17,72,164,.12);text-align:center;border:1.5px solid rgba(17,72,164,.07);}
+.hchip-val{font-size:15px;font-weight:900;font-family:'Sora',sans-serif;line-height:1;}
+.hchip-lbl{font-size:8.5px;font-weight:700;color:#7A8CA8;margin-top:3px;letter-spacing:.4px;text-transform:uppercase;}
+.hchip-sub{font-size:9px;font-weight:700;margin-top:2px;}
+
+/* SCROLL */
+.scroll{flex:1;overflow-y:auto;padding:20px 18px 28px;}
+.scroll::-webkit-scrollbar{display:none;}
+
+/* SECTION HEADERS */
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;}
+.sec-title{font-size:17px;font-weight:900;color:#1A2744;font-family:'Sora',sans-serif;letter-spacing:-.2px;}
+.see-all{font-size:12px;font-weight:700;color:#1A5FCC;cursor:pointer;padding:3px 8px;background:#EBF1FF;border-radius:99px;}
+
+/* APPT CARD */
+.appt-card{background:linear-gradient(135deg,#0D3D9C,#1E6BE0);border-radius:24px;padding:16px 18px;margin-bottom:24px;display:flex;align-items:stretch;gap:14px;box-shadow:0 10px 32px rgba(17,72,164,.32);position:relative;overflow:hidden;}
+.appt-card::before{content:'';position:absolute;top:-40px;right:-40px;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,.07);}
+.appt-avatar{width:48px;height:48px;border-radius:16px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;border:1.5px solid rgba(255,255,255,.25);}
+.appt-info{flex:1;}
+.appt-name{font-size:14px;font-weight:900;color:#fff;font-family:'Sora',sans-serif;}
+.appt-spec{font-size:11px;color:rgba(255,255,255,.65);margin-top:2px;}
+.appt-time-row{display:flex;align-items:center;gap:5px;margin-top:6px;}
+.appt-time-row span{font-size:11px;font-weight:700;color:#93C5FD;}
+.join-btn{margin-top:10px;background:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.3);border-radius:10px;padding:6px 12px;font-size:10px;font-weight:800;color:#fff;cursor:pointer;font-family:'Nunito',sans-serif;display:inline-block;}
+.appt-wait{text-align:center;display:flex;flex-direction:column;justify-content:center;padding:0 4px;flex-shrink:0;}
+.wait-lbl{font-size:8px;color:rgba(255,255,255,.55);font-weight:700;letter-spacing:.6px;text-transform:uppercase;white-space:nowrap;}
+.wait-val{font-size:28px;font-weight:900;color:#FFD580;font-family:'Sora',sans-serif;line-height:1.1;}
+.wait-sub{font-size:8.5px;color:rgba(255,255,255,.5);white-space:nowrap;}
+
+/* AI TRIAGE CARD */
+.ai-triage-card{
+  background:linear-gradient(135deg,#8B5CF6,#A78BFA);
+  border-radius:24px;padding:18px 20px;margin-bottom:20px;
+  box-shadow:0 10px 32px rgba(139,92,246,.32);
+  position:relative;overflow:hidden;cursor:pointer;
+  animation:fadeUp .3s ease both;
+}
+.ai-triage-card::before{
+  content:'';position:absolute;top:-40px;right:-40px;
+  width:130px;height:130px;border-radius:50%;
+  background:rgba(255,255,255,.1);
+}
+.ai-badge{
+  display:inline-block;background:rgba(255,255,255,.2);
+  border:1.5px solid rgba(255,255,255,.3);
+  padding:5px 12px;border-radius:99px;
+  font-size:9px;font-weight:800;color:#fff;
+  letter-spacing:.4px;margin-bottom:10px;
+}
+.ai-triage-title{
+  font-size:18px;font-weight:900;color:#fff;
+  font-family:'Sora',sans-serif;margin-bottom:6px;
+  position:relative;z-index:1;
+}
+.ai-triage-desc{
+  font-size:12px;color:rgba(255,255,255,.85);
+  line-height:1.5;margin-bottom:14px;position:relative;z-index:1;
+}
+.ai-triage-btn{
+  background:#fff;color:#8B5CF6;border:none;
+  border-radius:12px;padding:11px 18px;
+  font-size:12px;font-weight:800;cursor:pointer;
+  font-family:'Nunito',sans-serif;
+  box-shadow:0 4px 16px rgba(0,0,0,.15);
+  display:inline-flex;align-items:center;gap:7px;
+  position:relative;z-index:1;
+}
+
+/* SERVICE TILES */
+.tiles-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:24px;}
+.tile{
+  background:#fff;border-radius:20px;padding:16px 10px 13px;
+  display:flex;flex-direction:column;align-items:center;gap:9px;
+  cursor:pointer;box-shadow:0 3px 14px rgba(17,72,164,.08);
+  border:1.5px solid rgba(17,72,164,.05);
+  position:relative;overflow:hidden;
+  animation:fadeUp .4s ease both;
+}
+.tile::before{content:'';position:absolute;top:0;left:0;right:0;height:3.5px;border-radius:20px 20px 0 0;}
+.tile:active{transform:scale(.96);}
+.t-icon{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;}
+.t-lbl{font-size:11.5px;font-weight:800;color:#1A2744;text-align:center;line-height:1.3;}
+.t-sub{font-size:9.5px;font-weight:600;color:#9AAFC6;text-align:center;}
+
+/* RECENT ACTIVITY */
+.act-list{display:flex;flex-direction:column;gap:9px;margin-bottom:24px;}
+.act-item{background:#fff;border-radius:16px;padding:13px 14px;display:flex;align-items:center;gap:13px;box-shadow:0 2px 10px rgba(17,72,164,.06);}
+.act-ico{width:42px;height:42px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.act-info{flex:1;}
+.act-title{font-size:13px;font-weight:800;color:#1A2744;}
+.act-sub{font-size:11px;color:#8FA3BE;margin-top:1px;}
+.act-right{text-align:right;flex-shrink:0;}
+.act-time{font-size:10px;color:#B0BECF;font-weight:600;}
+.act-badge{font-size:9px;font-weight:800;padding:3px 9px;border-radius:99px;margin-top:4px;display:inline-block;white-space:nowrap;}
+
+/* RPM WIDGET */
+.rpm-card{background:#fff;border-radius:22px;padding:16px 18px;margin-bottom:24px;box-shadow:0 3px 16px rgba(17,72,164,.08);}
+.rpm-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.rpm-title{font-size:15px;font-weight:900;color:#1A2744;font-family:'Sora',sans-serif;}
+.rpm-live{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:800;color:#22C55E;background:#DCFCE7;padding:3px 10px;border-radius:99px;}
+.live-dot{width:7px;height:7px;border-radius:50%;background:#22C55E;animation:pulse 1.5s infinite;}
+.rpm-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.rpm-chip{text-align:center;background:#F5F8FF;border-radius:12px;padding:11px 6px;border:1.5px solid #E4ECF8;}
+.rpm-val{font-size:15px;font-weight:900;font-family:'Sora',sans-serif;line-height:1;}
+.rpm-lbl{font-size:8px;font-weight:700;color:#7A8CA8;margin-top:3px;letter-spacing:.3px;}
+.rpm-unit{font-size:8px;color:#B8C8D8;margin-top:1px;}
+
+/* PROMO BANNER */
+.promo{background:linear-gradient(135deg,#0D3D9C,#7C3AED);border-radius:22px;padding:16px 18px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 8px 28px rgba(124,58,237,.25);overflow:hidden;position:relative;}
+.promo::after{content:'';position:absolute;right:-20px;top:-20px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.08);}
+.promo-text{}
+.promo-title{font-size:16px;font-weight:900;color:#fff;font-family:'Sora',sans-serif;}
+.promo-sub{font-size:12px;color:rgba(255,255,255,.7);margin-top:3px;}
+.promo-btn{background:#fff;color:#7C3AED;border:none;border-radius:12px;padding:9px 15px;font-size:11px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;flex-shrink:0;position:relative;z-index:1;}
+
+/* BOTTOM NAV */
+.bottomnav{background:#fff;border-top:1px solid #E4ECF0;display:flex;justify-content:space-around;padding:10px 0 20px;flex-shrink:0;box-shadow:0 -6px 28px rgba(17,72,164,.08);}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;flex:1;padding-top:3px;}
+.nav-ico{width:42px;height:38px;border-radius:14px;display:flex;align-items:center;justify-content:center;}
+.nav-item.active .nav-ico{background:#EBF1FF;}
+.nav-lbl{font-size:9px;font-weight:700;color:#B0BECF;letter-spacing:.3px;}
+.nav-item.active .nav-lbl{color:#1148A4;}
+
+.nav-item:hover{color:#1148A4;} 
+.nav-lbl:hover{color:#1148A4;}
+
+
+
+
+.nav-item:hover svg {
+  stroke: #1148A4;
+}
+
+/* FAB */
+.fab{
+  position:fixed;bottom:130px;
+  right:calc(50% - 390px/2 + 16px);
+  width:54px;height:54px;
+  background:linear-gradient(135deg,#1148A4,#2273E8);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 30px rgba(17,72,164,.5);cursor:pointer;font-size:22px;
+  animation:glow 3s ease-in-out infinite;z-index:100;
+}
+
+@keyframes glow{0%,100%{box-shadow:0 8px 30px rgba(17,72,164,.5)}50%{box-shadow:0 8px 48px rgba(17,72,164,.75)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+.a-tags {
+  text-decoration: none;
+}
+.home-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: inline-block;
+    padding: 12px 28px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 15px;
+    border-radius: 30px;
+    background: linear-gradient(45deg, #2563eb, #06b6d4);
+    overflow: hidden;
+    transition: all 0.4s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* Shine animation */
+.home-btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.6), transparent);
+    transition: 0.5s;
+}
+
+.home-btn:hover::before {
+    left: 100%;
+}
+
+/* Hover effect */
+.home-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+/* Click effect */
+.home-btn:active {
+    transform: scale(0.95);
+}
+</style>
+</head>
+<body>
+
+  <div>
+    <a href="./index.html" class="home-btn">← Back to Home</a>
+  </div>
+<div class="phone">
+
+  <!-- STATUS BAR -->
+  <div class="statusbar">
+    <span class="time">11:20</span>
+    <div class="icons">
+      <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+      <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+      <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="loc-row">
+      <div>
+        <div class="loc-label">📍 Your Location</div>
+        <div class="loc-addr">Abu Dhabi, UAE &nbsp;▾</div>
+      </div>
+      <div class="header-icons">
+        <div class="icon-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <div class="badge">3</div>
+        </div>
+        <div class="icon-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          <div class="badge" style="background:#FF9500;">2</div>
+        </div>
+      </div>
+    </div>
+    <div class="patient-card">
+      <div class="avatar-wrap">
+        <div class="avatar">MA</div>
+        <div class="online-dot"></div>
+      </div>
+      <div style="flex:1;">
+        <div class="patient-name">Muhammad Ali</div>
+        <div class="mrn-row">
+          <span class="mrn-label">MR #:</span>
+          <span class="mrn-value">226589</span>
+        </div>
+      </div>
+      <button class="view-btn">View Profile</button>
+    </div>
+  </div>
+
+  <!-- HEALTH BAND -->
+  <div class="health-band">
+    <div class="hchip">
+      <div class="hchip-val" style="color:#1148A4;">118<span style="font-size:9px;">/76</span></div>
+      <div class="hchip-lbl">BP</div>
+      <div class="hchip-sub" style="color:#22C55E;">Normal</div>
+    </div>
+    <div class="hchip">
+      <div class="hchip-val" style="color:#0EA5E9;">98<span style="font-size:9px;">%</span></div>
+      <div class="hchip-lbl">SpO₂</div>
+      <div class="hchip-sub" style="color:#22C55E;">Normal</div>
+    </div>
+    <div class="hchip">
+      <div class="hchip-val" style="color:#D97706;">102</div>
+      <div class="hchip-lbl">Glucose</div>
+      <div class="hchip-sub" style="color:#D97706;">↑ Watch</div>
+    </div>
+    <div class="hchip">
+      <div class="hchip-val" style="color:#DB2777;">72</div>
+      <div class="hchip-lbl">Heart Rate</div>
+      <div class="hchip-sub" style="color:#22C55E;">Normal</div>
+    </div>
+  </div>
+
+  <!-- SCROLL CONTENT -->
+  <div class="scroll">
+
+    <!-- Upcoming Appointment -->
+    <div style="margin-top:20px;margin-bottom:6px;">
+      <div class="sec-head">
+        <div class="sec-title">Upcoming Visit</div>
+        <div class="see-all">See all →</div>
+      </div>
+      <div class="appt-card">
+        <div class="appt-avatar">🩺</div>
+        <div class="appt-info">
+          <div class="appt-name">Dr. Bilal Hussain</div>
+          <div class="appt-spec">Cardiologist · Teleconsult</div>
+          <div class="appt-time-row">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#93C5FD" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span>Today · 4:30 PM</span>
+          </div>
+          <button class="join-btn">▶ Join Call Now</button>
+        </div>
+        <div class="appt-wait">
+          <div class="wait-lbl">Wait Time</div>
+          <div class="wait-val">~18<span style="font-size:13px;">m</span></div>
+          <div class="wait-sub">3 ahead of you</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI Triage Card -->
+    <div class="ai-triage-card" >
+      <div class="ai-badge">🤖 AI POWERED</div>
+      <div class="ai-triage-title">AI Triage Assessment</div>
+      <div class="ai-triage-desc">
+        Tell us about your symptoms or upload medical reports. Our AI will analyze and suggest the best care pathway for you.
+      </div>
+      <a href="./AI_Voice_Assessment.html" style="text-decoration: none;"><button class="ai-triage-btn">
+        <span style="font-size:16px;">🎤</span>
+        Start Voice Assessment
+      </button></a>
+    </div>
+
+    <!-- Service Tiles -->
+    <div class="sec-head">
+      <div class="sec-title">Quality Services</div>
+      <div class="see-all">View all →</div>
+    </div>
+    <div class="tiles-grid">
+
+      <!-- 1 Tele-Consultation -->
+       <a href="./TeleConsultation_Flow.html" class="a-tags">
+      <div class="tile" style="animation-delay:.04s">
+        <div style="position:absolute;top:0;left:0;right:0;height:3.5px;border-radius:20px 20px 0 0;background:linear-gradient(90deg,#1148A4,#2273E8);"></div>
+        <div class="t-icon" style="background:linear-gradient(135deg,#EBF1FF,#D4E4FF);">
+          <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="#1148A4" stroke-width="1.6" stroke-linecap="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-4.62-4.62 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+            <line x1="15" y1="5" x2="19" y2="5" stroke-width="2"/><line x1="17" y1="3" x2="17" y2="7" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="t-lbl">Tele Consultation</div>
+        <div class="t-sub">Video · Audio</div>
+      </div>
+</a>
+      <!-- 2 Fauri Mashwara -->
+       <a href="./Quick_Consultation_Flow.html" class="a-tags">
+      <div class="tile" style="animation-delay:.07s">
+        <div style="position:absolute;top:0;left:0;right:0;height:3.5px;border-radius:20px 20px 0 0;background:linear-gradient(90deg,#DC2626,#FB7185);"></div>
+        <div class="t-icon" style="background:linear-gradient(135deg,#FFF0F0,#FFE0DE);">
+          <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="1.6" stroke-linecap="round">
+            <path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3z"/><path d="M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>
+          </svg>
+        </div>
+        <div class="t-lbl">Quick Consult</div>
+        <div class="t-sub">Urgent Advice</div>
+      </div>
+</a>
+      <!-- 3 Lab Services -->
+       <a href="./LabServices_Flow.html" class="a-tags">
+      <div class="tile" style="animation-delay:.10s">
+        <div style="position:absolute;top:0;left:0;right:0;height:3.5px;border-radius:20px 20px 0 0;background:linear-gradient(90deg,#7C3AED,#A78BFA);"></div>
+        <div class="t-icon" style="background:linear-gradient(135deg,#F0EBFF,#E2D4FF);">
+          <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="1.6" stroke-linecap="round">
+            <path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v18m0 0h10a2 2 0 0 0 2-2V9M9 21H5a2 2 0 0 1-2-2V9m0 0h18"/>
+          </svg>
+        </div>
+        <div class="t-lbl">Laboratory Services</div>
+        <div class="t-sub">Home Sampling</div>
+      </div>
+</a>
+
+      <!-- 4 Home Pharmacy -->
+       <a href="./PharmacyServices_Flow.html" class="a-tags">
+      <div class="tile" style="animation-delay:.13s">
+        <div style="position:absolute;top:0;left:0;right:0;height:3.5px;border-radius:20px 20px 0 0;background:linear-gradient(90deg,#D97706,#FBBF24);"></div>
+        <div class="t-icon" style="background:linear-gradient(135deg,#FFFBEB,#FFEEB0);">
+          <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="#D97706" stroke-width="1.6" stroke-linecap="round">
+            <path d="M10.5 20H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v7.5M16 19h6M19 16v6"/>
+          </svg>
+        </div>
+        <div class="t-lbl">Home Pharmacy</div>
+        <div class="t-sub">Door Delivery</div>
+      </div>
+      </a>
+
+      <!-- 5 Home Nursing -->
+       <a href="./HomeNursing_Flow.html" class="a-tags">
+      <div class="tile" style="animation-delay:.16s">
+        <div style="position:absolute;top:0;left:0;right:0;height:3.5px;border-radius:20px 20px 0 0;background:linear-gradient(90deg,#0EA5E9,#38BDF8);"></div>
+        <div class="t-icon" style="background:linear-gradient(135deg,#E0F7FF,#B8EFFF);">
+          <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="#0EA5E9" stroke-width="1.6" stroke-linecap="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <div class="t-lbl">Home Nursing</div>
+        <div class="t-sub">Bedside Care</div>
+      </div>
+</a>
+      <!-- 6 Home Physiotherapy -->
+       <a href="./Physiotherapy_Flow.html" class="a-tags">
+      <div class="tile" style="animation-delay:.19s">
+        <div style="position:absolute;top:0;left:0;right:0;height:3.5px;border-radius:20px 20px 0 0;background:linear-gradient(90deg,#059669,#34D399);"></div>
+        <div class="t-icon" style="background:linear-gradient(135deg,#ECFDF5,#BBFDE8);">
+          <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="1.6" stroke-linecap="round">
+            <path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/>
+          </svg>
+        </div>
+        <div class="t-lbl">Physiotherapy</div>
+        <div class="t-sub">Rehab at Home</div>
+      </div>
+</a>
+      <!-- 7 Care Plan -->
+       <a href="./Patient_App_CarePlan_Updated.html" class="a-tags">
+      <div class="tile" style="animation-delay:.22s">
+        <div style="position:absolute;top:0;left:0;right:0;height:3.5px;border-radius:20px 20px 0 0;background:linear-gradient(90deg,#DB2777,#F472B6);"></div>
+        <div class="t-icon" style="background:linear-gradient(135deg,#FFF0F7,#FFD6ED);">
+          <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="#DB2777" stroke-width="1.6" stroke-linecap="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <div class="t-lbl">My Care Plan</div>
+        <div class="t-sub">Treatment</div>
+      </div>
+</a>
+      <!-- 8 RPM -->
+       <a href="./RPM_Monitoring_Flow.html" class="a-tags">
+      <div class="tile" style="animation-delay:.25s">
+        <div style="position:absolute;top:0;left:0;right:0;height:3.5px;border-radius:20px 20px 0 0;background:linear-gradient(90deg,#1148A4,#0EA5E9);"></div>
+        <div class="t-icon" style="background:linear-gradient(135deg,#EBF7FF,#CCF0FF);">
+          <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="#1148A4" stroke-width="1.6" stroke-linecap="round">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+          </svg>
+        </div>
+        <div class="t-lbl">RPM Monitoring</div>
+        <div class="t-sub">24/7 Live</div>
+      </div>
+</a>
+      <!-- 9 Caregiver -->
+       <a href="./Patient_App_CarePlan_Updated.html" class="a-tags">
+      <div class="tile" style="animation-delay:.28s">
+        <div style="position:absolute;top:0;left:0;right:0;height:3.5px;border-radius:20px 20px 0 0;background:linear-gradient(90deg,#7C3AED,#DB2777);"></div>
+        <div class="t-icon" style="background:linear-gradient(135deg,#F5EBFF,#FFE0F5);">
+          <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="1.6" stroke-linecap="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+            <path d="M20 8v6M23 11h-6" stroke="#DB2777"/>
+          </svg>
+        </div>
+        <div class="t-lbl">Caregiver Mode</div>
+        <div class="t-sub">Family Access</div>
+      </div>
+</a>
+    </div>
+
+    <!-- RPM Widget -->
+    <div class="rpm-card">
+      <div class="rpm-head">
+        <div class="rpm-title">Live Health Monitor</div>
+        <div class="rpm-live"><div class="live-dot"></div>LIVE</div>
+      </div>
+      <div class="rpm-grid">
+        <div class="rpm-chip">
+          <div class="rpm-val" style="color:#1148A4;">118<span style="font-size:9px;font-weight:700;">/76</span></div>
+          <div class="rpm-lbl">Blood Pressure</div>
+          <div class="rpm-unit">mmHg</div>
+        </div>
+        <div class="rpm-chip">
+          <div class="rpm-val" style="color:#0EA5E9;">98<span style="font-size:10px;">%</span></div>
+          <div class="rpm-lbl">SpO₂ Oxygen</div>
+          <div class="rpm-unit">%</div>
+        </div>
+        <div class="rpm-chip">
+          <div class="rpm-val" style="color:#D97706;">102</div>
+          <div class="rpm-lbl">Blood Glucose</div>
+          <div class="rpm-unit">mg/dL</div>
+        </div>
+        <div class="rpm-chip">
+          <div class="rpm-val" style="color:#DB2777;">72</div>
+          <div class="rpm-lbl">Heart Rate</div>
+          <div class="rpm-unit">bpm</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Promo Banner -->
+    <div class="promo">
+      <div class="promo-text">
+        <div class="promo-title">📋 Report Symptoms</div>
+        <div class="promo-sub">Tap mic — AI triage in 30 seconds</div>
+      </div>
+      <button class="promo-btn">🎙 Start</button>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="sec-head">
+      <div class="sec-title">Recent Activity</div>
+      <div class="see-all">View all →</div>
+    </div>
+    <div class="act-list">
+      <div class="act-item">
+        <div class="act-ico" style="background:#EBF5FF;">🩺</div>
+        <div class="act-info">
+          <div class="act-title">Home Visit — Nurse Aisha</div>
+          <div class="act-sub">Vitals recorded · Dressing changed</div>
+        </div>
+        <div class="act-right">
+          <div class="act-time">Today 10 AM</div>
+          <div class="act-badge" style="background:#DCFCE7;color:#16A34A;">Completed</div>
+        </div>
+      </div>
+      <div class="act-item">
+        <div class="act-ico" style="background:#FFF7E0;">💊</div>
+        <div class="act-info">
+          <div class="act-title">Amlodipine 10mg</div>
+          <div class="act-sub">Morning dose — taken on time</div>
+        </div>
+        <div class="act-right">
+          <div class="act-time">8:00 AM</div>
+          <div class="act-badge" style="background:#DCFCE7;color:#16A34A;">Taken ✓</div>
+        </div>
+      </div>
+      <div class="act-item">
+        <div class="act-ico" style="background:#FFF0F7;">🔬</div>
+        <div class="act-info">
+          <div class="act-title">CBC Report Uploaded</div>
+          <div class="act-sub">OCR processed · 5 values extracted</div>
+        </div>
+        <div class="act-right">
+          <div class="act-time">Mar 28</div>
+          <div class="act-badge" style="background:#EBF1FF;color:#1148A4;">View →</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end scroll -->
+
+  <!-- BOTTOM NAV -->
+  <div class="bottomnav">
+    <div class="nav-item active">
+      <div class="nav-ico">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1148A4" stroke-width="2.2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </div>
+      <span class="nav-lbl" style="color:#1148A4;font-weight:800;">Home</span>
+    </div>
+    <div class="nav-item" onclick="redirect('./Patient_Health_Passport.html')">
+      <div class="nav-ico">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B0BECF" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      </div>
+      <span class="nav-lbl">Health Passport</span>
+    </div>
+    <div class="nav-item" onclick="redirect('./My_Bookings.html')">
+      <div class="nav-ico">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B0BECF" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      </div>
+      <span class="nav-lbl">My Bookings</span>
+    </div>
+    <div class="nav-item" onclick="redirect('./Patient_Messages.html')">
+      <div class="nav-ico">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B0BECF" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <span class="nav-lbl">Messages</span>
+    </div>
+    <div class="nav-item" onclick="redirect('./Patient_Profile.html')">
+      <div class="nav-ico">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B0BECF" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </div>
+      <span class="nav-lbl">Profile</span>
+    </div>
+  </div>
+
+</div><!-- end phone -->
+
+<!-- FAB -->
+
+
+
+<script>
+  function redirect(url) {
+    window.location.href = url;
+  }
+</script>
+</body>
+</html>
+
+

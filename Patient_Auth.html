@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Welcome — Humania Home Healthcare</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Sora:wght@400;600;700;800&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:linear-gradient(135deg,#C8D8F0 0%,#DCE8F8 50%,#C8D0EC 100%);
+  display:flex;align-items:center;justify-content:center;
+  min-height:100vh;font-family:'Nunito',sans-serif;padding:28px 16px;
+}
+
+/* PHONE SHELL */
+.phone{
+  width:390px;min-height:848px;background:#EEF3FB;
+  border-radius:52px;overflow:hidden;
+  box-shadow:0 70px 140px rgba(0,0,0,.28),0 0 0 1.5px #B8C8E0,inset 0 0 0 1px #fff;
+  position:relative;display:flex;flex-direction:column;
+}
+
+/* STATUS BAR */
+.statusbar{
+  height:48px;background:#1148A4;
+  display:flex;align-items:flex-end;justify-content:space-between;
+  padding:0 26px 10px;flex-shrink:0;
+}
+.statusbar .time{font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:#fff;}
+.statusbar .icons{display:flex;gap:6px;align-items:center;}
+
+/* HEADER */
+.header{
+  background:linear-gradient(155deg,#0D3D9C 0%,#1554C0 45%,#1E6BE0 100%);
+  padding:18px 22px 44px;position:relative;overflow:hidden;flex-shrink:0;
+}
+.header::before{content:'';position:absolute;top:-80px;right:-50px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.06);}
+.header::after{content:'';position:absolute;bottom:-50px;left:30px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.04);}
+
+/* LOGO */
+.logo-container{
+  text-align:center;padding:30px 0 24px;
+  position:relative;z-index:1;
+}
+.logo{
+  width:80px;height:80px;
+  background:rgba(255,255,255,.2);
+  border:3px solid rgba(255,255,255,.3);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:42px;margin:0 auto 14px;
+  animation:float 3s ease-in-out infinite;
+}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+
+.app-name{
+  font-size:24px;font-weight:900;color:#fff;
+  font-family:'Sora',sans-serif;margin-bottom:6px;
+  letter-spacing:-.5px;
+}
+.tagline{
+  font-size:13px;color:rgba(255,255,255,.8);
+  font-weight:600;
+}
+
+/* SCROLL */
+.scroll{flex:1;overflow-y:auto;padding:24px 20px 28px;}
+.scroll::-webkit-scrollbar{display:none;}
+
+/* WELCOME TEXT */
+.welcome-title{
+  font-size:22px;font-weight:900;color:#1A2744;
+  font-family:'Sora',sans-serif;text-align:center;
+  margin-bottom:10px;
+}
+.welcome-text{
+  font-size:13px;color:#64748B;text-align:center;
+  line-height:1.6;margin-bottom:28px;
+}
+
+/* INPUT CARD */
+.input-card{
+  background:#fff;border-radius:20px;padding:20px;
+  margin-bottom:16px;box-shadow:0 3px 14px rgba(17,72,164,.08);
+  border:1.5px solid rgba(17,72,164,.05);
+}
+.input-label{
+  font-size:12px;font-weight:800;color:#1A2744;
+  margin-bottom:8px;display:block;
+}
+.input-field{
+  width:100%;padding:12px 14px;
+  border:2px solid #E2E8F0;border-radius:12px;
+  font-size:14px;font-weight:600;color:#1A2744;
+  font-family:'Nunito',sans-serif;
+  transition:all .2s;
+}
+.input-field:focus{
+  outline:none;border-color:#1148A4;
+  background:rgba(17,72,164,.02);
+}
+.input-field::placeholder{
+  color:#94A3B8;font-weight:500;
+}
+
+.input-hint{
+  font-size:11px;color:#64748B;margin-top:6px;
+  line-height:1.4;
+}
+
+/* PHONE INPUT */
+.phone-input-group{
+  display:flex;gap:10px;
+}
+.country-code{
+  width:90px;padding:12px 10px;
+  border:2px solid #E2E8F0;border-radius:12px;
+  font-size:14px;font-weight:700;color:#1A2744;
+  text-align:center;background:#F8FAFC;
+  font-family:'Nunito',sans-serif;
+}
+
+/* CHECKBOX */
+.checkbox-group{
+  display:flex;align-items:flex-start;gap:10px;
+  margin:16px 0;
+}
+.checkbox{
+  width:20px;height:20px;
+  border:2px solid #E2E8F0;border-radius:6px;
+  flex-shrink:0;cursor:pointer;
+  transition:all .2s;
+}
+.checkbox.checked{
+  background:linear-gradient(135deg,#1148A4,#2273E8);
+  border-color:#1148A4;
+  position:relative;
+}
+.checkbox.checked::after{
+  content:'✓';position:absolute;
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  color:#fff;font-size:13px;font-weight:900;
+}
+.checkbox-label{
+  font-size:11px;color:#475569;
+  line-height:1.5;flex:1;
+}
+.checkbox-label a{
+  color:#1148A4;font-weight:800;
+  text-decoration:none;
+}
+
+/* BUTTONS */
+.btn-primary{
+  width:100%;background:linear-gradient(135deg,#1148A4,#2273E8);
+  color:#fff;border:none;border-radius:12px;
+  padding:14px;font-size:14px;font-weight:800;
+  cursor:pointer;margin-bottom:10px;
+  box-shadow:0 6px 24px rgba(17,72,164,.3);
+  transition:all .2s;font-family:'Nunito',sans-serif;
+}
+.btn-primary:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 32px rgba(17,72,164,.4);
+}
+.btn-primary:disabled{
+  opacity:.5;cursor:not-allowed;
+  transform:none;
+}
+
+.btn-secondary{
+  width:100%;background:#fff;color:#1148A4;
+  border:2px solid #1148A4;border-radius:12px;
+  padding:12px;font-size:14px;font-weight:800;
+  cursor:pointer;margin-bottom:10px;
+  font-family:'Nunito',sans-serif;
+}
+
+.btn-text{
+  width:100%;background:transparent;color:#64748B;
+  border:none;padding:10px;font-size:13px;
+  font-weight:700;cursor:pointer;
+  font-family:'Nunito',sans-serif;
+}
+
+/* DIVIDER */
+.divider{
+  text-align:center;position:relative;margin:20px 0;
+}
+.divider::before{
+  content:'';position:absolute;left:0;right:0;top:50%;
+  height:1px;background:#E2E8F0;
+}
+.divider-text{
+  display:inline-block;background:#EEF3FB;
+  padding:0 14px;font-size:11px;font-weight:700;
+  color:#94A3B8;position:relative;
+}
+
+/* OTP INPUT */
+.otp-container{
+  display:flex;justify-content:center;gap:10px;
+  margin:24px 0;
+}
+.otp-box{
+  width:50px;height:56px;
+  border:2px solid #E2E8F0;border-radius:12px;
+  text-align:center;font-size:24px;font-weight:900;
+  font-family:'Sora',sans-serif;color:#1A2744;
+  transition:all .2s;
+}
+.otp-box:focus{
+  outline:none;border-color:#1148A4;
+  background:rgba(17,72,164,.02);
+}
+
+.resend-row{
+  text-align:center;margin-top:16px;
+}
+.resend-text{
+  font-size:12px;color:#64748B;
+}
+.resend-link{
+  color:#1148A4;font-weight:800;
+  cursor:pointer;text-decoration:none;
+}
+
+/* TIMER */
+.timer{
+  display:inline-block;
+  background:rgba(17,72,164,.08);
+  color:#1148A4;padding:4px 12px;
+  border-radius:99px;font-size:11px;
+  font-weight:800;margin-top:10px;
+}
+
+/* INFO CARD */
+.info-card{
+  background:#fff;border-radius:20px;padding:18px;
+  margin-bottom:14px;box-shadow:0 3px 14px rgba(17,72,164,.08);
+  border:1.5px solid rgba(17,72,164,.05);
+}
+.info-header{
+  display:flex;align-items:center;gap:12px;margin-bottom:12px;
+}
+.info-icon{
+  width:40px;height:40px;
+  background:linear-gradient(135deg,#EBF1FF,#D4E4FF);
+  border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-size:20px;flex-shrink:0;
+}
+.info-title{
+  font-size:14px;font-weight:900;color:#1A2744;
+  font-family:'Sora',sans-serif;
+}
+.info-text{
+  font-size:12px;color:#475569;line-height:1.6;
+}
+
+/* SUCCESS */
+.success-icon{
+  width:90px;height:90px;
+  background:linear-gradient(135deg,#10B981,#059669);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:52px;margin:32px auto 20px;
+  box-shadow:0 12px 40px rgba(16,185,129,.3);
+}
+.success-title{
+  font-size:22px;font-weight:900;color:#1A2744;
+  font-family:'Sora',sans-serif;text-align:center;margin-bottom:10px;
+}
+.success-text{
+  font-size:13px;color:#64748B;text-align:center;
+  line-height:1.6;margin-bottom:24px;
+}
+
+/* PROGRESS STEPS */
+.progress-steps{
+  display:flex;justify-content:center;gap:8px;
+  margin-bottom:24px;
+}
+.step{
+  width:32px;height:4px;
+  background:#E2E8F0;border-radius:2px;
+  transition:all .3s;
+}
+.step.active{
+  background:linear-gradient(135deg,#1148A4,#2273E8);
+  width:48px;
+}
+
+/* UPLOAD AREA */
+.upload-area{
+  border:2px dashed #CBD5E1;border-radius:14px;
+  padding:24px 20px;text-align:center;cursor:pointer;
+  transition:all .2s;background:#F8FAFC;
+}
+.upload-area:hover{
+  border-color:#1148A4;background:rgba(17,72,164,.02);
+}
+.upload-icon{font-size:42px;margin-bottom:8px;}
+.upload-text{
+  font-size:12px;font-weight:700;color:#64748B;
+}
+.upload-hint{
+  font-size:10px;color:#94A3B8;margin-top:4px;
+}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<div class="phone">
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 1: WELCOME / CHECK REGISTRATION
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="screen-1" style="display:flex;flex-direction:column;flex:1;">
+    
+    <!-- STATUS BAR -->
+    <div class="statusbar">
+      <span class="time">11:20</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+        <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+      </div>
+    </div>
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="logo-container">
+        <div class="logo">🏥</div>
+        <div class="app-name">Humania</div>
+        <div class="tagline">Home Healthcare Excellence</div>
+      </div>
+    </div>
+
+    <!-- SCROLL -->
+    <div class="scroll">
+      
+      <div class="welcome-title">Welcome Back!</div>
+      <div class="welcome-text">
+        Enter your mobile number to continue
+      </div>
+
+      <!-- Phone Number Input -->
+      <div class="input-card">
+        <label class="input-label">Mobile Number</label>
+        <div class="phone-input-group">
+          <div class="country-code">+971</div>
+          <input type="tel" 
+                 class="input-field" 
+                 placeholder="50 123 4567"
+                 id="phone-input"
+                 maxlength="11"
+                 style="flex:1;">
+        </div>
+        <div class="input-hint">
+          We'll send you a verification code via SMS
+        </div>
+      </div>
+
+      <!-- <button class="btn-primary" onclick="checkRegistration()">
+        Continue
+      </button> -->
+      <a href="./Patient_App_Home.html" style="text-decoration:  none;"><button class="btn-primary">
+        Continue
+      </button></a>
+
+      <div class="divider">
+        <span class="divider-text">New to Humania?</span>
+      </div>
+
+      <button class="btn-secondary" onclick="showScreen(2)">
+        📝 Quick Registration (2 minutes)
+      </button>
+
+      <!-- Features Info -->
+      <div class="info-card" style="margin-top:20px;">
+        <div class="info-header">
+          <div class="info-icon">✨</div>
+          <div class="info-title">Why Choose Humania?</div>
+        </div>
+        <div class="info-text">
+          • AI-powered health assessments<br>
+          • 24/7 doctor availability<br>
+          • Home nursing & lab services<br>
+          • Secure health passport
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 2: REGISTRATION STEP 1 - BASIC INFO
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="screen-2" style="display:none;flex-direction:column;flex:1;">
+    
+    <div class="statusbar">
+      <span class="time">11:20</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+        <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+      </div>
+    </div>
+
+    <div class="header">
+      <div style="display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1;">
+        <div style="font-size:18px;font-weight:900;color:#fff;font-family:'Sora',sans-serif;">
+          Quick Registration
+        </div>
+        <div style="font-size:12px;color:rgba(255,255,255,.7);font-weight:700;">
+          Step 1 of 3
+        </div>
+      </div>
+      <div class="progress-steps" style="margin-top:16px;justify-content:flex-start;">
+        <div class="step active"></div>
+        <div class="step"></div>
+        <div class="step"></div>
+      </div>
+    </div>
+
+    <div class="scroll">
+
+      <div class="welcome-title">Basic Information</div>
+      <div class="welcome-text">
+        Tell us about yourself
+      </div>
+
+      <!-- Full Name -->
+      <div class="input-card">
+        <label class="input-label">Full Name (as per Emirates ID)</label>
+        <input type="text" 
+               class="input-field" 
+               placeholder="Muhammad Ali Ahmed">
+      </div>
+
+      <!-- Email -->
+      <div class="input-card">
+        <label class="input-label">Email Address</label>
+        <input type="email" 
+               class="input-field" 
+               placeholder="muhammad.ali@email.com">
+        <div class="input-hint">
+          Used for appointment confirmations and reports
+        </div>
+      </div>
+
+      <!-- Date of Birth -->
+      <div class="input-card">
+        <label class="input-label">Date of Birth</label>
+        <input type="date" 
+               class="input-field">
+      </div>
+
+      <!-- Gender -->
+      <div class="input-card">
+        <label class="input-label">Gender</label>
+        <select class="input-field">
+          <option value="">Select Gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+      <button class="btn-primary" onclick="showScreen(3)">
+        Continue to Contact Details →
+      </button>
+
+      <button class="btn-text" onclick="showScreen(1)">
+        ← Back to Login
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 3: REGISTRATION STEP 2 - CONTACT & ADDRESS
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="screen-3" style="display:none;flex-direction:column;flex:1;">
+    
+    <div class="statusbar">
+      <span class="time">11:21</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+        <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+      </div>
+    </div>
+
+    <div class="header">
+      <div style="display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1;">
+        <div style="font-size:18px;font-weight:900;color:#fff;font-family:'Sora',sans-serif;">
+          Quick Registration
+        </div>
+        <div style="font-size:12px;color:rgba(255,255,255,.7);font-weight:700;">
+          Step 2 of 3
+        </div>
+      </div>
+      <div class="progress-steps" style="margin-top:16px;justify-content:flex-start;">
+        <div class="step active"></div>
+        <div class="step active"></div>
+        <div class="step"></div>
+      </div>
+    </div>
+
+    <div class="scroll">
+
+      <div class="welcome-title">Contact & Address</div>
+      <div class="welcome-text">
+        Where can we reach you?
+      </div>
+
+      <!-- Mobile -->
+      <div class="input-card">
+        <label class="input-label">Mobile Number</label>
+        <div class="phone-input-group">
+          <div class="country-code">+971</div>
+          <input type="tel" 
+                 class="input-field" 
+                 placeholder="50 123 4567"
+                 style="flex:1;">
+        </div>
+      </div>
+
+      <!-- Emergency Contact -->
+      <div class="input-card">
+        <label class="input-label">Emergency Contact Number</label>
+        <div class="phone-input-group">
+          <div class="country-code">+971</div>
+          <input type="tel" 
+                 class="input-field" 
+                 placeholder="56 789 0123"
+                 style="flex:1;">
+        </div>
+        <div class="input-hint">
+          For urgent situations or when you're unreachable
+        </div>
+      </div>
+
+      <!-- Address -->
+      <div class="input-card">
+        <label class="input-label">Home Address</label>
+        <input type="text" 
+               class="input-field" 
+               placeholder="Building, Street Name"
+               style="margin-bottom:10px;">
+        <input type="text" 
+               class="input-field" 
+               placeholder="Area / District"
+               style="margin-bottom:10px;">
+        <select class="input-field">
+          <option value="">Select Emirate</option>
+          <option value="abu-dhabi">Abu Dhabi</option>
+          <option value="dubai">Dubai</option>
+          <option value="sharjah">Sharjah</option>
+          <option value="ajman">Ajman</option>
+          <option value="uaq">Umm Al Quwain</option>
+          <option value="rak">Ras Al Khaimah</option>
+          <option value="fujairah">Fujairah</option>
+        </select>
+      </div>
+
+      <button class="btn-primary" onclick="showScreen(4)">
+        Continue to Verification →
+      </button>
+
+      <button class="btn-text" onclick="showScreen(2)">
+        ← Back
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 4: REGISTRATION STEP 3 - EMIRATES ID & VERIFICATION
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="screen-4" style="display:none;flex-direction:column;flex:1;">
+    
+    <div class="statusbar">
+      <span class="time">11:21</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+        <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+      </div>
+    </div>
+
+    <div class="header">
+      <div style="display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1;">
+        <div style="font-size:18px;font-weight:900;color:#fff;font-family:'Sora',sans-serif;">
+          Quick Registration
+        </div>
+        <div style="font-size:12px;color:rgba(255,255,255,.7);font-weight:700;">
+          Step 3 of 3
+        </div>
+      </div>
+      <div class="progress-steps" style="margin-top:16px;justify-content:flex-start;">
+        <div class="step active"></div>
+        <div class="step active"></div>
+        <div class="step active"></div>
+      </div>
+    </div>
+
+    <div class="scroll">
+
+      <div class="welcome-title">Identity Verification</div>
+      <div class="welcome-text">
+        Upload your Emirates ID for quick verification
+      </div>
+
+      <!-- Emirates ID Number -->
+      <div class="input-card">
+        <label class="input-label">Emirates ID Number</label>
+        <input type="text" 
+               class="input-field" 
+               placeholder="784-1234-1234567-1"
+               maxlength="18">
+        <div class="input-hint">
+          Format: XXX-XXXX-XXXXXXX-X
+        </div>
+      </div>
+
+      <!-- Upload Emirates ID -->
+      <div class="input-card">
+        <label class="input-label">Upload Emirates ID</label>
+        <div class="upload-area" onclick="alert('File picker opened')">
+          <div class="upload-icon">📸</div>
+          <div class="upload-text">
+            Tap to upload front & back
+          </div>
+          <div class="upload-hint">
+            JPG, PNG or PDF • Max 5MB each
+          </div>
+        </div>
+      </div>
+
+      <!-- Terms & Conditions -->
+      <div class="checkbox-group">
+        <div class="checkbox" id="terms-check" onclick="toggleCheckbox(this)"></div>
+        <label class="checkbox-label">
+          I agree to the <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a>. I consent to Humania storing my health data securely.
+        </label>
+      </div>
+
+      <!-- Marketing Consent -->
+      <div class="checkbox-group">
+        <div class="checkbox checked" id="marketing-check" onclick="toggleCheckbox(this)"></div>
+        <label class="checkbox-label">
+          Send me health tips and promotional offers via SMS/Email
+        </label>
+      </div>
+
+      <button class="btn-primary" onclick="showScreen(5)">
+        Send Verification Code
+      </button>
+
+      <button class="btn-text" onclick="showScreen(3)">
+        ← Back
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 5: OTP VERIFICATION
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="screen-5" style="display:none;flex-direction:column;flex:1;">
+    
+    <div class="statusbar">
+      <span class="time">11:22</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+        <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+      </div>
+    </div>
+
+    <div class="header">
+      <div style="text-align:center;position:relative;z-index:1;padding:20px 0;">
+        <div style="font-size:48px;margin-bottom:12px;">📱</div>
+        <div style="font-size:18px;font-weight:900;color:#fff;font-family:'Sora',sans-serif;margin-bottom:6px;">
+          Verify Your Number
+        </div>
+        <div style="font-size:12px;color:rgba(255,255,255,.8);">
+          Enter the 4-digit code sent to<br>
+          <strong>+971 50 123 4567</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll">
+
+      <!-- OTP Input -->
+      <div class="otp-container">
+        <input type="text" class="otp-box" maxlength="1" 
+               oninput="moveFocus(this, 'otp2')" id="otp1">
+        <input type="text" class="otp-box" maxlength="1" 
+               oninput="moveFocus(this, 'otp3')" id="otp2">
+        <input type="text" class="otp-box" maxlength="1" 
+               oninput="moveFocus(this, 'otp4')" id="otp3">
+        <input type="text" class="otp-box" maxlength="1" 
+               oninput="verifyOTP()" id="otp4">
+      </div>
+
+      <div class="resend-row">
+        <div class="resend-text">
+          Didn't receive code?
+          <a href="#" class="resend-link" onclick="alert('Code resent!')">Resend</a>
+        </div>
+        <div class="timer" id="timer">Resend in 00:30</div>
+      </div>
+
+      <button class="btn-primary" style="margin-top:32px;" onclick="showScreen(6)">
+        Verify & Complete Registration
+      </button>
+
+      <button class="btn-text" onclick="showScreen(4)">
+        Change Number
+      </button>
+
+      <!-- Security Info -->
+      <div class="info-card" style="margin-top:24px;">
+        <div class="info-header">
+          <div class="info-icon" style="background:linear-gradient(135deg,#ECFDF5,#BBFDE8);">🔒</div>
+          <div class="info-title">Your Security Matters</div>
+        </div>
+        <div class="info-text">
+          We use SMS verification to ensure account security. Never share your OTP with anyone.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 6: REGISTRATION SUCCESS
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="screen-6" style="display:none;flex-direction:column;flex:1;">
+    
+    <div class="statusbar">
+      <span class="time">11:22</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+        <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+      </div>
+    </div>
+
+    <div class="header">
+      <div style="text-align:center;position:relative;z-index:1;padding:10px 0;">
+        <div style="font-size:18px;font-weight:900;color:#fff;font-family:'Sora',sans-serif;">
+          Registration Complete
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll">
+
+      <div class="success-icon">✓</div>
+      <div class="success-title">Welcome to Humania!</div>
+      <div class="success-text">
+        Your account has been created successfully. You're all set to access world-class home healthcare.
+      </div>
+
+      <!-- Account Info -->
+      <div class="info-card">
+        <div style="text-align:center;padding:10px 0;">
+          <div style="font-size:11px;color:#64748B;margin-bottom:8px;">
+            YOUR MEDICAL RECORD NUMBER
+          </div>
+          <div style="font-size:24px;font-weight:900;color:#1148A4;font-family:'Sora',sans-serif;margin-bottom:6px;">
+            226589
+          </div>
+          <div style="font-size:11px;color:#64748B;">
+            Use this MRN for all medical interactions
+          </div>
+        </div>
+      </div>
+
+      <!-- What's Next -->
+      <div class="info-card">
+        <div class="info-header">
+          <div class="info-icon">🎯</div>
+          <div class="info-title">What's Next?</div>
+        </div>
+        <div class="info-text" style="line-height:1.8;">
+          1. Complete your health profile<br>
+          2. Add insurance details (optional)<br>
+          3. Book your first consultation<br>
+          4. Enable biometric login
+        </div>
+      </div>
+
+      <a href="./Patient_App_Home.html" style="text-decoration: none;"><button class="btn-primary">
+        Get Started →
+      </button></a>
+
+      <button class="btn-secondary" onclick="alert('Complete Health Profile')">
+        Complete Health Profile Now
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 7: RETURNING USER - OTP LOGIN
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="screen-7" style="display:none;flex-direction:column;flex:1;">
+    
+    <div class="statusbar">
+      <span class="time">11:20</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+        <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+      </div>
+    </div>
+
+    <div class="header">
+      <div style="text-align:center;position:relative;z-index:1;padding:20px 0;">
+        <div style="font-size:48px;margin-bottom:12px;">👋</div>
+        <div style="font-size:18px;font-weight:900;color:#fff;font-family:'Sora',sans-serif;margin-bottom:6px;">
+          Welcome Back!
+        </div>
+        <div style="font-size:12px;color:rgba(255,255,255,.8);">
+          Enter verification code sent to<br>
+          <strong>+971 50 123 4567</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll">
+
+      <!-- OTP Input -->
+      <div class="otp-container">
+        <input type="text" class="otp-box" maxlength="1">
+        <input type="text" class="otp-box" maxlength="1">
+        <input type="text" class="otp-box" maxlength="1">
+        <input type="text" class="otp-box" maxlength="1">
+      </div>
+
+      <div class="resend-row">
+        <div class="resend-text">
+          Didn't receive code?
+          <a href="#" class="resend-link">Resend</a>
+        </div>
+        <div class="timer">Resend in 00:30</div>
+      </div>
+
+      <button class="btn-primary" style="margin-top:32px;" onclick="alert('Login successful - Navigate to Patient Home')">
+        Verify & Login
+      </button>
+
+      <button class="btn-text" onclick="showScreen(1)">
+        Use Different Number
+      </button>
+
+      <!-- Biometric Option -->
+      <div class="info-card" style="margin-top:24px;">
+        <div style="text-align:center;padding:8px 0;">
+          <div style="font-size:11px;color:#64748B;margin-bottom:12px;">
+            OR USE BIOMETRIC LOGIN
+          </div>
+          <button class="btn-secondary" onclick="alert('Biometric authentication')">
+            🔐 Use Face ID / Fingerprint
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+let currentScreen = 1;
+
+function showScreen(screenNum) {
+  // Hide all screens
+  for (let i = 1; i <= 7; i++) {
+    const screen = document.getElementById('screen-' + i);
+    if (screen) screen.style.display = 'none';
+  }
+  
+  // Show target screen
+  const targetScreen = document.getElementById('screen-' + screenNum);
+  if (targetScreen) {
+    targetScreen.style.display = 'flex';
+    currentScreen = screenNum;
+  }
+}
+
+function checkRegistration() {
+  const phoneInput = document.getElementById('phone-input');
+  const phoneNumber = phoneInput.value.trim();
+  
+  if (!phoneNumber) {
+    alert('Please enter your mobile number');
+    return;
+  }
+  
+  // Simulate API check
+  // In real app, this would call backend to check if number exists
+  const isRegistered = phoneNumber.includes('123'); // Demo logic
+  
+  if (isRegistered) {
+    // Existing user - send OTP and go to login screen
+    alert('Account found! Sending verification code...');
+    showScreen(7);
+  } else {
+    // New user - prompt for registration
+    const confirmReg = confirm('No account found with this number. Would you like to register?');
+    if (confirmReg) {
+      showScreen(2);
+    }
+  }
+}
+
+function toggleCheckbox(element) {
+  element.classList.toggle('checked');
+}
+
+function moveFocus(current, nextId) {
+  if (current.value.length === 1) {
+    const next = document.getElementById(nextId);
+    if (next) next.focus();
+  }
+}
+
+function verifyOTP() {
+  // Auto-verify when 4th digit is entered
+  const otp1 = document.getElementById('otp1').value;
+  const otp2 = document.getElementById('otp2').value;
+  const otp3 = document.getElementById('otp3').value;
+  const otp4 = document.getElementById('otp4').value;
+  
+  if (otp1 && otp2 && otp3 && otp4) {
+    console.log('OTP Complete:', otp1 + otp2 + otp3 + otp4);
+    // Could auto-submit here
+  }
+}
+
+// Timer countdown (demo)
+let timeLeft = 30;
+const timerElement = document.getElementById('timer');
+if (timerElement) {
+  setInterval(() => {
+    if (timeLeft > 0) {
+      timeLeft--;
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      timerElement.textContent = `Resend in ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+  }, 1000);
+}
+
+console.log('Patient Registration Flow Loaded');
+</script>
+
+</body>
+</html>

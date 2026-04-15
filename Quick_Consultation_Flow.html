@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Quick Consultation — Patient App</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Sora:wght@400;600;700;800&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:linear-gradient(135deg,#C8D8F0 0%,#DCE8F8 50%,#C8D0EC 100%);
+  display:flex;align-items:center;justify-content:center;
+  min-height:100vh;font-family:'Nunito',sans-serif;padding:28px 16px;
+}
+
+/* PHONE SHELL */
+.phone{
+  width:390px;min-height:848px;background:#EEF3FB;
+  border-radius:52px;overflow:hidden;
+  box-shadow:0 70px 140px rgba(0,0,0,.28),0 0 0 1.5px #B8C8E0,inset 0 0 0 1px #fff;
+  position:relative;display:flex;flex-direction:column;
+}
+
+/* STATUS BAR */
+.statusbar{
+  height:48px;background:#DC2626;
+  display:flex;align-items:flex-end;justify-content:space-between;
+  padding:0 26px 10px;flex-shrink:0;
+}
+.statusbar .time{font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:#fff;}
+.statusbar .icons{display:flex;gap:6px;align-items:center;}
+
+/* HEADER */
+.header{
+  background:linear-gradient(155deg,#DC2626 0%,#EF4444 45%,#FB7185 100%);
+  padding:14px 22px 34px;position:relative;overflow:hidden;flex-shrink:0;
+}
+.header::before{content:'';position:absolute;top:-80px;right:-50px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.06);}
+.header::after{content:'';position:absolute;bottom:-50px;left:30px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.04);}
+
+.top-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;position:relative;z-index:1;}
+.back-btn{
+  width:38px;height:38px;border-radius:50%;
+  background:rgba(255,255,255,.14);backdrop-filter:blur(8px);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;border:1px solid rgba(255,255,255,.18);
+  font-size:18px;color:#fff;font-weight:900;
+}
+.header-title{
+  font-size:17px;font-weight:900;color:#fff;
+  font-family:'Sora',sans-serif;letter-spacing:-.2px;
+}
+
+/* URGENT BANNER */
+.urgent-banner{
+  background:rgba(255,255,255,.16);backdrop-filter:blur(20px);
+  border:1.5px solid rgba(255,255,255,.25);border-radius:22px;
+  padding:16px 18px;text-align:center;
+  position:relative;z-index:1;
+}
+.urgent-icon{
+  font-size:52px;margin-bottom:10px;
+  animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.1)}
+}
+.urgent-title{
+  font-size:18px;font-weight:900;color:#fff;
+  font-family:'Sora',sans-serif;margin-bottom:6px;
+}
+.urgent-text{
+  font-size:12px;color:rgba(255,255,255,.85);
+  line-height:1.5;
+}
+
+/* SCROLL */
+.scroll{flex:1;overflow-y:auto;padding:20px 18px 28px;}
+.scroll::-webkit-scrollbar{display:none;}
+
+/* SECTION HEADERS */
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;}
+.sec-title{font-size:17px;font-weight:900;color:#1A2744;font-family:'Sora',sans-serif;letter-spacing:-.2px;}
+
+/* INFO CARD */
+.info-card{
+  background:#fff;border-radius:20px;padding:18px;
+  margin-bottom:14px;box-shadow:0 3px 14px rgba(17,72,164,.08);
+  border:1.5px solid rgba(17,72,164,.05);
+}
+.card-header{
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:12px;
+}
+.card-icon{
+  width:44px;height:44px;
+  background:linear-gradient(135deg,#FEE2E2,#FECACA);
+  border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-size:22px;flex-shrink:0;
+}
+.card-title{
+  font-size:15px;font-weight:900;color:#1A2744;
+  font-family:'Sora',sans-serif;
+}
+.card-text{
+  font-size:12px;color:#475569;line-height:1.6;
+}
+
+/* SYMPTOM INPUT */
+.symptom-input{
+  background:#fff;border-radius:20px;padding:18px;
+  margin-bottom:14px;box-shadow:0 3px 14px rgba(17,72,164,.08);
+  border:1.5px solid rgba(17,72,164,.05);
+}
+.input-label{
+  font-size:12px;font-weight:800;color:#1A2744;
+  margin-bottom:8px;display:block;
+}
+.textarea-field{
+  width:100%;padding:12px 14px;
+  border:2px solid #E2E8F0;border-radius:12px;
+  font-size:14px;font-weight:600;color:#1A2744;
+  font-family:'Nunito',sans-serif;
+  min-height:100px;resize:vertical;
+  transition:all .2s;
+}
+.textarea-field:focus{
+  outline:none;border-color:#DC2626;
+  background:rgba(220,38,38,.02);
+}
+.textarea-field::placeholder{
+  color:#94A3B8;font-weight:500;
+}
+.char-count{
+  text-align:right;font-size:11px;
+  color:#94A3B8;margin-top:6px;
+}
+
+/* QUICK TAGS */
+.quick-tags{
+  display:flex;flex-wrap:wrap;gap:8px;
+  margin-bottom:14px;
+}
+.quick-tag{
+  padding:8px 14px;background:#fff;
+  border:2px solid #E2E8F0;border-radius:99px;
+  font-size:12px;font-weight:800;color:#64748B;
+  cursor:pointer;transition:all .2s;
+}
+.quick-tag.selected{
+  background:linear-gradient(135deg,rgba(220,38,38,.08),rgba(239,68,68,.08));
+  border-color:#DC2626;color:#DC2626;
+}
+
+/* DOCTOR AVAILABILITY */
+.availability-card{
+  background:linear-gradient(135deg,#DCFCE7,#BBF7D0);
+  border:2px solid #10B981;border-radius:20px;
+  padding:16px;margin-bottom:14px;
+  display:flex;align-items:center;gap:12px;
+}
+.avail-icon{
+  width:48px;height:48px;
+  background:#10B981;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;flex-shrink:0;
+  animation:pulse 2s ease-in-out infinite;
+}
+.avail-info{flex:1;}
+.avail-title{
+  font-size:14px;font-weight:900;color:#047857;
+  margin-bottom:4px;
+}
+.avail-text{
+  font-size:12px;color:#065F46;
+  line-height:1.5;
+}
+
+/* QUEUE CARD */
+.queue-card{
+  background:#fff;border-radius:20px;padding:18px;
+  margin-bottom:14px;box-shadow:0 3px 14px rgba(17,72,164,.08);
+  border:1.5px solid rgba(17,72,164,.05);
+}
+.queue-header{
+  display:flex;justify-content:space-between;
+  align-items:center;margin-bottom:14px;
+}
+.queue-title{
+  font-size:15px;font-weight:900;color:#1A2744;
+  font-family:'Sora',sans-serif;
+}
+.queue-position{
+  text-align:center;padding:12px;
+  background:linear-gradient(135deg,rgba(220,38,38,.05),rgba(239,68,68,.05));
+  border-radius:14px;
+}
+.position-label{
+  font-size:10px;color:#DC2626;
+  font-weight:700;text-transform:uppercase;
+  letter-spacing:.5px;margin-bottom:4px;
+}
+.position-number{
+  font-size:32px;font-weight:900;color:#DC2626;
+  font-family:'Sora',sans-serif;line-height:1;
+}
+
+.queue-stats{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:10px;margin-top:14px;
+}
+.queue-stat{
+  text-align:center;padding:12px 8px;
+  background:#F8FAFC;border-radius:12px;
+}
+.stat-value{
+  font-size:18px;font-weight:900;
+  font-family:'Sora',sans-serif;line-height:1;
+  margin-bottom:4px;
+}
+.stat-label{
+  font-size:9px;color:#64748B;
+  font-weight:700;text-transform:uppercase;
+}
+
+/* DOCTOR ON DUTY */
+.doctor-card{
+  background:#fff;border-radius:20px;padding:16px;
+  margin-bottom:14px;box-shadow:0 3px 14px rgba(17,72,164,.08);
+  border:1.5px solid rgba(17,72,164,.05);
+}
+.doctor-header{
+  display:flex;gap:14px;margin-bottom:12px;
+}
+.doctor-avatar{
+  width:56px;height:56px;border-radius:50%;
+  background:linear-gradient(135deg,#DC2626,#EF4444);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;color:#fff;font-weight:900;
+  font-family:'Sora',sans-serif;
+  border:2.5px solid rgba(220,38,38,.15);
+  flex-shrink:0;
+  position:relative;
+}
+.online-indicator{
+  position:absolute;bottom:2px;right:2px;
+  width:14px;height:14px;background:#10B981;
+  border-radius:50%;border:2.5px solid #fff;
+  animation:blink 2s ease-in-out infinite;
+}
+@keyframes blink{
+  0%,100%{opacity:1}
+  50%{opacity:.3}
+}
+.doctor-info{flex:1;}
+.doctor-name{
+  font-size:15px;font-weight:900;color:#1A2744;
+  font-family:'Sora',sans-serif;margin-bottom:2px;
+}
+.doctor-specialty{
+  font-size:11px;color:#64748B;margin-bottom:5px;
+}
+.doctor-badge{
+  display:inline-block;
+  padding:4px 10px;border-radius:6px;
+  font-size:10px;font-weight:800;
+  background:#DCFCE7;color:#16A34A;
+}
+
+/* WAITING SCREEN */
+.waiting-container{
+  text-align:center;padding:40px 20px;
+}
+.spinner{
+  width:80px;height:80px;
+  border:6px solid #FEE2E2;
+  border-top-color:#DC2626;
+  border-radius:50%;
+  margin:0 auto 24px;
+  animation:spin 1s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.waiting-title{
+  font-size:20px;font-weight:900;color:#1A2744;
+  font-family:'Sora',sans-serif;margin-bottom:10px;
+}
+.waiting-text{
+  font-size:13px;color:#64748B;
+  line-height:1.6;margin-bottom:24px;
+}
+
+.eta-display{
+  background:linear-gradient(135deg,rgba(220,38,38,.05),rgba(239,68,68,.05));
+  border-radius:16px;padding:20px;
+  margin-bottom:24px;
+}
+.eta-label{
+  font-size:11px;color:#DC2626;
+  font-weight:700;text-transform:uppercase;
+  letter-spacing:.5px;margin-bottom:8px;
+}
+.eta-time{
+  font-size:42px;font-weight:900;color:#DC2626;
+  font-family:'Sora',sans-serif;line-height:1;
+  margin-bottom:6px;
+}
+.eta-subtext{
+  font-size:12px;color:#991B1B;
+}
+
+/* CALL ACTIVE */
+.call-container{
+  background:linear-gradient(135deg,#1A2744,#0F172A);
+  border-radius:24px;padding:32px 24px;
+  margin-bottom:14px;text-align:center;
+}
+.call-avatar{
+  width:100px;height:100px;
+  background:linear-gradient(135deg,#DC2626,#EF4444);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:42px;color:#fff;
+  margin:0 auto 16px;
+  border:4px solid rgba(255,255,255,.2);
+}
+.call-name{
+  font-size:20px;font-weight:900;color:#fff;
+  font-family:'Sora',sans-serif;margin-bottom:6px;
+}
+.call-specialty{
+  font-size:13px;color:rgba(255,255,255,.7);
+  margin-bottom:16px;
+}
+.call-duration{
+  font-size:32px;font-weight:900;color:#10B981;
+  font-family:'Sora',sans-serif;line-height:1;
+  margin-bottom:4px;
+}
+.call-label{
+  font-size:11px;color:rgba(255,255,255,.5);
+  text-transform:uppercase;letter-spacing:.5px;
+}
+
+.call-controls{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:12px;margin-bottom:24px;
+}
+.control-btn{
+  background:rgba(255,255,255,.1);
+  border:1.5px solid rgba(255,255,255,.2);
+  border-radius:50%;width:60px;height:60px;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  cursor:pointer;transition:all .2s;
+  margin:0 auto;
+}
+.control-btn:hover{
+  background:rgba(255,255,255,.15);
+}
+.control-icon{
+  font-size:24px;margin-bottom:4px;
+}
+.control-label{
+  font-size:9px;color:rgba(255,255,255,.7);
+  font-weight:700;
+}
+.end-call-btn{
+  background:#DC2626;
+  border-color:#DC2626;
+}
+
+/* BUTTONS */
+.btn-primary{
+  width:100%;background:linear-gradient(135deg,#DC2626,#EF4444);
+  color:#fff;border:none;border-radius:12px;
+  padding:14px;font-size:14px;font-weight:800;
+  cursor:pointer;margin-bottom:10px;
+  box-shadow:0 6px 24px rgba(220,38,38,.3);
+  transition:all .2s;font-family:'Nunito',sans-serif;
+}
+.btn-primary:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 32px rgba(220,38,38,.4);
+}
+
+.btn-secondary{
+  width:100%;background:#fff;color:#DC2626;
+  border:2px solid #DC2626;border-radius:12px;
+  padding:12px;font-size:14px;font-weight:800;
+  cursor:pointer;margin-bottom:10px;
+  font-family:'Nunito',sans-serif;
+}
+
+.btn-text{
+  width:100%;background:transparent;color:#64748B;
+  border:none;padding:10px;font-size:13px;
+  font-weight:700;cursor:pointer;
+  font-family:'Nunito',sans-serif;
+}
+
+/* SUCCESS */
+.success-icon{
+  width:90px;height:90px;
+  background:linear-gradient(135deg,#10B981,#059669);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:52px;margin:32px auto 20px;
+  box-shadow:0 12px 40px rgba(16,185,129,.3);
+}
+.success-title{
+  font-size:22px;font-weight:900;color:#1A2744;
+  font-family:'Sora',sans-serif;text-align:center;margin-bottom:10px;
+}
+.success-text{
+  font-size:13px;color:#64748B;text-align:center;
+  line-height:1.6;margin-bottom:24px;
+}
+
+/* SUMMARY CARD */
+.summary-card{
+  background:#fff;border-radius:20px;padding:18px;
+  margin-bottom:14px;box-shadow:0 3px 14px rgba(17,72,164,.08);
+  border:1.5px solid rgba(17,72,164,.05);
+}
+.summary-row{
+  display:flex;justify-content:space-between;
+  padding:10px 0;border-bottom:1px solid #F1F5F9;
+}
+.summary-row:last-child{border-bottom:none;}
+.summary-label{
+  font-size:12px;color:#64748B;
+}
+.summary-value{
+  font-size:13px;font-weight:800;color:#1A2744;
+  text-align:right;
+}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<div class="phone">
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 1: QUICK CONSULTATION INTRO
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="screen-1" style="display:flex;flex-direction:column;flex:1;">
+    
+    <!-- STATUS BAR -->
+    <div class="statusbar">
+      <span class="time">11:30</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+        <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+      </div>
+    </div>
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="top-row">
+        <div class="back-btn" onclick="redirect('./Patient_App_Home.html')">←</div>
+        <div class="header-title">Quick Consultation</div>
+        <div style="width:38px;"></div>
+      </div>
+
+      <!-- Urgent Banner -->
+      <div class="urgent-banner">
+        <div class="urgent-icon">🚨</div>
+        <div class="urgent-title">Urgent Medical Advice</div>
+        <div class="urgent-text">
+          Get instant medical advice from available doctors. Average wait time: <strong>2-5 minutes</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCROLL -->
+    <div class="scroll">
+
+      <!-- Doctor Availability -->
+      <div class="availability-card">
+        <div class="avail-icon">👨‍⚕️</div>
+        <div class="avail-info">
+          <div class="avail-title">3 Doctors Available Now</div>
+          <div class="avail-text">
+            General Physicians ready to assist you immediately
+          </div>
+        </div>
+      </div>
+
+      <!-- How It Works -->
+      <div class="info-card">
+        <div class="card-header">
+          <div class="card-icon">ℹ️</div>
+          <div class="card-title">How It Works</div>
+        </div>
+        <div class="card-text">
+          1. Describe your symptoms briefly<br>
+          2. Join the queue (usually 2-3 people ahead)<br>
+          3. Connect with next available doctor<br>
+          4. Get immediate medical advice (5-10 min call)<br>
+          5. Receive prescription if needed
+        </div>
+      </div>
+
+      <!-- Best For -->
+      <div class="info-card">
+        <div class="card-header">
+          <div class="card-icon" style="background:linear-gradient(135deg,#DCFCE7,#BBF7D0);">✓</div>
+          <div class="card-title">Best For</div>
+        </div>
+        <div class="card-text">
+          • Minor illness & symptoms<br>
+          • Medication questions<br>
+          • General health concerns<br>
+          • Quick second opinions<br>
+          • Non-emergency situations
+        </div>
+      </div>
+
+      <!-- Important Note -->
+      <div class="info-card" style="background:rgba(239,68,68,.05);border-color:#FEE2E2;">
+        <div class="card-header">
+          <div class="card-icon" style="background:#FEE2E2;">⚠️</div>
+          <div style="flex:1;">
+            <div style="font-size:13px;font-weight:900;color:#DC2626;margin-bottom:4px;">
+              Not For Emergencies
+            </div>
+            <div style="font-size:11px;color:#991B1B;line-height:1.5;">
+              For chest pain, severe bleeding, difficulty breathing, or other emergencies, call 999 immediately.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="showScreen(2)">
+        🚀 Start Quick Consultation
+      </button>
+
+      <div style="text-align:center;padding:12px 0;">
+        <div style="font-size:11px;color:#64748B;margin-bottom:6px;">
+          Consultation Fee
+        </div>
+        <div style="font-size:24px;font-weight:900;color:#DC2626;font-family:'Sora',sans-serif;">
+          $25
+        </div>
+        <div style="font-size:10px;color:#64748B;margin-top:4px;">
+          Charged only if consultation completes
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 2: DESCRIBE SYMPTOMS
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="screen-2" style="display:none;flex-direction:column;flex:1;">
+    
+    <div class="statusbar">
+      <span class="time">11:30</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+        <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+      </div>
+    </div>
+
+    <div class="header">
+      <div class="top-row">
+        <div class="back-btn" onclick="showScreen(1)">←</div>
+        <div class="header-title">Describe Your Issue</div>
+        <div style="width:38px;"></div>
+      </div>
+    </div>
+
+    <div class="scroll">
+
+      <div style="text-align:center;margin-bottom:20px;">
+        <div style="font-size:15px;font-weight:900;color:#1A2744;font-family:'Sora',sans-serif;margin-bottom:6px;">
+          What brings you here today?
+        </div>
+        <div style="font-size:12px;color:#64748B;line-height:1.5;">
+          Brief description helps the doctor prepare
+        </div>
+      </div>
+
+      <!-- Common Issues (Quick Tags) -->
+      <div class="sec-head">
+        <div class="sec-title">Common Issues</div>
+      </div>
+
+      <div class="quick-tags">
+        <div class="quick-tag" onclick="selectTag(this)">🤧 Cold/Flu</div>
+        <div class="quick-tag" onclick="selectTag(this)">🤕 Headache</div>
+        <div class="quick-tag" onclick="selectTag(this)">🤢 Nausea</div>
+        <div class="quick-tag" onclick="selectTag(this)">🔥 Fever</div>
+        <div class="quick-tag" onclick="selectTag(this)">😷 Cough</div>
+        <div class="quick-tag" onclick="selectTag(this)">😫 Body Pain</div>
+        <div class="quick-tag" onclick="selectTag(this)">🤮 Stomach Issue</div>
+        <div class="quick-tag" onclick="selectTag(this)">😴 Fatigue</div>
+        <div class="quick-tag" onclick="selectTag(this)">🩹 Skin Issue</div>
+        <div class="quick-tag" onclick="selectTag(this)">💊 Medication Query</div>
+      </div>
+
+      <!-- Text Input -->
+      <div class="symptom-input">
+        <label class="input-label">Describe Your Symptoms</label>
+        <textarea 
+          class="textarea-field" 
+          placeholder="Example: I've had a fever since yesterday morning, around 101°F. Also experiencing body aches and mild headache. No cough or breathing issues."
+          maxlength="500"
+          id="symptom-text"
+          oninput="updateCharCount()"></textarea>
+        <div class="char-count" id="char-count">0 / 500 characters</div>
+      </div>
+
+      <!-- Duration -->
+      <div class="info-card">
+        <label class="input-label" style="margin-bottom:10px;">How long have you had these symptoms?</label>
+        <div class="quick-tags">
+          <div class="quick-tag" onclick="selectDuration(this)">< 24 hours</div>
+          <div class="quick-tag" onclick="selectDuration(this)">1-3 days</div>
+          <div class="quick-tag" onclick="selectDuration(this)">4-7 days</div>
+          <div class="quick-tag" onclick="selectDuration(this)">> 1 week</div>
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="showScreen(3)">
+        Continue to Queue →
+      </button>
+
+      <button class="btn-text" onclick="showScreen(1)">
+        ← Back
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 3: QUEUE / WAITING
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="screen-3" style="display:none;flex-direction:column;flex:1;">
+    
+    <div class="statusbar">
+      <span class="time">11:31</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+        <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+      </div>
+    </div>
+
+    <div class="header">
+      <div class="top-row">
+        <div style="width:38px;"></div>
+        <div class="header-title">In Queue</div>
+        <div style="width:38px;"></div>
+      </div>
+    </div>
+
+    <div class="scroll">
+
+      <!-- Queue Position -->
+      <div class="queue-card">
+        <div class="queue-header">
+          <div class="queue-title">Your Position</div>
+        </div>
+        
+        <div class="queue-position">
+          <div class="position-label">Position in Queue</div>
+          <div class="position-number">3</div>
+        </div>
+
+        <div class="queue-stats">
+          <div class="queue-stat">
+            <div class="stat-value" style="color:#DC2626;">~4</div>
+            <div class="stat-label">Min Wait</div>
+          </div>
+          <div class="queue-stat">
+            <div class="stat-value" style="color:#1148A4;">2</div>
+            <div class="stat-label">Ahead</div>
+          </div>
+          <div class="queue-stat">
+            <div class="stat-value" style="color:#10B981;">3</div>
+            <div class="stat-label">Doctors</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Next Available Doctor -->
+      <div class="doctor-card">
+        <div style="font-size:12px;color:#64748B;font-weight:700;margin-bottom:12px;">
+          NEXT AVAILABLE DOCTOR
+        </div>
+        <div class="doctor-header">
+          <div class="doctor-avatar">
+            SF
+            <div class="online-indicator"></div>
+          </div>
+          <div class="doctor-info">
+            <div class="doctor-name">Dr. Sarah Farooq</div>
+            <div class="doctor-specialty">General Physician · 12 yrs exp</div>
+            <div class="doctor-badge">🟢 Available Now</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Waiting Animation -->
+      <div class="waiting-container">
+        <div class="spinner"></div>
+        <div class="waiting-title">Please Stay Connected</div>
+        <div class="waiting-text">
+          You'll be connected automatically when it's your turn. Don't close this screen.
+        </div>
+
+        <div class="eta-display">
+          <div class="eta-label">Estimated Wait Time</div>
+          <div class="eta-time" id="eta-timer">3:45</div>
+          <div class="eta-subtext">Updating in real-time</div>
+        </div>
+      </div>
+
+      <!-- Your Request -->
+      <div class="info-card">
+        <div style="font-size:13px;font-weight:900;color:#1A2744;margin-bottom:10px;">
+          📝 Your Request
+        </div>
+        <div style="background:#F8FAFC;border-radius:10px;padding:12px;font-size:12px;color:#475569;line-height:1.6;">
+          I've had a fever since yesterday morning, around 101°F. Also experiencing body aches and mild headache.
+        </div>
+        <div style="margin-top:10px;font-size:11px;color:#64748B;">
+          <strong>Duration:</strong> 1-3 days<br>
+          <strong>Issue Type:</strong> Fever, Body Pain, Headache
+        </div>
+      </div>
+
+      <button class="btn-secondary" onclick="showScreen(1)">
+        Leave Queue
+      </button>
+
+      <div style="text-align:center;padding:12px;font-size:11px;color:#64748B;">
+        Queue updated • Just now
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 4: CONNECTING TO DOCTOR
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="screen-4" style="display:none;flex-direction:column;flex:1;">
+    
+    <div class="statusbar">
+      <span class="time">11:35</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+        <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+      </div>
+    </div>
+
+    <div class="header">
+      <div class="top-row">
+        <div style="width:38px;"></div>
+        <div class="header-title">Connecting...</div>
+        <div style="width:38px;"></div>
+      </div>
+    </div>
+
+    <div class="scroll">
+
+      <div class="waiting-container">
+        <div style="width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,#DC2626,#EF4444);display:flex;align-items:center;justify-content:center;font-size:56px;margin:0 auto 24px;animation:pulse 2s ease-in-out infinite;">
+          👨‍⚕️
+        </div>
+
+        <div class="waiting-title">Connecting You Now!</div>
+        <div class="waiting-text">
+          Dr. Sarah Farooq is joining the call...<br>
+          Please enable your microphone
+        </div>
+
+        <div style="background:#DCFCE7;border:2px solid #10B981;border-radius:16px;padding:18px;margin:24px 0;">
+          <div style="font-size:13px;font-weight:900;color:#047857;margin-bottom:8px;text-align:center;">
+            ✓ Your turn has arrived!
+          </div>
+          <div style="font-size:11px;color:#065F46;text-align:center;line-height:1.5;">
+            The doctor has reviewed your symptoms and is ready to speak with you
+          </div>
+        </div>
+
+        <div class="spinner" style="width:60px;height:60px;border-width:4px;"></div>
+
+      </div>
+
+      <button class="btn-primary" onclick="showScreen(5)">
+        ✓ I'm Ready - Join Call
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 5: CALL IN PROGRESS
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="screen-5" style="display:none;flex-direction:column;flex:1;">
+    
+    <div class="statusbar">
+      <span class="time">11:36</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+        <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+      </div>
+    </div>
+
+    <div class="header">
+      <div class="top-row">
+        <div style="width:38px;"></div>
+        <div class="header-title">Call Active</div>
+        <div style="width:38px;"></div>
+      </div>
+    </div>
+
+    <div class="scroll">
+
+      <!-- Call Display -->
+      <div class="call-container">
+        <div class="call-avatar">SF</div>
+        <div class="call-name">Dr. Sarah Farooq</div>
+        <div class="call-specialty">General Physician</div>
+        
+        <div style="margin:20px 0;">
+          <div class="call-duration" id="call-timer">05:32</div>
+          <div class="call-label">Call Duration</div>
+        </div>
+      </div>
+
+      <!-- Call Controls -->
+      <div class="call-controls">
+        <div class="control-btn" onclick="alert('Microphone toggled')">
+          <div class="control-icon">🎤</div>
+          <div class="control-label">Mute</div>
+        </div>
+        <div class="control-btn" onclick="alert('Speaker toggled')">
+          <div class="control-icon">🔊</div>
+          <div class="control-label">Speaker</div>
+        </div>
+        <div class="control-btn end-call-btn" onclick="showScreen(6)">
+          <div class="control-icon">📞</div>
+          <div class="control-label">End</div>
+        </div>
+      </div>
+
+      <!-- Quick Notes -->
+      <div class="info-card">
+        <div style="font-size:13px;font-weight:900;color:#1A2744;margin-bottom:10px;">
+          💡 During the call:
+        </div>
+        <div style="font-size:12px;color:#475569;line-height:1.7;">
+          • Describe your symptoms clearly<br>
+          • Mention any medications you're taking<br>
+          • Ask about treatment options<br>
+          • Request prescription if needed
+        </div>
+      </div>
+
+      <!-- Call Quality -->
+      <div style="text-align:center;padding:12px;">
+        <div style="font-size:11px;color:#64748B;margin-bottom:6px;">
+          Call Quality
+        </div>
+        <div style="font-size:13px;font-weight:800;color:#10B981;">
+          ● Excellent
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 6: CONSULTATION COMPLETE
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="screen-6" style="display:none;flex-direction:column;flex:1;">
+    
+    <div class="statusbar" style="background:#1148A4;">
+      <span class="time">11:44</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+        <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+      </div>
+    </div>
+
+    <div class="header" style="background:linear-gradient(155deg,#0D3D9C 0%,#1554C0 45%,#1E6BE0 100%);">
+      <div class="top-row">
+        <div style="width:38px;"></div>
+        <div class="header-title">Consultation Complete</div>
+        <div style="width:38px;"></div>
+      </div>
+    </div>
+
+    <div class="scroll">
+
+      <div class="success-icon">✓</div>
+      <div class="success-title">Thank You!</div>
+      <div class="success-text">
+        Your consultation with Dr. Sarah Farooq has been completed successfully.
+      </div>
+
+      <!-- Consultation Summary -->
+      <div class="summary-card">
+        <div style="font-size:15px;font-weight:900;color:#1A2744;font-family:'Sora',sans-serif;margin-bottom:14px;">
+          📋 Consultation Summary
+        </div>
+        
+        <div class="summary-row">
+          <div class="summary-label">Doctor</div>
+          <div class="summary-value">Dr. Sarah Farooq</div>
+        </div>
+        
+        <div class="summary-row">
+          <div class="summary-label">Date & Time</div>
+          <div class="summary-value">Mar 14, 11:36 AM</div>
+        </div>
+        
+        <div class="summary-row">
+          <div class="summary-label">Duration</div>
+          <div class="summary-value">8 minutes</div>
+        </div>
+        
+        <div class="summary-row">
+          <div class="summary-label">Consultation Fee</div>
+          <div class="summary-value">$25</div>
+        </div>
+
+        <div class="summary-row" style="border-top:2px solid #E2E8F0;margin-top:10px;padding-top:14px;">
+          <div style="font-size:14px;font-weight:900;color:#1A2744;">Total Paid</div>
+          <div style="font-size:20px;font-weight:900;color:#10B981;font-family:'Sora',sans-serif;">$25</div>
+        </div>
+      </div>
+
+      <!-- Doctor's Notes -->
+      <div class="info-card">
+        <div style="font-size:13px;font-weight:900;color:#1A2744;margin-bottom:10px;">
+          🩺 Doctor's Assessment
+        </div>
+        <div style="background:#F8FAFC;border-radius:10px;padding:12px;font-size:12px;color:#475569;line-height:1.6;">
+          <strong>Diagnosis:</strong> Viral fever with myalgia<br><br>
+          <strong>Advice:</strong> Rest, adequate hydration, monitor temperature. If fever persists beyond 3 days or exceeds 103°F, seek in-person evaluation.
+        </div>
+      </div>
+
+      <!-- Prescription -->
+      <div class="info-card" style="background:linear-gradient(135deg,rgba(16,185,129,.05),rgba(5,150,105,.05));border-color:#D1FAE5;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <div style="font-size:13px;font-weight:900;color:#047857;">
+            💊 Prescription Issued
+          </div>
+          <div style="font-size:10px;font-weight:800;color:#10B981;background:#DCFCE7;padding:4px 10px;border-radius:6px;">
+            E-Prescription
+          </div>
+        </div>
+        <div style="font-size:12px;color:#065F46;line-height:1.6;">
+          1. Paracetamol 500mg - Every 6 hours if needed<br>
+          2. Vitamin C 1000mg - Once daily for 5 days
+        </div>
+      </div>
+
+      <!-- Follow-up -->
+      <div class="info-card">
+        <div style="font-size:13px;font-weight:900;color:#1A2744;margin-bottom:10px;">
+          📅 Follow-up Recommended
+        </div>
+        <div style="font-size:12px;color:#475569;line-height:1.6;">
+          If symptoms don't improve in 48 hours, schedule a teleconsultation or home visit for further evaluation.
+        </div>
+      </div>
+
+      <button class="btn-primary" style="background:linear-gradient(135deg,#1148A4,#2273E8);box-shadow:0 6px 24px rgba(17,72,164,.3);" onclick="alert('View prescription')">
+        📄 View Full Prescription
+      </button>
+
+      <button class="btn-secondary" style="border-color:#1148A4;color:#1148A4;" onclick="alert('Download consultation summary')">
+        💾 Download Summary
+      </button>
+
+      <button class="btn-text" onclick="alert('Rate consultation')">
+        ⭐ Rate This Consultation
+      </button>
+
+      <div style="text-align:center;padding:16px;background:#F8FAFC;border-radius:14px;margin-top:14px;">
+        <div style="font-size:11px;color:#64748B;margin-bottom:8px;">
+          Need more help?
+        </div>
+        <button class="btn-secondary" style="margin:0;" onclick="alert('Book follow-up')">
+          Book Follow-up Consultation
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+let currentScreen = 1;
+
+function showScreen(screenNum) {
+  // Hide all screens
+  for (let i = 1; i <= 6; i++) {
+    const screen = document.getElementById('screen-' + i);
+    if (screen) screen.style.display = 'none';
+  }
+  
+  // Show target screen
+  const targetScreen = document.getElementById('screen-' + screenNum);
+  if (targetScreen) {
+    targetScreen.style.display = 'flex';
+    currentScreen = screenNum;
+  }
+}
+
+function selectTag(element) {
+  element.classList.toggle('selected');
+}
+
+function selectDuration(element) {
+  document.querySelectorAll('.quick-tags .quick-tag').forEach(tag => {
+    if (tag.parentElement === element.parentElement) {
+      tag.classList.remove('selected');
+    }
+  });
+  element.classList.add('selected');
+}
+
+function updateCharCount() {
+  const textarea = document.getElementById('symptom-text');
+  const charCount = document.getElementById('char-count');
+  if (textarea && charCount) {
+    charCount.textContent = textarea.value.length + ' / 500 characters';
+  }
+}
+
+// Simulate ETA countdown
+let etaSeconds = 225; // 3:45
+const etaTimer = document.getElementById('eta-timer');
+if (etaTimer) {
+  setInterval(() => {
+    if (etaSeconds > 0) {
+      etaSeconds--;
+      const minutes = Math.floor(etaSeconds / 60);
+      const seconds = etaSeconds % 60;
+      etaTimer.textContent = minutes + ':' + String(seconds).padStart(2, '0');
+    }
+  }, 1000);
+}
+
+// Simulate call timer
+let callSeconds = 0;
+const callTimer = document.getElementById('call-timer');
+if (callTimer) {
+  setInterval(() => {
+    callSeconds++;
+    const minutes = Math.floor(callSeconds / 60);
+    const seconds = callSeconds % 60;
+    callTimer.textContent = String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
+  }, 1000);
+}
+  function redirect(url) {
+    window.location.href = url;
+  }
+console.log('Quick Consultation Flow Loaded');
+</script>
+
+</body>
+</html>

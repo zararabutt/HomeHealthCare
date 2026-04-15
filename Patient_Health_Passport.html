@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Health Passport — Patient App</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Sora:wght@400;600;700;800&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:linear-gradient(135deg,#C8D8F0 0%,#DCE8F8 50%,#C8D0EC 100%);
+  display:flex;align-items:center;justify-content:center;
+  min-height:100vh;font-family:'Nunito',sans-serif;padding:28px 16px;
+}
+
+/* PHONE SHELL */
+.phone{
+  width:390px;min-height:848px;background:#EEF3FB;
+  border-radius:52px;overflow:hidden;
+  box-shadow:0 70px 140px rgba(0,0,0,.28),0 0 0 1.5px #B8C8E0,inset 0 0 0 1px #fff;
+  position:relative;display:flex;flex-direction:column;
+}
+
+/* STATUS BAR */
+.statusbar{
+  height:48px;background:#1148A4;
+  display:flex;align-items:flex-end;justify-content:space-between;
+  padding:0 26px 10px;flex-shrink:0;
+}
+.statusbar .time{font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:#fff;}
+.statusbar .icons{display:flex;gap:6px;align-items:center;}
+
+/* HEADER */
+.header{
+  background:linear-gradient(155deg,#0D3D9C 0%,#1554C0 45%,#1E6BE0 100%);
+  padding:14px 22px 34px;position:relative;overflow:hidden;flex-shrink:0;
+}
+.header::before{content:'';position:absolute;top:-80px;right:-50px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.06);}
+.header::after{content:'';position:absolute;bottom:-50px;left:30px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.04);}
+
+.top-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;position:relative;z-index:1;}
+.back-btn{
+  width:38px;height:38px;border-radius:50%;
+  background:rgba(255,255,255,.14);backdrop-filter:blur(8px);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;border:1px solid rgba(255,255,255,.18);
+  font-size:18px;color:#fff;font-weight:900;
+}
+.header-title{
+  font-size:17px;font-weight:900;color:#fff;
+  font-family:'Sora',sans-serif;letter-spacing:-.2px;
+}
+.header-action{
+  width:38px;height:38px;border-radius:50%;
+  background:rgba(255,255,255,.14);backdrop-filter:blur(8px);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;border:1px solid rgba(255,255,255,.18);
+  font-size:16px;color:#fff;
+}
+
+/* PATIENT SUMMARY CARD */
+.patient-summary{
+  background:rgba(255,255,255,.16);backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,.25);border-radius:22px;
+  padding:16px 18px;position:relative;z-index:1;
+}
+.summary-top{
+  display:flex;align-items:center;gap:14px;margin-bottom:14px;
+}
+.summary-avatar{
+  width:56px;height:56px;border-radius:50%;
+  background:linear-gradient(135deg,#FFD580,#FF9A3C);
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;font-weight:900;color:#fff;
+  font-family:'Sora',sans-serif;
+  border:2.5px solid rgba(255,255,255,.5);
+  flex-shrink:0;
+}
+.summary-info{flex:1;}
+.summary-name{
+  font-size:16px;font-weight:900;color:#fff;
+  font-family:'Sora',sans-serif;margin-bottom:3px;
+}
+.summary-meta{
+  font-size:11px;color:rgba(255,255,255,.75);
+  margin-bottom:6px;
+}
+.mrn-badge{
+  display:inline-block;
+  background:rgba(255,255,255,.2);
+  border:1.5px solid rgba(255,255,255,.3);
+  padding:4px 10px;border-radius:99px;
+  font-size:10px;font-weight:800;color:#fff;
+}
+
+.summary-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+.summary-stat{
+  background:rgba(255,255,255,.1);
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:12px;padding:10px 8px;
+  text-align:center;
+}
+.stat-value{
+  font-size:16px;font-weight:900;color:#fff;
+  font-family:'Sora',sans-serif;line-height:1;
+  margin-bottom:3px;
+}
+.stat-label{
+  font-size:9px;color:rgba(255,255,255,.65);
+  font-weight:700;text-transform:uppercase;
+  letter-spacing:.3px;
+}
+
+/* SCROLL */
+.scroll{flex:1;overflow-y:auto;padding:20px 18px 28px;}
+.scroll::-webkit-scrollbar{display:none;}
+
+/* SECTION HEADERS */
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;}
+.sec-title{font-size:17px;font-weight:900;color:#1A2744;font-family:'Sora',sans-serif;letter-spacing:-.2px;}
+.see-all{font-size:12px;font-weight:700;color:#1A5FCC;cursor:pointer;padding:3px 8px;background:#EBF1FF;border-radius:99px;}
+
+/* CATEGORY TABS */
+.category-tabs{
+  display:flex;gap:8px;margin-bottom:18px;
+  overflow-x:auto;padding-bottom:4px;
+}
+.category-tabs::-webkit-scrollbar{display:none;}
+.category-tab{
+  padding:9px 16px;background:#fff;
+  border:2px solid #E2E8F0;border-radius:99px;
+  font-size:12px;font-weight:800;color:#64748B;
+  white-space:nowrap;cursor:pointer;
+  transition:all .2s;flex-shrink:0;
+  box-shadow:0 2px 8px rgba(17,72,164,.04);
+}
+.category-tab.active{
+  background:linear-gradient(135deg,#EBF1FF,#D4E4FF);
+  border-color:#1148A4;color:#1148A4;
+}
+
+/* INFO CARD */
+.info-card{
+  background:#fff;border-radius:20px;padding:18px;
+  margin-bottom:14px;box-shadow:0 3px 14px rgba(17,72,164,.08);
+  border:1.5px solid rgba(17,72,164,.05);
+}
+.card-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:14px;
+}
+.card-title{
+  font-size:15px;font-weight:900;color:#1A2744;
+  font-family:'Sora',sans-serif;
+}
+.card-badge{
+  padding:4px 10px;border-radius:6px;
+  font-size:10px;font-weight:800;
+}
+
+/* CONDITION CARD */
+.condition-item{
+  background:#fff;border-radius:16px;padding:14px;
+  margin-bottom:10px;box-shadow:0 3px 14px rgba(17,72,164,.08);
+  border:1.5px solid rgba(17,72,164,.05);
+}
+.condition-header{
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:10px;
+}
+.condition-icon{
+  width:44px;height:44px;
+  background:linear-gradient(135deg,#EBF1FF,#D4E4FF);
+  border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-size:22px;flex-shrink:0;
+}
+.condition-info{flex:1;}
+.condition-name{
+  font-size:14px;font-weight:900;color:#1A2744;
+  margin-bottom:3px;
+}
+.condition-date{
+  font-size:11px;color:#64748B;
+}
+.condition-status{
+  padding:4px 10px;border-radius:6px;
+  font-size:10px;font-weight:800;
+}
+
+.condition-details{
+  background:#F8FAFC;border-radius:10px;
+  padding:12px;font-size:12px;color:#475569;
+  line-height:1.6;
+}
+
+/* MEDICATION CARD */
+.med-item{
+  background:#fff;border-radius:16px;padding:14px;
+  margin-bottom:10px;box-shadow:0 3px 14px rgba(17,72,164,.08);
+  border:1.5px solid rgba(17,72,164,.05);
+  position:relative;
+}
+.med-active-indicator{
+  position:absolute;top:14px;right:14px;
+  width:8px;height:8px;border-radius:50%;
+  background:#10B981;
+  box-shadow:0 0 0 3px rgba(16,185,129,.2);
+}
+.med-header{
+  display:flex;align-items:flex-start;gap:12px;
+  margin-bottom:10px;
+}
+.med-icon{
+  width:44px;height:44px;
+  background:linear-gradient(135deg,#FFFBEB,#FFEEB0);
+  border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-size:22px;flex-shrink:0;
+}
+.med-info{flex:1;}
+.med-name{
+  font-size:14px;font-weight:900;color:#1A2744;
+  margin-bottom:3px;
+}
+.med-dosage{
+  font-size:12px;color:#64748B;
+  font-weight:700;margin-bottom:6px;
+}
+.med-schedule{
+  display:flex;flex-wrap:wrap;gap:5px;
+}
+.time-badge{
+  padding:3px 8px;background:#F8FAFC;
+  border:1.5px solid #E2E8F0;border-radius:6px;
+  font-size:10px;font-weight:700;color:#475569;
+}
+
+/* VITALS CHART */
+.vitals-chart{
+  background:#fff;border-radius:20px;padding:18px;
+  margin-bottom:14px;box-shadow:0 3px 14px rgba(17,72,164,.08);
+  border:1.5px solid rgba(17,72,164,.05);
+}
+.chart-header{
+  display:flex;justify-content:space-between;
+  align-items:center;margin-bottom:16px;
+}
+.chart-title{
+  font-size:15px;font-weight:900;color:#1A2744;
+  font-family:'Sora',sans-serif;
+}
+.chart-range{
+  font-size:11px;color:#64748B;
+  font-weight:700;
+}
+
+.vital-reading{
+  background:#F8FAFC;border-radius:12px;
+  padding:14px;margin-bottom:10px;
+  display:flex;justify-content:space-between;
+  align-items:center;
+}
+.reading-info{flex:1;}
+.reading-label{
+  font-size:12px;color:#64748B;
+  font-weight:700;margin-bottom:4px;
+}
+.reading-value{
+  font-size:20px;font-weight:900;
+  font-family:'Sora',sans-serif;line-height:1;
+}
+.reading-trend{
+  text-align:right;
+}
+.trend-icon{
+  font-size:18px;margin-bottom:3px;
+}
+.trend-text{
+  font-size:10px;font-weight:700;
+}
+
+/* DOCUMENT CARD */
+.doc-item{
+  background:#fff;border-radius:16px;padding:14px;
+  margin-bottom:10px;box-shadow:0 3px 14px rgba(17,72,164,.08);
+  border:1.5px solid rgba(17,72,164,.05);
+  display:flex;gap:12px;align-items:center;
+  cursor:pointer;transition:all .2s;
+}
+.doc-item:hover{
+  transform:translateX(4px);
+  box-shadow:0 6px 20px rgba(17,72,164,.12);
+}
+.doc-icon{
+  width:48px;height:48px;
+  background:linear-gradient(135deg,#FFF0F7,#FFD6ED);
+  border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-size:24px;flex-shrink:0;
+}
+.doc-info{flex:1;}
+.doc-name{
+  font-size:13px;font-weight:900;color:#1A2744;
+  margin-bottom:3px;
+}
+.doc-meta{
+  font-size:11px;color:#64748B;
+}
+.doc-arrow{
+  font-size:18px;color:#CBD5E1;
+  flex-shrink:0;
+}
+
+/* ALLERGY BADGE */
+.allergy-item{
+  background:#fff;border:2px solid #FEE2E2;
+  border-radius:12px;padding:12px 14px;
+  margin-bottom:10px;
+  display:flex;align-items:center;gap:10px;
+}
+.allergy-icon{
+  font-size:22px;flex-shrink:0;
+}
+.allergy-info{flex:1;}
+.allergy-name{
+  font-size:13px;font-weight:900;color:#DC2626;
+  margin-bottom:3px;
+}
+.allergy-reaction{
+  font-size:11px;color:#991B1B;
+}
+.allergy-severity{
+  padding:4px 10px;border-radius:6px;
+  font-size:10px;font-weight:800;
+  background:#FEE2E2;color:#DC2626;
+}
+
+/* TIMELINE */
+.timeline{
+  position:relative;padding-left:32px;
+}
+.timeline::before{
+  content:'';position:absolute;left:11px;top:0;bottom:0;
+  width:2px;background:#E2E8F0;
+}
+.timeline-item{
+  position:relative;margin-bottom:20px;
+}
+.timeline-dot{
+  position:absolute;left:-32px;top:4px;
+  width:24px;height:24px;border-radius:50%;
+  background:#fff;border:3px solid #1148A4;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;
+}
+.timeline-card{
+  background:#fff;border-radius:14px;
+  padding:14px;box-shadow:0 2px 10px rgba(17,72,164,.06);
+  border:1.5px solid rgba(17,72,164,.05);
+}
+.timeline-date{
+  font-size:11px;color:#64748B;
+  font-weight:700;margin-bottom:6px;
+}
+.timeline-title{
+  font-size:13px;font-weight:900;color:#1A2744;
+  margin-bottom:4px;
+}
+.timeline-desc{
+  font-size:12px;color:#475569;
+  line-height:1.5;
+}
+
+/* BUTTONS */
+.btn-primary{
+  width:100%;background:linear-gradient(135deg,#1148A4,#2273E8);
+  color:#fff;border:none;border-radius:12px;
+  padding:14px;font-size:14px;font-weight:800;
+  cursor:pointer;margin-bottom:10px;
+  box-shadow:0 6px 24px rgba(17,72,164,.3);
+  transition:all .2s;font-family:'Nunito',sans-serif;
+}
+.btn-primary:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 32px rgba(17,72,164,.4);
+}
+
+.btn-secondary{
+  width:100%;background:#fff;color:#1148A4;
+  border:2px solid #1148A4;border-radius:12px;
+  padding:12px;font-size:14px;font-weight:800;
+  cursor:pointer;margin-bottom:10px;
+  font-family:'Nunito',sans-serif;
+}
+
+.btn-icon{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:10px 16px;background:#fff;
+  border:2px solid #E2E8F0;border-radius:10px;
+  font-size:12px;font-weight:800;color:#475569;
+  cursor:pointer;transition:all .2s;
+}
+.btn-icon:hover{
+  border-color:#1148A4;color:#1148A4;
+  background:rgba(17,72,164,.02);
+}
+
+/* QUICK ACTIONS */
+.quick-actions{
+  display:grid;grid-template-columns:repeat(2,1fr);
+  gap:10px;margin-bottom:18px;
+}
+.action-card{
+  background:#fff;border-radius:16px;
+  padding:16px 14px;text-align:center;
+  box-shadow:0 3px 14px rgba(17,72,164,.08);
+  border:1.5px solid rgba(17,72,164,.05);
+  cursor:pointer;transition:all .2s;
+}
+.action-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 6px 20px rgba(17,72,164,.14);
+}
+.action-icon{
+  font-size:32px;margin-bottom:8px;
+}
+.action-label{
+  font-size:12px;font-weight:800;color:#1A2744;
+}
+
+/* EMPTY STATE */
+.empty-state{
+  text-align:center;padding:40px 20px;
+}
+.empty-icon{
+  font-size:56px;margin-bottom:14px;
+  opacity:.3;
+}
+.empty-title{
+  font-size:15px;font-weight:900;color:#1A2744;
+  font-family:'Sora',sans-serif;margin-bottom:6px;
+}
+.empty-text{
+  font-size:12px;color:#64748B;
+  line-height:1.6;margin-bottom:18px;
+}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<div class="phone">
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 1: HEALTH PASSPORT OVERVIEW
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="screen-1" style="display:flex;flex-direction:column;flex:1;">
+    
+    <!-- STATUS BAR -->
+    <div class="statusbar">
+      <span class="time">11:25</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+        <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+      </div>
+    </div>
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="top-row">
+        <div class="back-btn" onclick="redirect('./Patient_App_Home.html')">←</div>
+        <div class="header-title">Health Passport</div>
+        <div class="header-action" onclick="alert('Share Health Passport')">⤴</div>
+      </div>
+
+      <!-- Patient Summary -->
+      <div class="patient-summary">
+        <div class="summary-top">
+          <div class="summary-avatar">MA</div>
+          <div class="summary-info">
+            <div class="summary-name">Muhammad Ali</div>
+            <div class="summary-meta">Male • 45 years • Blood Type A+</div>
+            <div class="mrn-badge">MRN: 226589</div>
+          </div>
+        </div>
+        
+        <div class="summary-grid">
+          <div class="summary-stat">
+            <div class="stat-value">12</div>
+            <div class="stat-label">Visits</div>
+          </div>
+          <div class="summary-stat">
+            <div class="stat-value">3</div>
+            <div class="stat-label">Conditions</div>
+          </div>
+          <div class="summary-stat">
+            <div class="stat-value">5</div>
+            <div class="stat-label">Medications</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCROLL -->
+    <div class="scroll">
+
+      <!-- Quick Actions -->
+      <div class="quick-actions">
+        <div class="action-card" onclick="showScreen(2)">
+          <div class="action-icon">🩺</div>
+          <div class="action-label">Medical History</div>
+        </div>
+        <div class="action-card" onclick="showScreen(3)">
+          <div class="action-icon">💊</div>
+          <div class="action-label">Medications</div>
+        </div>
+        <div class="action-card" onclick="showScreen(4)">
+          <div class="action-icon">📊</div>
+          <div class="action-label">Vital Signs</div>
+        </div>
+        <div class="action-card" onclick="showScreen(5)">
+          <div class="action-icon">📄</div>
+          <div class="action-label">Documents</div>
+        </div>
+        <div class="action-card" onclick="showScreen(6)">
+          <div class="action-icon">⚠️</div>
+          <div class="action-label">Allergies</div>
+        </div>
+        <div class="action-card" onclick="showScreen(7)">
+          <div class="action-icon">💉</div>
+          <div class="action-label">Immunizations</div>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="sec-head">
+        <div class="sec-title">Recent Activity</div>
+        <div class="see-all" onclick="showScreen(8)">View all →</div>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot">🩺</div>
+          <div class="timeline-card">
+            <div class="timeline-date">Today • 10:30 AM</div>
+            <div class="timeline-title">Home Visit - Nurse Aisha Khan</div>
+            <div class="timeline-desc">
+              Vitals recorded, wound dressing changed. BP: 118/76, SpO₂: 98%
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot">💊</div>
+          <div class="timeline-card">
+            <div class="timeline-date">Yesterday • 8:00 AM</div>
+            <div class="timeline-title">Medication Taken</div>
+            <div class="timeline-desc">
+              Metformin 500mg - Morning dose taken on time
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot">🔬</div>
+          <div class="timeline-card">
+            <div class="timeline-date">Mar 28 • 2:45 PM</div>
+            <div class="timeline-title">Lab Results Uploaded</div>
+            <div class="timeline-desc">
+              Complete Blood Count (CBC) - OCR processed automatically
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-secondary" onclick="alert('Add new entry')">
+        + Add Health Record
+      </button>
+      <button class="btn-secondary" onclick="redirect('./Patient_App_Home.html')">
+        Go Back
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 2: MEDICAL HISTORY / CONDITIONS
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="screen-2" style="display:none;flex-direction:column;flex:1;">
+    
+    <div class="statusbar">
+      <span class="time">11:25</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+        <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+      </div>
+    </div>
+
+    <div class="header">
+      <div class="top-row">
+        <div class="back-btn" onclick="showScreen(1)">←</div>
+        <div class="header-title">Medical History</div>
+        <div class="header-action" onclick="alert('Add condition')">+</div>
+      </div>
+    </div>
+
+    <div class="scroll">
+
+      <div class="sec-head">
+        <div class="sec-title">Active Conditions</div>
+      </div>
+
+      <!-- Condition 1 -->
+      <div class="condition-item">
+        <div class="condition-header">
+          <div class="condition-icon" style="background:linear-gradient(135deg,rgba(220,38,38,.1),rgba(239,68,68,.1));">
+            🫀
+          </div>
+          <div class="condition-info">
+            <div class="condition-name">Type 2 Diabetes Mellitus</div>
+            <div class="condition-date">Diagnosed: Jan 2019</div>
+          </div>
+          <div class="condition-status" style="background:#DCFCE7;color:#16A34A;">
+            Controlled
+          </div>
+        </div>
+        <div class="condition-details">
+          <strong>Managed by:</strong> Dr. Bilal Hussain (Endocrinologist)<br>
+          <strong>Last Review:</strong> Mar 10, 2026<br>
+          <strong>HbA1c:</strong> 6.8% (Target: <7%)
+        </div>
+      </div>
+
+      <!-- Condition 2 -->
+      <div class="condition-item">
+        <div class="condition-header">
+          <div class="condition-icon" style="background:linear-gradient(135deg,rgba(17,72,164,.1),rgba(30,107,224,.1));">
+            💔
+          </div>
+          <div class="condition-info">
+            <div class="condition-name">Hypertension (Stage 1)</div>
+            <div class="condition-date">Diagnosed: May 2020</div>
+          </div>
+          <div class="condition-status" style="background:#DCFCE7;color:#16A34A;">
+            Controlled
+          </div>
+        </div>
+        <div class="condition-details">
+          <strong>Managed by:</strong> Dr. Ahmed Khan (Cardiologist)<br>
+          <strong>Current BP:</strong> 118/76 mmHg (Target: <130/80)<br>
+          <strong>Monitoring:</strong> Daily home readings
+        </div>
+      </div>
+
+      <!-- Condition 3 -->
+      <div class="condition-item">
+        <div class="condition-header">
+          <div class="condition-icon" style="background:linear-gradient(135deg,rgba(245,158,11,.1),rgba(217,119,6,.1));">
+            🦴
+          </div>
+          <div class="condition-info">
+            <div class="condition-name">Osteoarthritis (Knee)</div>
+            <div class="condition-date">Diagnosed: Aug 2023</div>
+          </div>
+          <div class="condition-status" style="background:#FEF3C7;color:#CA8A04;">
+            Monitoring
+          </div>
+        </div>
+        <div class="condition-details">
+          <strong>Managed by:</strong> Dr. Omar Hassan (Orthopedic)<br>
+          <strong>Treatment:</strong> Physiotherapy twice weekly<br>
+          <strong>Last X-ray:</strong> Feb 2026 - Mild progression
+        </div>
+      </div>
+
+      <div class="sec-head" style="margin-top:24px;">
+        <div class="sec-title">Past Conditions (Resolved)</div>
+      </div>
+
+      <div class="condition-item" style="opacity:.6;">
+        <div class="condition-header">
+          <div class="condition-icon">🤕</div>
+          <div class="condition-info">
+            <div class="condition-name">COVID-19</div>
+            <div class="condition-date">Mar 2022 - Apr 2022</div>
+          </div>
+          <div class="condition-status" style="background:#E2E8F0;color:#64748B;">
+            Resolved
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-secondary" onclick="alert('Add new condition')">
+        + Add Medical Condition
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 3: MEDICATIONS
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="screen-3" style="display:none;flex-direction:column;flex:1;">
+    
+    <div class="statusbar">
+      <span class="time">11:26</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+        <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+      </div>
+    </div>
+
+    <div class="header">
+      <div class="top-row">
+        <div class="back-btn" onclick="showScreen(1)">←</div>
+        <div class="header-title">Current Medications</div>
+        <div class="header-action" onclick="alert('Add medication')">+</div>
+      </div>
+    </div>
+
+    <div class="scroll">
+
+      <!-- Category Tabs -->
+      <div class="category-tabs">
+        <div class="category-tab active">Active (5)</div>
+        <div class="category-tab">As Needed (2)</div>
+        <div class="category-tab">Discontinued (3)</div>
+      </div>
+
+      <!-- Med 1 -->
+      <div class="med-item">
+        <div class="med-active-indicator"></div>
+        <div class="med-header">
+          <div class="med-icon">💊</div>
+          <div class="med-info">
+            <div class="med-name">Metformin</div>
+            <div class="med-dosage">500mg • 2 times daily</div>
+            <div class="med-schedule">
+              <div class="time-badge">🌅 8:00 AM</div>
+              <div class="time-badge">🌙 8:00 PM</div>
+            </div>
+          </div>
+        </div>
+        <div class="condition-details">
+          <strong>Purpose:</strong> Type 2 Diabetes management<br>
+          <strong>Prescribed by:</strong> Dr. Bilal Hussain<br>
+          <strong>Started:</strong> Jan 15, 2019<br>
+          <strong>Instructions:</strong> Take with meals
+        </div>
+      </div>
+
+      <!-- Med 2 -->
+      <div class="med-item">
+        <div class="med-active-indicator"></div>
+        <div class="med-header">
+          <div class="med-icon">💊</div>
+          <div class="med-info">
+            <div class="med-name">Amlodipine</div>
+            <div class="med-dosage">10mg • Once daily</div>
+            <div class="med-schedule">
+              <div class="time-badge">🌅 8:00 AM</div>
+            </div>
+          </div>
+        </div>
+        <div class="condition-details">
+          <strong>Purpose:</strong> Blood pressure control<br>
+          <strong>Prescribed by:</strong> Dr. Ahmed Khan<br>
+          <strong>Started:</strong> May 22, 2020
+        </div>
+      </div>
+
+      <!-- Med 3 -->
+      <div class="med-item">
+        <div class="med-active-indicator"></div>
+        <div class="med-header">
+          <div class="med-icon">💊</div>
+          <div class="med-info">
+            <div class="med-name">Atorvastatin</div>
+            <div class="med-dosage">20mg • Once daily</div>
+            <div class="med-schedule">
+              <div class="time-badge">🌙 9:00 PM</div>
+            </div>
+          </div>
+        </div>
+        <div class="condition-details">
+          <strong>Purpose:</strong> Cholesterol management<br>
+          <strong>Prescribed by:</strong> Dr. Ahmed Khan<br>
+          <strong>Started:</strong> Jun 10, 2020
+        </div>
+      </div>
+
+      <!-- Med 4 -->
+      <div class="med-item">
+        <div class="med-active-indicator"></div>
+        <div class="med-header">
+          <div class="med-icon">💊</div>
+          <div class="med-info">
+            <div class="med-name">Aspirin</div>
+            <div class="med-dosage">75mg • Once daily</div>
+            <div class="med-schedule">
+              <div class="time-badge">🌅 8:00 AM</div>
+            </div>
+          </div>
+        </div>
+        <div class="condition-details">
+          <strong>Purpose:</strong> Cardiovascular protection<br>
+          <strong>Started:</strong> May 22, 2020<br>
+          <strong>Instructions:</strong> Take with food
+        </div>
+      </div>
+
+      <!-- Med 5 -->
+      <div class="med-item">
+        <div class="med-active-indicator"></div>
+        <div class="med-header">
+          <div class="med-icon">💊</div>
+          <div class="med-info">
+            <div class="med-name">Vitamin D3</div>
+            <div class="med-dosage">1000 IU • Once daily</div>
+            <div class="med-schedule">
+              <div class="time-badge">🌅 Morning</div>
+            </div>
+          </div>
+        </div>
+        <div class="condition-details">
+          <strong>Purpose:</strong> Bone health supplement<br>
+          <strong>Started:</strong> Aug 15, 2023
+        </div>
+      </div>
+
+      <button class="btn-secondary" onclick="alert('Set medication reminder')">
+        🔔 Set Medication Reminders
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 4: VITAL SIGNS / READINGS
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="screen-4" style="display:none;flex-direction:column;flex:1;">
+    
+    <div class="statusbar">
+      <span class="time">11:26</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+        <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+      </div>
+    </div>
+
+    <div class="header">
+      <div class="top-row">
+        <div class="back-btn" onclick="showScreen(1)">←</div>
+        <div class="header-title">Vital Signs</div>
+        <div class="header-action" onclick="alert('View charts')">📈</div>
+      </div>
+    </div>
+
+    <div class="scroll">
+
+      <!-- Latest Readings -->
+      <div class="vitals-chart">
+        <div class="chart-header">
+          <div class="chart-title">Latest Readings</div>
+          <div class="chart-range">Today 10:30 AM</div>
+        </div>
+
+        <!-- BP -->
+        <div class="vital-reading">
+          <div class="reading-info">
+            <div class="reading-label">Blood Pressure</div>
+            <div class="reading-value" style="color:#1148A4;">
+              118<span style="font-size:14px;font-weight:700;">/76</span>
+              <span style="font-size:12px;font-weight:600;color:#64748B;"> mmHg</span>
+            </div>
+          </div>
+          <div class="reading-trend">
+            <div class="trend-icon" style="color:#10B981;">↓</div>
+            <div class="trend-text" style="color:#10B981;">Normal</div>
+          </div>
+        </div>
+
+        <!-- SpO2 -->
+        <div class="vital-reading">
+          <div class="reading-info">
+            <div class="reading-label">Oxygen Saturation</div>
+            <div class="reading-value" style="color:#0EA5E9;">
+              98<span style="font-size:14px;font-weight:700;">%</span>
+            </div>
+          </div>
+          <div class="reading-trend">
+            <div class="trend-icon" style="color:#10B981;">✓</div>
+            <div class="trend-text" style="color:#10B981;">Normal</div>
+          </div>
+        </div>
+
+        <!-- Glucose -->
+        <div class="vital-reading">
+          <div class="reading-info">
+            <div class="reading-label">Blood Glucose</div>
+            <div class="reading-value" style="color:#D97706;">
+              102
+              <span style="font-size:12px;font-weight:600;color:#64748B;"> mg/dL</span>
+            </div>
+          </div>
+          <div class="reading-trend">
+            <div class="trend-icon" style="color:#F59E0B;">↑</div>
+            <div class="trend-text" style="color:#D97706;">Watch</div>
+          </div>
+        </div>
+
+        <!-- Heart Rate -->
+        <div class="vital-reading">
+          <div class="reading-info">
+            <div class="reading-label">Heart Rate</div>
+            <div class="reading-value" style="color:#DB2777;">
+              72
+              <span style="font-size:12px;font-weight:600;color:#64748B;"> bpm</span>
+            </div>
+          </div>
+          <div class="reading-trend">
+            <div class="trend-icon" style="color:#10B981;">✓</div>
+            <div class="trend-text" style="color:#10B981;">Normal</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7-Day Trend -->
+      <div class="info-card">
+        <div class="card-header">
+          <div class="card-title">7-Day Average</div>
+          <div style="font-size:11px;color:#64748B;font-weight:700;">
+            Mar 8 - Mar 14
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;">
+          <div style="text-align:center;">
+            <div style="font-size:11px;color:#64748B;margin-bottom:6px;">BP Average</div>
+            <div style="font-size:20px;font-weight:900;color:#1148A4;font-family:'Sora',sans-serif;">
+              120/78
+            </div>
+          </div>
+          <div style="text-align:center;">
+            <div style="font-size:11px;color:#64748B;margin-bottom:6px;">Glucose Avg</div>
+            <div style="font-size:20px;font-weight:900;color:#D97706;font-family:'Sora',sans-serif;">
+              108
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;">
+        <button class="btn-icon" onclick="alert('Record new reading')">
+          <span style="font-size:18px;">📝</span>
+          Add Reading
+        </button>
+        <button class="btn-icon" onclick="redirect('./Vital_Signs_Add_And_History.html')">
+          <span style="font-size:18px;">📊</span>
+          View History
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 5: DOCUMENTS / REPORTS
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="screen-5" style="display:none;flex-direction:column;flex:1;">
+    
+    <div class="statusbar">
+      <span class="time">11:27</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+        <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+      </div>
+    </div>
+
+    <div class="header">
+      <div class="top-row">
+        <div class="back-btn" onclick="showScreen(1)">←</div>
+        <div class="header-title">Medical Documents</div>
+        <div class="header-action" onclick="alert('Upload document')">📤</div>
+      </div>
+    </div>
+
+    <div class="scroll">
+
+      <!-- Category Tabs -->
+      <div class="category-tabs">
+        <div class="category-tab active">All (24)</div>
+        <div class="category-tab">Lab Reports</div>
+        <div class="category-tab">Prescriptions</div>
+        <div class="category-tab">Imaging</div>
+        <div class="category-tab">Insurance</div>
+      </div>
+
+      <div class="sec-head">
+        <div class="sec-title">Recent Documents</div>
+      </div>
+
+      <!-- Doc 1 -->
+      <div class="doc-item" onclick="alert('View CBC Report')">
+        <div class="doc-icon" style="background:linear-gradient(135deg,rgba(139,92,246,.1),rgba(167,139,250,.1));">
+          🔬
+        </div>
+        <div class="doc-info">
+          <div class="doc-name">Complete Blood Count (CBC)</div>
+          <div class="doc-meta">Mar 28, 2026 • 2.4 MB • PDF</div>
+        </div>
+        <div class="doc-arrow">›</div>
+      </div>
+
+      <!-- Doc 2 -->
+      <div class="doc-item" onclick="alert('View HbA1c Report')">
+        <div class="doc-icon" style="background:linear-gradient(135deg,rgba(139,92,246,.1),rgba(167,139,250,.1));">
+          🔬
+        </div>
+        <div class="doc-info">
+          <div class="doc-name">HbA1c Test Report</div>
+          <div class="doc-meta">Mar 10, 2026 • 1.8 MB • PDF</div>
+        </div>
+        <div class="doc-arrow">›</div>
+      </div>
+
+      <!-- Doc 3 -->
+      <div class="doc-item" onclick="alert('View Prescription')">
+        <div class="doc-icon" style="background:linear-gradient(135deg,rgba(16,185,129,.1),rgba(5,150,105,.1));">
+          📋
+        </div>
+        <div class="doc-info">
+          <div class="doc-name">Prescription - Dr. Bilal Hussain</div>
+          <div class="doc-meta">Mar 1, 2026 • 890 KB • PDF</div>
+        </div>
+        <div class="doc-arrow">›</div>
+      </div>
+
+      <!-- Doc 4 -->
+      <div class="doc-item" onclick="alert('View X-ray')">
+        <div class="doc-icon" style="background:linear-gradient(135deg,rgba(17,72,164,.1),rgba(30,107,224,.1));">
+          🦴
+        </div>
+        <div class="doc-info">
+          <div class="doc-name">Knee X-Ray (AP & Lateral)</div>
+          <div class="doc-meta">Feb 18, 2026 • 5.2 MB • DICOM</div>
+        </div>
+        <div class="doc-arrow">›</div>
+      </div>
+
+      <!-- Doc 5 -->
+      <div class="doc-item" onclick="alert('View Insurance Card')">
+        <div class="doc-icon" style="background:linear-gradient(135deg,rgba(245,158,11,.1),rgba(217,119,6,.1));">
+          🏥
+        </div>
+        <div class="doc-info">
+          <div class="doc-name">Health Insurance Card</div>
+          <div class="doc-meta">Jan 1, 2026 • 650 KB • JPG</div>
+        </div>
+        <div class="doc-arrow">›</div>
+      </div>
+
+      <!-- Doc 6 -->
+      <div class="doc-item" onclick="alert('View Emirates ID')">
+        <div class="doc-icon" style="background:linear-gradient(135deg,rgba(245,158,11,.1),rgba(217,119,6,.1));">
+          🪪
+        </div>
+        <div class="doc-info">
+          <div class="doc-name">Emirates ID Copy</div>
+          <div class="doc-meta">Jan 1, 2026 • 1.2 MB • PDF</div>
+        </div>
+        <div class="doc-arrow">›</div>
+      </div>
+
+      <button class="btn-secondary" onclick="alert('Upload new document')">
+        📤 Upload New Document
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 6: ALLERGIES
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="screen-6" style="display:none;flex-direction:column;flex:1;">
+    
+    <div class="statusbar">
+      <span class="time">11:27</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+        <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+      </div>
+    </div>
+
+    <div class="header">
+      <div class="top-row">
+        <div class="back-btn" onclick="showScreen(1)">←</div>
+        <div class="header-title">Allergies & Reactions</div>
+        <div class="header-action" onclick="alert('Add allergy')">+</div>
+      </div>
+    </div>
+
+    <div class="scroll">
+
+      <div class="info-card" style="background:rgba(239,68,68,.05);border-color:#FEE2E2;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+          <div style="font-size:24px;">⚠️</div>
+          <div style="font-size:13px;font-weight:900;color:#DC2626;">
+            Critical Alert - 2 Active Allergies
+          </div>
+        </div>
+        <div style="font-size:11px;color:#991B1B;line-height:1.5;">
+          Always inform healthcare providers about your allergies before any treatment or medication.
+        </div>
+      </div>
+
+      <div class="sec-head">
+        <div class="sec-title">Drug Allergies</div>
+      </div>
+
+      <!-- Allergy 1 -->
+      <div class="allergy-item">
+        <div class="allergy-icon">💊</div>
+        <div class="allergy-info">
+          <div class="allergy-name">Penicillin</div>
+          <div class="allergy-reaction">
+            Reaction: Skin rash, itching, hives
+          </div>
+        </div>
+        <div class="allergy-severity">
+          High Risk
+        </div>
+      </div>
+
+      <!-- Allergy 2 -->
+      <div class="allergy-item">
+        <div class="allergy-icon">💊</div>
+        <div class="allergy-info">
+          <div class="allergy-name">Sulfa Drugs (Sulfonamides)</div>
+          <div class="allergy-reaction">
+            Reaction: Nausea, dizziness
+          </div>
+        </div>
+        <div class="allergy-severity" style="background:#FEF3C7;color:#CA8A04;">
+          Moderate
+        </div>
+      </div>
+
+      <div class="sec-head" style="margin-top:24px;">
+        <div class="sec-title">Food Allergies</div>
+      </div>
+
+      <div class="empty-state">
+        <div class="empty-icon">🥜</div>
+        <div class="empty-title">No Food Allergies Recorded</div>
+        <div class="empty-text">
+          If you have any food allergies, add them here to keep your health profile complete.
+        </div>
+        <button class="btn-secondary" onclick="alert('Add food allergy')">
+          + Add Food Allergy
+        </button>
+      </div>
+
+      <div class="sec-head" style="margin-top:24px;">
+        <div class="sec-title">Environmental Allergies</div>
+      </div>
+
+      <div class="allergy-item" style="border-color:#E2E8F0;">
+        <div class="allergy-icon">🌼</div>
+        <div class="allergy-info">
+          <div class="allergy-name" style="color:#1A2744;">Pollen (Spring)</div>
+          <div class="allergy-reaction" style="color:#64748B;">
+            Reaction: Sneezing, watery eyes
+          </div>
+        </div>
+        <div class="allergy-severity" style="background:#E2E8F0;color:#64748B;">
+          Mild
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 7: IMMUNIZATIONS / VACCINATIONS
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="screen-7" style="display:none;flex-direction:column;flex:1;">
+    
+    <div class="statusbar">
+      <span class="time">11:28</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+        <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+      </div>
+    </div>
+
+    <div class="header">
+      <div class="top-row">
+        <div class="back-btn" onclick="showScreen(1)">←</div>
+        <div class="header-title">Immunization Record</div>
+        <div class="header-action" onclick="alert('Add vaccination')">+</div>
+      </div>
+    </div>
+
+    <div class="scroll">
+
+      <div class="info-card" style="background:rgba(16,185,129,.05);border-color:#D1FAE5;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="font-size:24px;">✓</div>
+          <div>
+            <div style="font-size:13px;font-weight:900;color:#059669;margin-bottom:4px;">
+              Vaccination Status: Up to Date
+            </div>
+            <div style="font-size:11px;color:#047857;">
+              Next recommended: Flu vaccine in Oct 2026
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sec-head">
+        <div class="sec-title">COVID-19 Vaccinations</div>
+      </div>
+
+      <div class="condition-item">
+        <div class="condition-header">
+          <div class="condition-icon" style="background:linear-gradient(135deg,rgba(16,185,129,.1),rgba(5,150,105,.1));">
+            💉
+          </div>
+          <div class="condition-info">
+            <div class="condition-name">COVID-19 Vaccine (Booster)</div>
+            <div class="condition-date">Dec 15, 2023</div>
+          </div>
+          <div class="condition-status" style="background:#DCFCE7;color:#16A34A;">
+            ✓ Complete
+          </div>
+        </div>
+        <div class="condition-details">
+          <strong>Vaccine:</strong> Pfizer-BioNTech mRNA<br>
+          <strong>Dose:</strong> 4th dose (2nd booster)<br>
+          <strong>Location:</strong> Abu Dhabi Health Center<br>
+          <strong>Batch #:</strong> FH3264
+        </div>
+      </div>
+
+      <div class="sec-head" style="margin-top:24px;">
+        <div class="sec-title">Routine Vaccinations</div>
+      </div>
+
+      <div class="condition-item">
+        <div class="condition-header">
+          <div class="condition-icon" style="background:linear-gradient(135deg,rgba(17,72,164,.1),rgba(30,107,224,.1));">
+            💉
+          </div>
+          <div class="condition-info">
+            <div class="condition-name">Influenza (Flu Vaccine)</div>
+            <div class="condition-date">Oct 8, 2025</div>
+          </div>
+          <div class="condition-status" style="background:#DCFCE7;color:#16A34A;">
+            ✓ Current
+          </div>
+        </div>
+        <div class="condition-details">
+          <strong>Type:</strong> Quadrivalent inactivated<br>
+          <strong>Next Due:</strong> Oct 2026 (Annual)
+        </div>
+      </div>
+
+      <div class="condition-item">
+        <div class="condition-header">
+          <div class="condition-icon" style="background:linear-gradient(135deg,rgba(17,72,164,.1),rgba(30,107,224,.1));">
+            💉
+          </div>
+          <div class="condition-info">
+            <div class="condition-name">Tetanus-Diphtheria (Td)</div>
+            <div class="condition-date">Mar 12, 2021</div>
+          </div>
+          <div class="condition-status" style="background:#FEF3C7;color:#CA8A04;">
+            Due Soon
+          </div>
+        </div>
+        <div class="condition-details">
+          <strong>Type:</strong> Tetanus & Diphtheria booster<br>
+          <strong>Next Due:</strong> Mar 2026 (Every 10 years)<br>
+          <strong>Reminder:</strong> Schedule appointment
+        </div>
+      </div>
+
+      <button class="btn-secondary" onclick="alert('Schedule vaccination')">
+        📅 Schedule Vaccination
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 8: FULL MEDICAL TIMELINE
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="screen-8" style="display:none;flex-direction:column;flex:1;">
+    
+    <div class="statusbar">
+      <span class="time">11:28</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+        <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+      </div>
+    </div>
+
+    <div class="header">
+      <div class="top-row">
+        <div class="back-btn" onclick="showScreen(1)">←</div>
+        <div class="header-title">Medical Timeline</div>
+        <div class="header-action" onclick="alert('Filter timeline')">🔍</div>
+      </div>
+    </div>
+
+    <div class="scroll">
+
+      <!-- Category Tabs -->
+      <div class="category-tabs">
+        <div class="category-tab active">All Events</div>
+        <div class="category-tab">Consultations</div>
+        <div class="category-tab">Lab Tests</div>
+        <div class="category-tab">Medications</div>
+      </div>
+
+      <div class="timeline">
+        <!-- Today -->
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:#10B981;border-color:#10B981;">✓</div>
+          <div class="timeline-card">
+            <div class="timeline-date">Today • 10:30 AM</div>
+            <div class="timeline-title">Home Nursing Visit</div>
+            <div class="timeline-desc">
+              Nurse Aisha Khan • Vital signs recorded, wound dressing changed. All readings normal.
+            </div>
+          </div>
+        </div>
+
+        <!-- Yesterday -->
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:#1148A4;border-color:#1148A4;">💊</div>
+          <div class="timeline-card">
+            <div class="timeline-date">Yesterday • 8:00 AM</div>
+            <div class="timeline-title">Medication Adherence</div>
+            <div class="timeline-desc">
+              All morning medications taken on schedule. Perfect adherence maintained.
+            </div>
+          </div>
+        </div>
+
+        <!-- Mar 28 -->
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:#8B5CF6;border-color:#8B5CF6;">🔬</div>
+          <div class="timeline-card">
+            <div class="timeline-date">Mar 28 • 2:45 PM</div>
+            <div class="timeline-title">Lab Results - CBC</div>
+            <div class="timeline-desc">
+              Complete Blood Count uploaded via OCR. All values within normal range.
+            </div>
+          </div>
+        </div>
+
+        <!-- Mar 10 -->
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:#1148A4;border-color:#1148A4;">🩺</div>
+          <div class="timeline-card">
+            <div class="timeline-date">Mar 10 • 3:00 PM</div>
+            <div class="timeline-title">Teleconsultation - Dr. Bilal Hussain</div>
+            <div class="timeline-desc">
+              Diabetes review. HbA1c: 6.8% (improved). Continue current medications. Follow-up in 3 months.
+            </div>
+          </div>
+        </div>
+
+        <!-- Mar 10 Lab -->
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:#8B5CF6;border-color:#8B5CF6;">🔬</div>
+          <div class="timeline-card">
+            <div class="timeline-date">Mar 10 • 9:00 AM</div>
+            <div class="timeline-title">Lab Test - HbA1c</div>
+            <div class="timeline-desc">
+              Result: 6.8% (Target: <7%). Improved from previous 7.2%.
+            </div>
+          </div>
+        </div>
+
+        <!-- Feb 18 -->
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:#1148A4;border-color:#1148A4;">🦴</div>
+          <div class="timeline-card">
+            <div class="timeline-date">Feb 18 • 11:00 AM</div>
+            <div class="timeline-title">X-Ray Imaging - Knee</div>
+            <div class="timeline-desc">
+              Orthopedic evaluation. Mild progression of osteoarthritis. Continue physiotherapy.
+            </div>
+          </div>
+        </div>
+
+        <!-- Jan 15 -->
+        <div class="timeline-item">
+          <div class="timeline-dot" style="background:#10B981;border-color:#10B981;">💉</div>
+          <div class="timeline-card">
+            <div class="timeline-date">Jan 15 • 2:00 PM</div>
+            <div class="timeline-title">Health Checkup - Annual</div>
+            <div class="timeline-desc">
+              Comprehensive annual physical. Overall health good. Blood pressure controlled. Continue current treatment plan.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-text">Load More History</button>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+function showScreen(screenNum) {
+  // Hide all screens
+  for (let i = 1; i <= 8; i++) {
+    const screen = document.getElementById('screen-' + i);
+    if (screen) screen.style.display = 'none';
+  }
+  
+  // Show target screen
+  const targetScreen = document.getElementById('screen-' + screenNum);
+  if (targetScreen) {
+    targetScreen.style.display = 'flex';
+  }
+}
+
+console.log('Health Passport Loaded');
+
+  function redirect(url) {
+    window.location.href = url;
+  }
+
+
+</script>
+
+</body>
+</html>

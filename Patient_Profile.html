@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Profile — Patient App</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Sora:wght@400;600;700;800&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:linear-gradient(135deg,#C8D8F0 0%,#DCE8F8 50%,#C8D0EC 100%);
+  display:flex;align-items:center;justify-content:center;
+  min-height:100vh;font-family:'Nunito',sans-serif;padding:28px 16px;
+}
+
+/* PHONE SHELL */
+.phone{
+  width:390px;min-height:848px;background:#EEF3FB;
+  border-radius:52px;overflow:hidden;
+  box-shadow:0 70px 140px rgba(0,0,0,.28),0 0 0 1.5px #B8C8E0,inset 0 0 0 1px #fff;
+  position:relative;display:flex;flex-direction:column;
+}
+
+/* STATUS BAR */
+.statusbar{
+  height:48px;background:#1148A4;
+  display:flex;align-items:flex-end;justify-content:space-between;
+  padding:0 26px 10px;flex-shrink:0;
+}
+.statusbar .time{font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:#fff;}
+.statusbar .icons{display:flex;gap:6px;align-items:center;}
+
+/* HEADER */
+.header{
+  background:linear-gradient(155deg,#0D3D9C 0%,#1554C0 45%,#1E6BE0 100%);
+  padding:14px 22px 34px;position:relative;overflow:hidden;flex-shrink:0;
+}
+.header::before{content:'';position:absolute;top:-80px;right:-50px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.06);}
+.header::after{content:'';position:absolute;bottom:-50px;left:30px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.04);}
+
+.top-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;position:relative;z-index:1;}
+.back-btn{
+  width:38px;height:38px;border-radius:50%;
+  background:rgba(255,255,255,.14);backdrop-filter:blur(8px);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;border:1px solid rgba(255,255,255,.18);
+  font-size:18px;color:#fff;font-weight:900;
+}
+.header-title{
+  font-size:17px;font-weight:900;color:#fff;
+  font-family:'Sora',sans-serif;letter-spacing:-.2px;
+}
+.header-action{
+  width:38px;height:38px;border-radius:50%;
+  background:rgba(255,255,255,.14);backdrop-filter:blur(8px);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;border:1px solid rgba(255,255,255,.18);
+  font-size:16px;color:#fff;
+}
+
+/* PROFILE HEADER */
+.profile-header{
+  position:relative;z-index:1;text-align:center;
+}
+.profile-avatar{
+  width:80px;height:80px;border-radius:50%;
+  background:linear-gradient(135deg,#FFD580,#FF9A3C);
+  display:flex;align-items:center;justify-content:center;
+  font-size:32px;font-weight:900;color:#fff;
+  font-family:'Sora',sans-serif;
+  border:4px solid rgba(255,255,255,.3);
+  margin:0 auto 12px;
+  box-shadow:0 8px 24px rgba(0,0,0,.2);
+  position:relative;
+  cursor:pointer;
+}
+.avatar-edit{
+  position:absolute;bottom:0;right:0;
+  width:28px;height:28px;background:#10B981;
+  border-radius:50%;border:3px solid rgba(255,255,255,.3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;cursor:pointer;
+}
+.profile-name{
+  font-size:20px;font-weight:900;color:#fff;
+  font-family:'Sora',sans-serif;margin-bottom:4px;
+}
+.profile-mrn{
+  font-size:12px;color:rgba(255,255,255,.8);
+  font-weight:700;
+}
+
+/* SCROLL */
+.scroll{flex:1;overflow-y:auto;padding:20px 18px 28px;}
+.scroll::-webkit-scrollbar{display:none;}
+
+/* SECTION HEADERS */
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;}
+.sec-title{font-size:17px;font-weight:900;color:#1A2744;font-family:'Sora',sans-serif;letter-spacing:-.2px;}
+
+/* INFO CARD */
+.info-card{
+  background:#fff;border-radius:20px;padding:18px;
+  margin-bottom:14px;box-shadow:0 3px 14px rgba(17,72,164,.08);
+  border:1.5px solid rgba(17,72,164,.05);
+}
+
+/* MENU ITEM */
+.menu-item{
+  background:#fff;border-radius:16px;padding:16px;
+  margin-bottom:10px;box-shadow:0 3px 14px rgba(17,72,164,.08);
+  border:1.5px solid rgba(17,72,164,.05);
+  display:flex;align-items:center;gap:14px;
+  cursor:pointer;transition:all .2s;
+}
+.menu-item:hover{
+  transform:translateY(-2px);
+  box-shadow:0 6px 20px rgba(17,72,164,.14);
+}
+.menu-icon{
+  width:48px;height:48px;
+  border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-size:24px;flex-shrink:0;
+}
+.menu-content{flex:1;}
+.menu-title{
+  font-size:14px;font-weight:900;color:#1A2744;
+  margin-bottom:3px;
+}
+.menu-subtitle{
+  font-size:11px;color:#64748B;
+}
+.menu-arrow{
+  font-size:18px;color:#CBD5E1;
+  flex-shrink:0;
+}
+.menu-badge{
+  padding:4px 10px;background:#FEE2E2;
+  border-radius:6px;font-size:10px;
+  font-weight:800;color:#DC2626;
+}
+
+/* INFO ROW */
+.info-row{
+  display:flex;justify-content:space-between;
+  padding:12px 0;border-bottom:1px solid #F1F5F9;
+}
+.info-row:last-child{border-bottom:none;}
+.info-label{
+  font-size:12px;color:#64748B;
+  font-weight:700;
+}
+.info-value{
+  font-size:13px;font-weight:800;color:#1A2744;
+  text-align:right;
+}
+
+/* TOGGLE SWITCH */
+.toggle-row{
+  display:flex;justify-content:space-between;
+  align-items:center;padding:12px 0;
+  border-bottom:1px solid #F1F5F9;
+}
+.toggle-row:last-child{border-bottom:none;}
+.toggle-label{
+  font-size:13px;font-weight:800;color:#1A2744;
+}
+.toggle-subtitle{
+  font-size:11px;color:#64748B;
+  margin-top:2px;
+}
+.toggle-switch{
+  width:48px;height:28px;
+  background:#E2E8F0;border-radius:14px;
+  position:relative;cursor:pointer;
+  transition:all .3s;flex-shrink:0;
+}
+.toggle-switch.active{
+  background:linear-gradient(135deg,#1148A4,#2273E8);
+}
+.toggle-knob{
+  width:22px;height:22px;
+  background:#fff;border-radius:50%;
+  position:absolute;top:3px;left:3px;
+  transition:all .3s;
+  box-shadow:0 2px 6px rgba(0,0,0,.2);
+}
+.toggle-switch.active .toggle-knob{
+  left:23px;
+}
+
+/* BUTTONS */
+.btn-primary{
+  width:100%;background:linear-gradient(135deg,#1148A4,#2273E8);
+  color:#fff;border:none;border-radius:12px;
+  padding:14px;font-size:14px;font-weight:800;
+  cursor:pointer;margin-bottom:10px;
+  box-shadow:0 6px 24px rgba(17,72,164,.3);
+  transition:all .2s;font-family:'Nunito',sans-serif;
+}
+
+.btn-secondary{
+  width:100%;background:#fff;color:#1148A4;
+  border:2px solid #1148A4;border-radius:12px;
+  padding:12px;font-size:14px;font-weight:800;
+  cursor:pointer;margin-bottom:10px;
+  font-family:'Nunito',sans-serif;
+}
+
+.btn-text{
+  width:100%;background:transparent;color:#64748B;
+  border:none;padding:10px;font-size:13px;
+  font-weight:700;cursor:pointer;
+  font-family:'Nunito',sans-serif;
+}
+
+/* INPUT FIELD */
+.input-group{
+  margin-bottom:16px;
+}
+.input-label{
+  font-size:12px;font-weight:800;color:#1A2744;
+  margin-bottom:8px;display:block;
+}
+.input-field{
+  width:100%;padding:12px 14px;
+  border:2px solid #E2E8F0;border-radius:12px;
+  font-size:14px;font-weight:600;color:#1A2744;
+  font-family:'Nunito',sans-serif;
+  transition:all .2s;
+}
+.input-field:focus{
+  outline:none;border-color:#1148A4;
+  background:rgba(17,72,164,.02);
+}
+
+/* STATS GRID */
+.stats-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:10px;margin-bottom:18px;
+}
+.stat-card{
+  background:#F8FAFC;border-radius:12px;
+  padding:14px 10px;text-align:center;
+}
+.stat-value{
+  font-size:20px;font-weight:900;
+  font-family:'Sora',sans-serif;line-height:1;
+  margin-bottom:4px;
+}
+.stat-label{
+  font-size:10px;color:#64748B;
+  font-weight:700;text-transform:uppercase;
+}
+
+/* FAMILY MEMBER CARD */
+.family-card{
+  background:#fff;border-radius:16px;padding:14px;
+  margin-bottom:10px;box-shadow:0 3px 14px rgba(17,72,164,.08);
+  border:1.5px solid rgba(17,72,164,.05);
+  display:flex;align-items:center;gap:12px;
+}
+.family-avatar{
+  width:44px;height:44px;border-radius:50%;
+  background:linear-gradient(135deg,#8B5CF6,#A78BFA);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;color:#fff;font-weight:900;
+  font-family:'Sora',sans-serif;flex-shrink:0;
+}
+.family-info{flex:1;}
+.family-name{
+  font-size:13px;font-weight:900;color:#1A2744;
+  margin-bottom:2px;
+}
+.family-relation{
+  font-size:11px;color:#64748B;
+}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<div class="phone">
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 1: PROFILE OVERVIEW
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="screen-1" style="display:flex;flex-direction:column;flex:1;">
+    
+    <!-- STATUS BAR -->
+    <div class="statusbar">
+      <span class="time">15:20</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+        <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+      </div>
+    </div>
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="top-row">
+        <div class="back-btn" onclick="redirect('./Patient_App_Home.html')">←</div>
+        <div class="header-title">My Profile</div>
+        <div class="header-action" onclick="showScreen(2)">✎</div>
+      </div>
+
+      <!-- Profile Header -->
+      <div class="profile-header">
+        <div class="profile-avatar" onclick="alert('Change photo')">
+          MA
+          <div class="avatar-edit">📷</div>
+        </div>
+        <div class="profile-name">Muhammad Ali</div>
+        <div class="profile-mrn">MRN: 226589 • Male, 45 yrs</div>
+      </div>
+    </div>
+
+    <!-- SCROLL -->
+    <div class="scroll">
+
+      <!-- Quick Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value" style="color:#1148A4;">12</div>
+          <div class="stat-label">Visits</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" style="color:#10B981;">3</div>
+          <div class="stat-label">Conditions</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" style="color:#8B5CF6;">47</div>
+          <div class="stat-label">Records</div>
+        </div>
+      </div>
+
+      <!-- Personal Information -->
+      <div class="sec-head">
+        <div class="sec-title">Personal Information</div>
+      </div>
+
+      <div class="menu-item" onclick="showScreen(2)">
+        <div class="menu-icon" style="background:linear-gradient(135deg,rgba(17,72,164,.1),rgba(34,115,232,.1));">
+          👤
+        </div>
+        <div class="menu-content">
+          <div class="menu-title">Basic Information</div>
+          <div class="menu-subtitle">Name, DOB, Gender, Contact</div>
+        </div>
+        <div class="menu-arrow">›</div>
+      </div>
+
+      <div class="menu-item" onclick="showScreen(3)">
+        <div class="menu-icon" style="background:linear-gradient(135deg,rgba(220,38,38,.1),rgba(239,68,68,.1));">
+          🩺
+        </div>
+        <div class="menu-content">
+          <div class="menu-title">Medical Profile</div>
+          <div class="menu-subtitle">Blood type, Allergies, Emergency contact</div>
+        </div>
+        <div class="menu-arrow">›</div>
+      </div>
+
+      <div class="menu-item" onclick="showScreen(4)">
+        <div class="menu-icon" style="background:linear-gradient(135deg,rgba(245,158,11,.1),rgba(217,119,6,.1));">
+          🏥
+        </div>
+        <div class="menu-content">
+          <div class="menu-title">Insurance Information</div>
+          <div class="menu-subtitle">DHA Insurance • Exp: Dec 2026</div>
+        </div>
+        <div class="menu-arrow">›</div>
+      </div>
+
+      <!-- Family & Dependents -->
+      <div class="sec-head" style="margin-top:24px;">
+        <div class="sec-title">Family & Dependents</div>
+      </div>
+
+      <div class="menu-item" onclick="showScreen(5)">
+        <div class="menu-icon" style="background:linear-gradient(135deg,rgba(139,92,246,.1),rgba(167,139,250,.1));">
+          👨‍👩‍👧‍👦
+        </div>
+        <div class="menu-content">
+          <div class="menu-title">Family Members</div>
+          <div class="menu-subtitle">3 members added</div>
+        </div>
+        <div class="menu-arrow">›</div>
+      </div>
+
+      <!-- App Settings -->
+      <div class="sec-head" style="margin-top:24px;">
+        <div class="sec-title">App Settings</div>
+      </div>
+
+      <div class="menu-item" onclick="showScreen(6)">
+        <div class="menu-icon" style="background:linear-gradient(135deg,rgba(16,185,129,.1),rgba(5,150,105,.1));">
+          🔔
+        </div>
+        <div class="menu-content">
+          <div class="menu-title">Notifications</div>
+          <div class="menu-subtitle">Manage alert preferences</div>
+        </div>
+        <div class="menu-arrow">›</div>
+      </div>
+
+      <div class="menu-item" onclick="showScreen(7)">
+        <div class="menu-icon" style="background:linear-gradient(135deg,rgba(17,72,164,.1),rgba(34,115,232,.1));">
+          🔒
+        </div>
+        <div class="menu-content">
+          <div class="menu-title">Privacy & Security</div>
+          <div class="menu-subtitle">Password, Biometrics, 2FA</div>
+        </div>
+        <div class="menu-arrow">›</div>
+      </div>
+
+      <div class="menu-item" onclick="alert('Language settings')">
+        <div class="menu-icon" style="background:linear-gradient(135deg,rgba(139,92,246,.1),rgba(167,139,250,.1));">
+          🌐
+        </div>
+        <div class="menu-content">
+          <div class="menu-title">Language</div>
+          <div class="menu-subtitle">English (US)</div>
+        </div>
+        <div class="menu-arrow">›</div>
+      </div>
+
+      <!-- Support & Legal -->
+      <div class="sec-head" style="margin-top:24px;">
+        <div class="sec-title">Support & Legal</div>
+      </div>
+
+      <div class="menu-item" onclick="alert('Help center')">
+        <div class="menu-icon" style="background:linear-gradient(135deg,rgba(16,185,129,.1),rgba(5,150,105,.1));">
+          ❓
+        </div>
+        <div class="menu-content">
+          <div class="menu-title">Help & Support</div>
+          <div class="menu-subtitle">FAQs, Contact us</div>
+        </div>
+        <div class="menu-arrow">›</div>
+      </div>
+
+      <div class="menu-item" onclick="alert('Terms')">
+        <div class="menu-icon" style="background:linear-gradient(135deg,rgba(100,116,139,.1),rgba(148,163,184,.1));">
+          📄
+        </div>
+        <div class="menu-content">
+          <div class="menu-title">Terms & Privacy</div>
+          <div class="menu-subtitle">Legal documents</div>
+        </div>
+        <div class="menu-arrow">›</div>
+      </div>
+
+      <div class="menu-item" onclick="alert('About')">
+        <div class="menu-icon" style="background:linear-gradient(135deg,rgba(100,116,139,.1),rgba(148,163,184,.1));">
+          ℹ️
+        </div>
+        <div class="menu-content">
+          <div class="menu-title">About Humania</div>
+          <div class="menu-subtitle">Version 2.1.0</div>
+        </div>
+        <div class="menu-arrow">›</div>
+      </div>
+
+      <!-- Logout -->
+      <button class="btn-text" style="color:#DC2626;font-weight:900;margin-top:20px;" onclick="redirect('./index.html')">
+        🚪 Logout from Account
+      </button>
+
+      <div style="text-align:center;padding:20px;font-size:11px;color:#94A3B8;">
+        Humania Home Healthcare © 2026
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 2: EDIT BASIC INFORMATION
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="screen-2" style="display:none;flex-direction:column;flex:1;">
+    
+    <div class="statusbar">
+      <span class="time">15:21</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+        <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+      </div>
+    </div>
+
+    <div class="header">
+      <div class="top-row">
+        <div class="back-btn" onclick="showScreen(1)">←</div>
+        <div class="header-title">Basic Information</div>
+        <div style="width:38px;"></div>
+      </div>
+    </div>
+
+    <div class="scroll">
+
+      <div class="info-card">
+        <div class="input-group">
+          <label class="input-label">Full Name</label>
+          <input type="text" class="input-field" value="Muhammad Ali Ahmed">
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">Email Address</label>
+          <input type="email" class="input-field" value="muhammad.ali@email.com">
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">Mobile Number</label>
+          <input type="tel" class="input-field" value="+971 50 123 4567">
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">Date of Birth</label>
+          <input type="date" class="input-field" value="1981-03-15">
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">Gender</label>
+          <select class="input-field">
+            <option value="male" selected>Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">Nationality</label>
+          <input type="text" class="input-field" value="Pakistani">
+        </div>
+
+        <div class="input-group">
+          <label class="input-label">Emirates ID</label>
+          <input type="text" class="input-field" value="784-1234-1234567-1">
+        </div>
+
+        <div class="input-group" style="margin-bottom:0;">
+          <label class="input-label">Home Address</label>
+          <input type="text" class="input-field" placeholder="Building, Street" value="Villa 42" style="margin-bottom:10px;">
+          <input type="text" class="input-field" placeholder="Area" value="Palm Jumeirah" style="margin-bottom:10px;">
+          <select class="input-field">
+            <option value="">Select Emirate</option>
+            <option value="dubai" selected>Dubai</option>
+            <option value="abu-dhabi">Abu Dhabi</option>
+            <option value="sharjah">Sharjah</option>
+          </select>
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="alert('Information updated')">
+        💾 Save Changes
+      </button>
+
+      <button class="btn-text" onclick="showScreen(1)">
+        Cancel
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 3: MEDICAL PROFILE
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="screen-3" style="display:none;flex-direction:column;flex:1;">
+    
+    <div class="statusbar">
+      <span class="time">15:22</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+        <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+      </div>
+    </div>
+
+    <div class="header">
+      <div class="top-row">
+        <div class="back-btn" onclick="showScreen(1)">←</div>
+        <div class="header-title">Medical Profile</div>
+        <div style="width:38px;"></div>
+      </div>
+    </div>
+
+    <div class="scroll">
+
+      <!-- Basic Medical Info -->
+      <div class="info-card">
+        <div style="font-size:15px;font-weight:900;color:#1A2744;font-family:'Sora',sans-serif;margin-bottom:14px;">
+          Basic Medical Information
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">Blood Type</div>
+          <div class="info-value">A+</div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">Height</div>
+          <div class="info-value">175 cm</div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">Weight</div>
+          <div class="info-value">78 kg</div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">BMI</div>
+          <div class="info-value">25.5 (Normal)</div>
+        </div>
+      </div>
+
+      <!-- Allergies -->
+      <div class="info-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+          <div style="font-size:15px;font-weight:900;color:#1A2744;font-family:'Sora',sans-serif;">
+            Allergies
+          </div>
+          <div class="menu-badge">2 Active</div>
+        </div>
+
+        <div style="font-size:12px;color:#475569;line-height:1.8;">
+          <strong style="color:#DC2626;">💊 Penicillin</strong> - Severe (Rash, hives)<br>
+          <strong style="color:#DC2626;">💊 Sulfa Drugs</strong> - Moderate (Nausea)<br>
+          <strong style="color:#64748B;">🌼 Pollen</strong> - Mild (Seasonal)
+        </div>
+
+        <button class="btn-secondary" style="margin-top:14px;" onclick="alert('Manage allergies')">
+          Edit Allergies
+        </button>
+      </div>
+
+      <!-- Emergency Contact -->
+      <div class="info-card">
+        <div style="font-size:15px;font-weight:900;color:#1A2744;font-family:'Sora',sans-serif;margin-bottom:14px;">
+          Emergency Contact
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">Name</div>
+          <div class="info-value">Fatima Ali</div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">Relationship</div>
+          <div class="info-value">Spouse</div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">Phone Number</div>
+          <div class="info-value">+971 56 789 0123</div>
+        </div>
+
+        <button class="btn-secondary" style="margin-top:14px;" onclick="alert('Edit emergency contact')">
+          Edit Contact
+        </button>
+      </div>
+
+      <!-- Organ Donor -->
+      <div class="info-card">
+        <div style="font-size:15px;font-weight:900;color:#1A2744;font-family:'Sora',sans-serif;margin-bottom:14px;">
+          Organ Donor Status
+        </div>
+
+        <div class="toggle-row" style="border:none;">
+          <div>
+            <div class="toggle-label">I am an organ donor</div>
+            <div class="toggle-subtitle">Help save lives through organ donation</div>
+          </div>
+          <div class="toggle-switch" onclick="toggleSwitch(this)">
+            <div class="toggle-knob"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 4: INSURANCE INFORMATION
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="screen-4" style="display:none;flex-direction:column;flex:1;">
+    
+    <div class="statusbar">
+      <span class="time">15:23</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+        <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+      </div>
+    </div>
+
+    <div class="header">
+      <div class="top-row">
+        <div class="back-btn" onclick="showScreen(1)">←</div>
+        <div class="header-title">Insurance</div>
+        <div class="header-action" onclick="alert('Add insurance')">+</div>
+      </div>
+    </div>
+
+    <div class="scroll">
+
+      <div style="background:linear-gradient(135deg,#DCFCE7,#BBF7D0);border:2px solid #10B981;border-radius:16px;padding:16px;margin-bottom:14px;text-align:center;">
+        <div style="font-size:13px;font-weight:900;color:#047857;margin-bottom:4px;">
+          ✓ Active Insurance
+        </div>
+        <div style="font-size:11px;color:#065F46;">
+          Valid until December 31, 2026
+        </div>
+      </div>
+
+      <!-- Primary Insurance -->
+      <div class="info-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+          <div style="font-size:15px;font-weight:900;color:#1A2744;font-family:'Sora',sans-serif;">
+            Primary Insurance
+          </div>
+          <div style="padding:4px 10px;background:#DCFCE7;border-radius:6px;font-size:10px;font-weight:800;color:#16A34A;">
+            Active
+          </div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">Provider</div>
+          <div class="info-value">DHA Insurance</div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">Policy Number</div>
+          <div class="info-value">DHA-2024-45678</div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">Member ID</div>
+          <div class="info-value">226589-01</div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">Plan Type</div>
+          <div class="info-value">Gold Plus</div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">Coverage</div>
+          <div class="info-value">AED 500,000</div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">Valid From</div>
+          <div class="info-value">Jan 1, 2024</div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">Expires On</div>
+          <div class="info-value">Dec 31, 2026</div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">Network</div>
+          <div class="info-value">DHA Approved Facilities</div>
+        </div>
+      </div>
+
+      <!-- Coverage Details -->
+      <div class="info-card">
+        <div style="font-size:15px;font-weight:900;color:#1A2744;font-family:'Sora',sans-serif;margin-bottom:14px;">
+          Coverage Details
+        </div>
+
+        <div style="font-size:12px;color:#475569;line-height:1.8;">
+          ✓ Inpatient care - 100%<br>
+          ✓ Outpatient consultations - 80%<br>
+          ✓ Emergency services - 100%<br>
+          ✓ Prescription medications - 75%<br>
+          ✓ Diagnostic tests & imaging - 80%<br>
+          ✓ Dental (Basic) - 50%<br>
+          ✓ Optical - AED 500/year
+        </div>
+      </div>
+
+      <!-- Copayment Info -->
+      <div class="info-card">
+        <div style="font-size:15px;font-weight:900;color:#1A2744;font-family:'Sora',sans-serif;margin-bottom:14px;">
+          Copayment Information
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">GP Consultation</div>
+          <div class="info-value">AED 20</div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">Specialist Consultation</div>
+          <div class="info-value">AED 50</div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">Emergency Visit</div>
+          <div class="info-value">AED 0</div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">Annual Deductible</div>
+          <div class="info-value">AED 500</div>
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="alert('View insurance card')">
+        📄 View Digital Insurance Card
+      </button>
+
+      <button class="btn-secondary" onclick="alert('Edit insurance')">
+        ✎ Edit Insurance Details
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 5: FAMILY MEMBERS
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="screen-5" style="display:none;flex-direction:column;flex:1;">
+    
+    <div class="statusbar">
+      <span class="time">15:24</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+        <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+      </div>
+    </div>
+
+    <div class="header">
+      <div class="top-row">
+        <div class="back-btn" onclick="showScreen(1)">←</div>
+        <div class="header-title">Family Members</div>
+        <div class="header-action" onclick="alert('Add family member')">+</div>
+      </div>
+    </div>
+
+    <div class="scroll">
+
+      <div style="font-size:13px;color:#64748B;margin-bottom:18px;line-height:1.6;">
+        Add family members to book appointments on their behalf and manage their health records.
+      </div>
+
+      <!-- Member 1 -->
+      <div class="family-card">
+        <div class="family-avatar">FA</div>
+        <div class="family-info">
+          <div class="family-name">Fatima Ali</div>
+          <div class="family-relation">Spouse • Female, 42 yrs • MRN: 226590</div>
+        </div>
+        <div class="menu-arrow">›</div>
+      </div>
+
+      <!-- Member 2 -->
+      <div class="family-card">
+        <div class="family-avatar" style="background:linear-gradient(135deg,#10B981,#059669);">AA</div>
+        <div class="family-info">
+          <div class="family-name">Ahmed Ali</div>
+          <div class="family-relation">Son • Male, 18 yrs • MRN: 226591</div>
+        </div>
+        <div class="menu-arrow">›</div>
+      </div>
+
+      <!-- Member 3 -->
+      <div class="family-card">
+        <div class="family-avatar" style="background:linear-gradient(135deg,#EC4899,#F472B6);">SA</div>
+        <div class="family-info">
+          <div class="family-name">Sarah Ali</div>
+          <div class="family-relation">Daughter • Female, 15 yrs • MRN: 226592</div>
+        </div>
+        <div class="menu-arrow">›</div>
+      </div>
+
+      <!-- Add Member Button -->
+      <button class="btn-secondary" onclick="alert('Add new family member')">
+        ➕ Add Family Member
+      </button>
+
+      <!-- Info Card -->
+      <div class="info-card">
+        <div style="font-size:13px;font-weight:900;color:#1A2744;margin-bottom:10px;">
+          💡 Family Account Benefits
+        </div>
+        <div style="font-size:12px;color:#475569;line-height:1.7;">
+          • Book appointments for any family member<br>
+          • Share medical records with consent<br>
+          • Single payment for family services<br>
+          • Unified health tracking<br>
+          • Family health insights
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 6: NOTIFICATION SETTINGS
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="screen-6" style="display:none;flex-direction:column;flex:1;">
+    
+    <div class="statusbar">
+      <span class="time">15:25</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+        <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+      </div>
+    </div>
+
+    <div class="header">
+      <div class="top-row">
+        <div class="back-btn" onclick="showScreen(1)">←</div>
+        <div class="header-title">Notifications</div>
+        <div style="width:38px;"></div>
+      </div>
+    </div>
+
+    <div class="scroll">
+
+      <!-- Appointment Notifications -->
+      <div class="info-card">
+        <div style="font-size:15px;font-weight:900;color:#1A2744;font-family:'Sora',sans-serif;margin-bottom:14px;">
+          Appointment Notifications
+        </div>
+
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-label">Appointment Reminders</div>
+            <div class="toggle-subtitle">24h and 1h before appointment</div>
+          </div>
+          <div class="toggle-switch active" onclick="toggleSwitch(this)">
+            <div class="toggle-knob"></div>
+          </div>
+        </div>
+
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-label">Booking Confirmations</div>
+            <div class="toggle-subtitle">When appointment is confirmed</div>
+          </div>
+          <div class="toggle-switch active" onclick="toggleSwitch(this)">
+            <div class="toggle-knob"></div>
+          </div>
+        </div>
+
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-label">Provider On The Way</div>
+            <div class="toggle-subtitle">Nurse/doctor approaching location</div>
+          </div>
+          <div class="toggle-switch active" onclick="toggleSwitch(this)">
+            <div class="toggle-knob"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Health Updates -->
+      <div class="info-card">
+        <div style="font-size:15px;font-weight:900;color:#1A2744;font-family:'Sora',sans-serif;margin-bottom:14px;">
+          Health Updates
+        </div>
+
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-label">Lab Results Available</div>
+            <div class="toggle-subtitle">When test results are ready</div>
+          </div>
+          <div class="toggle-switch active" onclick="toggleSwitch(this)">
+            <div class="toggle-knob"></div>
+          </div>
+        </div>
+
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-label">Prescription Ready</div>
+            <div class="toggle-subtitle">Medications ready for pickup/delivery</div>
+          </div>
+          <div class="toggle-switch active" onclick="toggleSwitch(this)">
+            <div class="toggle-knob"></div>
+          </div>
+        </div>
+
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-label">Medication Reminders</div>
+            <div class="toggle-subtitle">Daily medication schedule alerts</div>
+          </div>
+          <div class="toggle-switch" onclick="toggleSwitch(this)">
+            <div class="toggle-knob"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Marketing & Updates -->
+      <div class="info-card">
+        <div style="font-size:15px;font-weight:900;color:#1A2744;font-family:'Sora',sans-serif;margin-bottom:14px;">
+          Marketing & Updates
+        </div>
+
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-label">Health Tips</div>
+            <div class="toggle-subtitle">Weekly health and wellness tips</div>
+          </div>
+          <div class="toggle-switch active" onclick="toggleSwitch(this)">
+            <div class="toggle-knob"></div>
+          </div>
+        </div>
+
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-label">Special Offers</div>
+            <div class="toggle-subtitle">Promotions and discounts</div>
+          </div>
+          <div class="toggle-switch" onclick="toggleSwitch(this)">
+            <div class="toggle-knob"></div>
+          </div>
+        </div>
+
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-label">Product Updates</div>
+            <div class="toggle-subtitle">New features and services</div>
+          </div>
+          <div class="toggle-switch active" onclick="toggleSwitch(this)">
+            <div class="toggle-knob"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notification Channels -->
+      <div class="info-card">
+        <div style="font-size:15px;font-weight:900;color:#1A2744;font-family:'Sora',sans-serif;margin-bottom:14px;">
+          Notification Channels
+        </div>
+
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-label">Push Notifications</div>
+          </div>
+          <div class="toggle-switch active" onclick="toggleSwitch(this)">
+            <div class="toggle-knob"></div>
+          </div>
+        </div>
+
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-label">SMS Messages</div>
+          </div>
+          <div class="toggle-switch active" onclick="toggleSwitch(this)">
+            <div class="toggle-knob"></div>
+          </div>
+        </div>
+
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-label">Email Notifications</div>
+          </div>
+          <div class="toggle-switch active" onclick="toggleSwitch(this)">
+            <div class="toggle-knob"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 7: PRIVACY & SECURITY
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="screen-7" style="display:none;flex-direction:column;flex:1;">
+    
+    <div class="statusbar">
+      <span class="time">15:26</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+        <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+      </div>
+    </div>
+
+    <div class="header">
+      <div class="top-row">
+        <div class="back-btn" onclick="showScreen(1)">←</div>
+        <div class="header-title">Privacy & Security</div>
+        <div style="width:38px;"></div>
+      </div>
+    </div>
+
+    <div class="scroll">
+
+      <!-- Account Security -->
+      <div class="info-card">
+        <div style="font-size:15px;font-weight:900;color:#1A2744;font-family:'Sora',sans-serif;margin-bottom:14px;">
+          Account Security
+        </div>
+
+        <div class="menu-item" style="margin:0 0 10px 0;padding:14px;" onclick="alert('Change password')">
+          <div class="menu-icon" style="background:linear-gradient(135deg,rgba(220,38,38,.1),rgba(239,68,68,.1));width:40px;height:40px;">
+            🔑
+          </div>
+          <div class="menu-content">
+            <div class="menu-title">Change Password</div>
+          </div>
+          <div class="menu-arrow">›</div>
+        </div>
+
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-label">Biometric Login</div>
+            <div class="toggle-subtitle">Use Face ID / Fingerprint</div>
+          </div>
+          <div class="toggle-switch active" onclick="toggleSwitch(this)">
+            <div class="toggle-knob"></div>
+          </div>
+        </div>
+
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-label">Two-Factor Authentication</div>
+            <div class="toggle-subtitle">SMS code on login</div>
+          </div>
+          <div class="toggle-switch active" onclick="toggleSwitch(this)">
+            <div class="toggle-knob"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Privacy Controls -->
+      <div class="info-card">
+        <div style="font-size:15px;font-weight:900;color:#1A2744;font-family:'Sora',sans-serif;margin-bottom:14px;">
+          Privacy Controls
+        </div>
+
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-label">Share Health Data with Providers</div>
+            <div class="toggle-subtitle">Auto-share relevant medical history</div>
+          </div>
+          <div class="toggle-switch active" onclick="toggleSwitch(this)">
+            <div class="toggle-knob"></div>
+          </div>
+        </div>
+
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-label">Anonymous Analytics</div>
+            <div class="toggle-subtitle">Help improve app experience</div>
+          </div>
+          <div class="toggle-switch active" onclick="toggleSwitch(this)">
+            <div class="toggle-knob"></div>
+          </div>
+        </div>
+
+        <div class="menu-item" style="margin:10px 0 0 0;padding:14px;" onclick="alert('Privacy settings')">
+          <div class="menu-icon" style="background:linear-gradient(135deg,rgba(100,116,139,.1),rgba(148,163,184,.1));width:40px;height:40px;">
+            📋
+          </div>
+          <div class="menu-content">
+            <div class="menu-title">Download My Data</div>
+          </div>
+          <div class="menu-arrow">›</div>
+        </div>
+      </div>
+
+      <!-- Active Sessions -->
+      <div class="info-card">
+        <div style="font-size:15px;font-weight:900;color:#1A2744;font-family:'Sora',sans-serif;margin-bottom:14px;">
+          Active Sessions
+        </div>
+
+        <div style="background:#F8FAFC;border-radius:10px;padding:12px;margin-bottom:10px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+            <div style="font-size:12px;font-weight:800;color:#1A2744;">
+              📱 iPhone 14 Pro
+            </div>
+            <div style="font-size:10px;font-weight:800;color:#10B981;background:#DCFCE7;padding:3px 8px;border-radius:6px;">
+              Current
+            </div>
+          </div>
+          <div style="font-size:11px;color:#64748B;">
+            Dubai, UAE • Last active: Now
+          </div>
+        </div>
+
+        <div style="background:#F8FAFC;border-radius:10px;padding:12px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+            <div style="font-size:12px;font-weight:800;color:#1A2744;">
+              💻 MacBook Pro
+            </div>
+            <div style="font-size:10px;font-weight:700;color:#DC2626;cursor:pointer;">
+              Logout
+            </div>
+          </div>
+          <div style="font-size:11px;color:#64748B;">
+            Dubai, UAE • Last active: 2 days ago
+          </div>
+        </div>
+      </div>
+
+      <!-- Danger Zone -->
+      <div class="info-card" style="border-color:#FEE2E2;">
+        <div style="font-size:15px;font-weight:900;color:#DC2626;font-family:'Sora',sans-serif;margin-bottom:14px;">
+          ⚠️ Danger Zone
+        </div>
+
+        <button class="btn-text" style="color:#DC2626;font-weight:900;" onclick="alert('Delete account')">
+          Delete My Account
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+let currentScreen = 1;
+
+function showScreen(screenNum) {
+  for (let i = 1; i <= 7; i++) {
+    const screen = document.getElementById('screen-' + i);
+    if (screen) screen.style.display = 'none';
+  }
+  
+  const targetScreen = document.getElementById('screen-' + screenNum);
+  if (targetScreen) {
+    targetScreen.style.display = 'flex';
+    currentScreen = screenNum;
+  }
+}
+
+function toggleSwitch(element) {
+  element.classList.toggle('active');
+}
+
+  function redirect(url) {
+    window.location.href = url;
+  }
+
+console.log('Patient Profile Loaded');
+</script>
+
+</body>
+</html>

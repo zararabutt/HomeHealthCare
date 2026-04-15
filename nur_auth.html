@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Home Healthcare — 4 Main Applications</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Sora:wght@400;600;700;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+
+body{
+  background:linear-gradient(160deg,#080C14 0%,#0D1220 40%,#0A1018 100%);
+  min-height:100vh;font-family:'Nunito',sans-serif;padding:40px 24px 72px;
+}
+
+/* ═══════════════════════════════════════════
+   PAGE HEADER
+═══════════════════════════════════════════ */
+.page-header{text-align:center;margin-bottom:56px;}
+.brand-row{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:99px;padding:8px 22px;margin-bottom:20px;}
+.brand-icon{font-size:18px;}
+.brand-name{font-family:'Sora',sans-serif;font-size:13px;font-weight:800;color:#fff;letter-spacing:.5px;}
+.brand-sep{width:1px;height:14px;background:rgba(255,255,255,.2);}
+.brand-tag{font-size:11px;color:rgba(255,255,255,.5);font-weight:600;}
+
+.page-title{font-family:'Sora',sans-serif;font-size:42px;font-weight:800;color:#fff;line-height:1.1;margin-bottom:12px;}
+.page-title .hi{background:linear-gradient(135deg,#60A5FA,#818CF8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.page-sub{font-size:15px;color:rgba(255,255,255,.45);max-width:580px;margin:0 auto 28px;}
+
+/* App identity pills */
+.app-pills{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.app-pill{display:flex;align-items:center;gap:7px;padding:7px 16px;border-radius:99px;font-size:12px;font-weight:800;border:1px solid;}
+
+/* ═══════════════════════════════════════════
+   APP SECTION LABELS
+═══════════════════════════════════════════ */
+.apps-grid{display:flex;flex-direction:column;gap:80px;}
+.app-section{display:flex;flex-direction:column;align-items:center;gap:0;}
+
+.app-label{
+  display:flex;align-items:center;gap:16px;
+  margin-bottom:28px;text-align:center;
+  width:100%;justify-content:center;
+}
+.app-num{
+  width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:'Sora',sans-serif;font-size:14px;font-weight:800;color:#fff;flex-shrink:0;
+}
+.app-label-text{}
+.app-label-title{font-family:'Sora',sans-serif;font-size:26px;font-weight:800;color:#fff;line-height:1.1;}
+.app-label-sub{font-size:13px;color:rgba(255,255,255,.45);margin-top:4px;}
+.app-label-type{display:inline-flex;align-items:center;gap:5px;padding:3px 12px;border-radius:99px;font-size:10px;font-weight:800;margin-top:8px;border:1px solid;}
+
+/* Divider between apps */
+.app-divider{display:flex;align-items:center;gap:16px;margin:0;width:100%;max-width:1200px;}
+.div-line{flex:1;height:1px;background:rgba(255,255,255,.06);}
+.div-num{font-size:10px;font-weight:800;letter-spacing:2px;color:rgba(255,255,255,.18);white-space:nowrap;}
+
+/* ═══════════════════════════════════════════
+   PHONE SHELL  (Patient & Nurse — mobile)
+═══════════════════════════════════════════ */
+.phone-wrap{display:flex;justify-content:center;}
+.phone{
+  width:375px;
+  background:#F5F7FC;
+  border-radius:50px;
+  overflow:hidden;
+  box-shadow:0 60px 120px rgba(0,0,0,.4),0 0 0 1.5px rgba(255,255,255,.12),inset 0 0 0 1px rgba(255,255,255,.5);
+  display:flex;flex-direction:column;
+  position:relative;
+}
+
+/* ═══════════════════════════════════════════
+   BROWSER SHELL (Doctor & Admin — web)
+═══════════════════════════════════════════ */
+.browser-wrap{display:flex;justify-content:center;width:100%;}
+.browser{
+  width:100%;max-width:1100px;
+  background:#1A1D26;
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 40px 80px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.06);
+}
+.browser-bar{
+  background:#242836;
+  padding:12px 18px;
+  display:flex;align-items:center;
+  gap:12px;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.browser-dots{display:flex;gap:6px;}
+.bdot{width:12px;height:12px;border-radius:50%;}
+.browser-url{
+  flex:1;background:rgba(255,255,255,.06);border-radius:8px;
+  padding:7px 14px;font-size:12px;color:rgba(255,255,255,.4);
+  font-family:'Courier New',monospace;
+}
+.browser-actions{display:flex;gap:8px;}
+.bact{width:28px;height:28px;border-radius:7px;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer;}
+
+/* browser inner layout */
+.browser-inner{display:flex;min-height:680px;}
+
+/* ═══════════════════════════════════════════
+   STATUS BAR
+═══════════════════════════════════════════ */
+.sb{height:44px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 22px 8px;flex-shrink:0;}
+.sb-time{font-family:'Sora',sans-serif;font-size:13px;font-weight:700;color:#fff;}
+.sb-icons{display:flex;gap:5px;align-items:center;}
+
+/* ═══════════════════════════════════════════
+   SCROLL AREA
+═══════════════════════════════════════════ */
+.scr{overflow-y:auto;flex:1;}
+.scr::-webkit-scrollbar{display:none;}
+
+/* ═══════════════════════════════════════════
+   SHARED PRIMITIVES
+═══════════════════════════════════════════ */
+.card{background:#fff;border-radius:18px;}
+.row{display:flex;align-items:center;gap:10px;}
+
+/* ═══════════════════════════════════════════
+   ANIMATIONS
+═══════════════════════════════════════════ */
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.fu{animation:fadeUp .4s ease both;}
+
+/* status icons shared svg reuse */
+.ico-bar svg{opacity:.85;}
+
+
+
+.home-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: inline-block;
+    padding: 12px 28px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 15px;
+    border-radius: 30px;
+    background: linear-gradient(135deg,#022C1A,#047A40);
+    overflow: hidden;
+    transition: all 0.4s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* Shine animation */
+.home-btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg,#022C1A,#047A40);
+    transition: 0.5s;
+}
+
+.home-btn:hover::before {
+    left: 100%;
+}
+
+/* Hover effect */
+.home-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+/* Click effect */
+.home-btn:active {
+    transform: scale(0.95);
+}
+</style>
+</head>
+<body>
+
+  <div>
+    <a href="./index.html" class="home-btn">← Back to Home</a>
+  </div>
+
+<!-- ══════════════════════════════════════════════════
+     LOGIN SCREENS SECTION
+══════════════════════════════════════════════════ -->
+<div style="margin-top:20px;">
+
+
+
+  <!-- 4 login screens grid — 2 rows of 2 -->
+  <div style="display:flex;flex-direction:column;gap:64px;align-items:center;">
+
+    
+
+      <!-- ── LOGIN 2: NURSE APP ── -->
+      <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+        <div style="font-family:'Sora',sans-serif;font-size:16px;font-weight:800;color:#fff;text-align:center;">📱 Nurse App Login</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.38);text-align:center;margin-bottom:4px;">Mobile · Staff ID · Shift-aware</div>
+
+        <div style="width:375px;background:#F0FDF9;border-radius:50px;overflow:hidden;box-shadow:0 60px 120px rgba(0,0,0,.4),0 0 0 1.5px rgba(255,255,255,.12),inset 0 0 0 1px rgba(255,255,255,.5);display:flex;flex-direction:column;min-height:760px;">
+
+          <!-- Status bar -->
+          <div style="height:44px;background:linear-gradient(135deg,#022C1A,#047A40);display:flex;align-items:flex-end;justify-content:space-between;padding:0 22px 8px;flex-shrink:0;">
+            <span style="font-family:'Sora',sans-serif;font-size:13px;font-weight:700;color:#fff;">07:45</span>
+            <div style="display:flex;gap:5px;align-items:center;">
+              <svg width="15" height="11" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/></svg>
+              <svg width="22" height="11" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+            </div>
+          </div>
+
+          <!-- Hero -->
+          <div style="background:linear-gradient(155deg,#022C1A,#047A40,#059669);padding:30px 24px 34px;position:relative;overflow:hidden;flex-shrink:0;text-align:center;">
+            <div style="position:absolute;top:-50px;right:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.05);"></div>
+            <div style="width:72px;height:72px;border-radius:24px;background:rgba(255,255,255,.18);border:2px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:32px;position:relative;z-index:1;">👩‍⚕️</div>
+            <div style="font-family:'Sora',sans-serif;font-size:21px;font-weight:800;color:#fff;margin-bottom:5px;position:relative;z-index:1;">Clinical Staff Portal</div>
+            <div style="font-size:12px;color:rgba(255,255,255,.65);position:relative;z-index:1;">Home Healthcare · Nurse Access</div>
+            <!-- Shift start reminder -->
+            <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.2);border-radius:99px;padding:5px 14px;margin-top:14px;position:relative;z-index:1;">
+              <div style="width:6px;height:6px;border-radius:50%;background:#A7F3D0;animation:blink 1.4s infinite;"></div>
+              <span style="font-size:11px;font-weight:700;color:#A7F3D0;">Morning shift starts 8:00 AM · 15 min</span>
+            </div>
+          </div>
+
+          <!-- Login form -->
+          <div style="flex:1;padding:26px 24px 24px;overflow-y:auto;">
+
+            <div style="font-family:'Sora',sans-serif;font-size:21px;font-weight:800;color:#1A2744;margin-bottom:4px;">Staff Sign In</div>
+            <div style="font-size:13px;color:#7A9A8A;margin-bottom:22px;">Enter your credentials</div>
+
+            <!-- Staff ID -->
+            <div style="margin-bottom:13px;">
+              <div style="font-size:12px;font-weight:700;color:#4A8A6A;margin-bottom:6px;letter-spacing:.3px;">STAFF ID </div>
+              <div style="background:#fff;border:2px solid #059669;border-radius:12px;padding:13px 14px;display:flex;align-items:center;gap:10px;box-shadow:0 0 0 4px rgba(5,150,105,.08);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                <span style="font-size:15px;font-weight:700;color:#1A2744;font-family:'Sora',sans-serif;">XXX-12045</span>
+              </div>
+            </div>
+
+            <!-- PIN -->
+            <div style="margin-bottom:13px;">
+              <div style="font-size:12px;font-weight:700;color:#4A8A6A;margin-bottom:6px;letter-spacing:.3px;">4-DIGIT PIN</div>
+              <div style="display:flex;gap:10px;">
+                <div style="flex:1;background:#fff;border:2px solid #059669;border-radius:12px;padding:14px 8px;text-align:center;font-family:'Sora',sans-serif;font-size:22px;font-weight:800;color:#059669;box-shadow:0 0 0 4px rgba(5,150,105,.08);">●</div>
+                <div style="flex:1;background:#fff;border:2px solid #059669;border-radius:12px;padding:14px 8px;text-align:center;font-family:'Sora',sans-serif;font-size:22px;font-weight:800;color:#059669;">●</div>
+                <div style="flex:1;background:#fff;border:2px solid #059669;border-radius:12px;padding:14px 8px;text-align:center;font-family:'Sora',sans-serif;font-size:22px;font-weight:800;color:#059669;">●</div>
+                <div style="flex:1;background:#ECFDF5;border:2px dashed #059669;border-radius:12px;padding:14px 8px;text-align:center;font-size:20px;color:#6EE7B7;">_</div>
+              </div>
+            </div>
+
+            <!-- Location verification -->
+            <div style="background:#ECFDF5;border:1.5px solid #6EE7B7;border-radius:12px;padding:12px 14px;margin-bottom:18px;display:flex;gap:9px;align-items:center;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              <div>
+                <div style="font-size:12px;font-weight:700;color:#059669;">Location Verified</div>
+                <div style="font-size:10px;color:#4A8A6A;margin-top:1px;">Abu Dhabhi, United Arab Emirates · Within service zone ✓</div>
+              </div>
+            </div>
+
+            <!-- Sign in button -->
+           <a href="./nurse_main.html" style="text-decoration: none;"><button style="width:100%;background:linear-gradient(135deg,#047A40,#059669);color:#fff;border:none;border-radius:14px;padding:15px 20px;font-size:15px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;box-shadow:0 6px 20px rgba(5,150,105,.32);margin-bottom:14px;">Login</button></a> 
+
+            <!-- Biometric -->
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+              <div style="flex:1;height:1px;background:#D1FAE5;"></div>
+              <div style="font-size:12px;color:#7A9A8A;font-weight:600;">or</div>
+              <div style="flex:1;height:1px;background:#D1FAE5;"></div>
+            </div>
+            <div style="display:flex;gap:10px;margin-bottom:20px;">
+              <div style="flex:1;background:#fff;border:1.5px solid #D1FAE5;border-radius:12px;padding:13px;text-align:center;cursor:pointer;">
+                <div style="font-size:22px;margin-bottom:4px;">👆</div>
+                <div style="font-size:11px;font-weight:700;color:#4A8A6A;">Fingerprint</div>
+              </div>
+              <div style="flex:1;background:#fff;border:1.5px solid #D1FAE5;border-radius:12px;padding:13px;text-align:center;cursor:pointer;">
+                <div style="font-size:22px;margin-bottom:4px;">🪪</div>
+                <div style="font-size:11px;font-weight:700;color:#4A8A6A;">NFC Badge</div>
+              </div>
+              <div style="flex:1;background:#fff;border:1.5px solid #D1FAE5;border-radius:12px;padding:13px;text-align:center;cursor:pointer;">
+                <div style="font-size:22px;margin-bottom:4px;">📲</div>
+                <div style="font-size:11px;font-weight:700;color:#4A8A6A;">SMS OTP</div>
+              </div>
+            </div>
+
+            <!-- Forgot PIN -->
+            <div style="text-align:center;">
+              <span style="font-size:13px;color:#7A9A8A;">Forgot PIN? </span>
+              <span style="font-size:13px;font-weight:800;color:#059669;cursor:pointer;">Reset via HR Portal</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end row 1 -->
+
+
+
+
+</div><!-- end login section -->
+
+<!-- Footer -->
+<div style="text-align:center;margin-top:64px;padding-top:32px;border-top:1px solid rgba(255,255,255,.06);">
+  <div style="font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:rgba(255,255,255,.3);">Home Healthcare Platform — Complete Application Suite</div>
+  <div style="font-size:12px;color:rgba(255,255,255,.18);margin-top:6px;">Patient App · Nurse App · Doctor Portal · Admin Dashboard · 6–8 developers · 3–4 months MVP</div>
+</div>
+
+</body>
+</html>

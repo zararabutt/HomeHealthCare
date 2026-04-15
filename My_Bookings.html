@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>My Bookings — Patient App</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Sora:wght@400;600;700;800&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:linear-gradient(135deg,#C8D8F0 0%,#DCE8F8 50%,#C8D0EC 100%);
+  display:flex;align-items:center;justify-content:center;
+  min-height:100vh;font-family:'Nunito',sans-serif;padding:28px 16px;
+}
+
+/* PHONE SHELL */
+.phone{
+  width:390px;min-height:848px;background:#EEF3FB;
+  border-radius:52px;overflow:hidden;
+  box-shadow:0 70px 140px rgba(0,0,0,.28),0 0 0 1.5px #B8C8E0,inset 0 0 0 1px #fff;
+  position:relative;display:flex;flex-direction:column;
+}
+
+/* STATUS BAR */
+.statusbar{
+  height:48px;background:#1148A4;
+  display:flex;align-items:flex-end;justify-content:space-between;
+  padding:0 26px 10px;flex-shrink:0;
+}
+.statusbar .time{font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:#fff;}
+.statusbar .icons{display:flex;gap:6px;align-items:center;}
+
+/* HEADER */
+.header{
+  background:linear-gradient(155deg,#0D3D9C 0%,#1554C0 45%,#1E6BE0 100%);
+  padding:14px 22px 34px;position:relative;overflow:hidden;flex-shrink:0;
+}
+.header::before{content:'';position:absolute;top:-80px;right:-50px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.06);}
+.header::after{content:'';position:absolute;bottom:-50px;left:30px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.04);}
+
+.top-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;position:relative;z-index:1;}
+.back-btn{
+  width:38px;height:38px;border-radius:50%;
+  background:rgba(255,255,255,.14);backdrop-filter:blur(8px);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;border:1px solid rgba(255,255,255,.18);
+  font-size:18px;color:#fff;font-weight:900;
+}
+.header-title{
+  font-size:17px;font-weight:900;color:#fff;
+  font-family:'Sora',sans-serif;letter-spacing:-.2px;
+}
+.header-action{
+  width:38px;height:38px;border-radius:50%;
+  background:rgba(255,255,255,.14);backdrop-filter:blur(8px);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;border:1px solid rgba(255,255,255,.18);
+  font-size:16px;color:#fff;
+}
+
+/* SCROLL */
+.scroll{flex:1;overflow-y:auto;padding:20px 18px 28px;}
+.scroll::-webkit-scrollbar{display:none;}
+
+/* SECTION HEADERS */
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;}
+.sec-title{font-size:17px;font-weight:900;color:#1A2744;font-family:'Sora',sans-serif;letter-spacing:-.2px;}
+
+/* CATEGORY TABS */
+.category-tabs{
+  display:flex;gap:8px;margin-bottom:18px;
+  overflow-x:auto;padding-bottom:4px;
+}
+.category-tabs::-webkit-scrollbar{display:none;}
+.category-tab{
+  padding:9px 16px;background:#fff;
+  border:2px solid #E2E8F0;border-radius:99px;
+  font-size:12px;font-weight:800;color:#64748B;
+  white-space:nowrap;cursor:pointer;
+  transition:all .2s;flex-shrink:0;
+  box-shadow:0 2px 8px rgba(17,72,164,.04);
+}
+.category-tab.active{
+  background:linear-gradient(135deg,#EBF1FF,#D4E4FF);
+  border-color:#1148A4;color:#1148A4;
+}
+
+/* BOOKING CARD */
+.booking-card{
+  background:#fff;border-radius:20px;padding:16px;
+  margin-bottom:12px;box-shadow:0 3px 14px rgba(17,72,164,.08);
+  border:1.5px solid rgba(17,72,164,.05);
+  cursor:pointer;transition:all .2s;
+  position:relative;
+}
+.booking-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 6px 20px rgba(17,72,164,.14);
+}
+
+.booking-header{
+  display:flex;gap:14px;margin-bottom:12px;
+}
+.booking-icon{
+  width:56px;height:56px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;flex-shrink:0;
+  border:2.5px solid rgba(17,72,164,.1);
+}
+.booking-info{flex:1;}
+.booking-type{
+  font-size:10px;font-weight:700;color:#64748B;
+  text-transform:uppercase;letter-spacing:.5px;
+  margin-bottom:4px;
+}
+.booking-title{
+  font-size:15px;font-weight:900;color:#1A2744;
+  font-family:'Sora',sans-serif;margin-bottom:4px;
+}
+.booking-subtitle{
+  font-size:12px;color:#64748B;
+}
+
+.booking-details{
+  display:grid;grid-template-columns:repeat(2,1fr);
+  gap:10px;padding:12px;
+  background:#F8FAFC;border-radius:12px;
+  margin-bottom:12px;
+}
+.detail-item{
+  display:flex;align-items:center;gap:6px;
+}
+.detail-icon{
+  font-size:14px;flex-shrink:0;
+}
+.detail-text{
+  font-size:11px;color:#475569;
+  font-weight:700;
+}
+
+.booking-status{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 12px;border-radius:8px;
+  font-size:11px;font-weight:800;
+}
+
+.booking-actions{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:8px;margin-top:12px;
+  padding-top:12px;border-top:1px solid #F1F5F9;
+}
+.action-btn{
+  padding:10px 14px;border-radius:10px;
+  font-size:12px;font-weight:800;
+  cursor:pointer;transition:all .2s;
+  text-align:center;font-family:'Nunito',sans-serif;
+}
+.action-primary{
+  background:linear-gradient(135deg,#1148A4,#2273E8);
+  color:#fff;border:none;
+  box-shadow:0 4px 16px rgba(17,72,164,.2);
+}
+.action-secondary{
+  background:#fff;color:#1148A4;
+  border:2px solid #1148A4;
+}
+
+/* BUTTONS */
+.btn-primary{
+  width:100%;background:linear-gradient(135deg,#1148A4,#2273E8);
+  color:#fff;border:none;border-radius:12px;
+  padding:14px;font-size:14px;font-weight:800;
+  cursor:pointer;margin-bottom:10px;
+  box-shadow:0 6px 24px rgba(17,72,164,.3);
+  transition:all .2s;font-family:'Nunito',sans-serif;
+}
+
+.btn-secondary{
+  width:100%;background:#fff;color:#1148A4;
+  border:2px solid #1148A4;border-radius:12px;
+  padding:12px;font-size:14px;font-weight:800;
+  cursor:pointer;margin-bottom:10px;
+  font-family:'Nunito',sans-serif;
+}
+
+.btn-text{
+  width:100%;background:transparent;color:#64748B;
+  border:none;padding:10px;font-size:13px;
+  font-weight:700;cursor:pointer;
+  font-family:'Nunito',sans-serif;
+}
+
+/* DETAIL VIEW */
+.detail-section{
+  background:#fff;border-radius:20px;padding:18px;
+  margin-bottom:14px;box-shadow:0 3px 14px rgba(17,72,164,.08);
+  border:1.5px solid rgba(17,72,164,.05);
+}
+.section-title{
+  font-size:14px;font-weight:900;color:#1A2744;
+  font-family:'Sora',sans-serif;margin-bottom:12px;
+}
+
+.info-row{
+  display:flex;justify-content:space-between;
+  padding:10px 0;border-bottom:1px solid #F1F5F9;
+}
+.info-row:last-child{border-bottom:none;}
+.info-label{
+  font-size:12px;color:#64748B;
+}
+.info-value{
+  font-size:13px;font-weight:800;color:#1A2744;
+  text-align:right;
+}
+
+/* EMPTY STATE */
+.empty-state{
+  text-align:center;padding:60px 20px;
+}
+.empty-icon{
+  font-size:72px;margin-bottom:16px;
+  opacity:.3;
+}
+.empty-title{
+  font-size:17px;font-weight:900;color:#1A2744;
+  font-family:'Sora',sans-serif;margin-bottom:8px;
+}
+.empty-text{
+  font-size:13px;color:#64748B;
+  line-height:1.6;margin-bottom:24px;
+}
+
+/* COUNTDOWN */
+.countdown-badge{
+  position:absolute;top:16px;right:16px;
+  background:linear-gradient(135deg,#10B981,#059669);
+  color:#fff;padding:6px 12px;
+  border-radius:8px;font-size:10px;
+  font-weight:800;box-shadow:0 4px 12px rgba(16,185,129,.3);
+}
+
+/* DOCTOR CARD */
+.doctor-mini{
+  display:flex;align-items:center;gap:12px;
+  padding:12px;background:#F8FAFC;
+  border-radius:12px;margin-bottom:12px;
+}
+.doctor-avatar{
+  width:44px;height:44px;border-radius:50%;
+  background:linear-gradient(135deg,#1148A4,#2273E8);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;color:#fff;font-weight:900;
+  font-family:'Sora',sans-serif;flex-shrink:0;
+}
+.doctor-details{flex:1;}
+.doctor-name{
+  font-size:13px;font-weight:900;color:#1A2744;
+  margin-bottom:2px;
+}
+.doctor-spec{
+  font-size:11px;color:#64748B;
+}
+
+/* TIMELINE */
+.timeline-item{
+  display:flex;gap:12px;margin-bottom:16px;
+}
+.timeline-dot{
+  width:32px;height:32px;border-radius:50%;
+  background:linear-gradient(135deg,#EBF1FF,#D4E4FF);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;flex-shrink:0;
+  margin-top:2px;
+}
+.timeline-content{flex:1;}
+.timeline-title{
+  font-size:12px;font-weight:800;color:#1A2744;
+  margin-bottom:3px;
+}
+.timeline-text{
+  font-size:11px;color:#64748B;
+  line-height:1.5;
+}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<div class="phone">
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 1: MY BOOKINGS (MAIN LIST)
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="screen-1" style="display:flex;flex-direction:column;flex:1;">
+    
+    <!-- STATUS BAR -->
+    <div class="statusbar">
+      <span class="time">14:30</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+        <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+      </div>
+    </div>
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="top-row">
+        <div class="back-btn" onclick="redirect('./Patient_App_Home.html')">←</div>
+        <div class="header-title">My Bookings</div>
+        <div style="width:38px;"></div>
+      </div>
+    </div>
+
+    <!-- SCROLL -->
+    <div class="scroll">
+
+      <!-- Category Tabs -->
+      <div class="category-tabs">
+        <div class="category-tab active" onclick="selectTab(this)">All (5)</div>
+        <div class="category-tab" onclick="selectTab(this)">Upcoming (3)</div>
+        <div class="category-tab" onclick="selectTab(this)">Completed (2)</div>
+        <div class="category-tab" onclick="selectTab(this)">Cancelled (0)</div>
+      </div>
+
+      <div class="sec-head">
+        <div class="sec-title">Upcoming Appointments</div>
+      </div>
+
+      <!-- Booking 1 - Home Visit (Upcoming) -->
+      <div class="booking-card" onclick="showScreen(2)">
+        <div class="countdown-badge">In 2 hrs 15 min</div>
+        
+        <div class="booking-header">
+          <div class="booking-icon" style="background:linear-gradient(135deg,rgba(16,185,129,.1),rgba(5,150,105,.1));">
+            🏠
+          </div>
+          <div class="booking-info">
+            <div class="booking-type">Home Visit</div>
+            <div class="booking-title">Nurse Home Visit</div>
+            <div class="booking-subtitle">Nurse Aisha Khan, RN</div>
+          </div>
+        </div>
+
+        <div class="booking-details">
+          <div class="detail-item">
+            <div class="detail-icon">📅</div>
+            <div class="detail-text">Today, Mar 14</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">🕐</div>
+            <div class="detail-text">4:45 PM - 5:15 PM</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">📍</div>
+            <div class="detail-text">Home Address</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">💰</div>
+            <div class="detail-text">AED 150</div>
+          </div>
+        </div>
+
+        <div class="booking-status" style="background:#DCFCE7;color:#16A34A;">
+          ● Confirmed
+        </div>
+
+        <div class="booking-actions">
+          <button class="action-btn action-primary">View Details</button>
+          <button class="action-btn action-secondary">Reschedule</button>
+        </div>
+      </div>
+
+      <!-- Booking 2 - Teleconsultation (Tomorrow) -->
+      <div class="booking-card" onclick="showScreen(3)">
+        <div class="booking-header">
+          <div class="booking-icon" style="background:linear-gradient(135deg,rgba(17,72,164,.1),rgba(34,115,232,.1));">
+            📹
+          </div>
+          <div class="booking-info">
+            <div class="booking-type">Teleconsultation</div>
+            <div class="booking-title">Video Consultation</div>
+            <div class="booking-subtitle">Dr. Bilal Hussain</div>
+          </div>
+        </div>
+
+        <div class="booking-details">
+          <div class="detail-item">
+            <div class="detail-icon">📅</div>
+            <div class="detail-text">Tomorrow, Mar 15</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">🕐</div>
+            <div class="detail-text">10:00 AM - 10:30 AM</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">💻</div>
+            <div class="detail-text">Video Call</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">💰</div>
+            <div class="detail-text">AED 180</div>
+          </div>
+        </div>
+
+        <div class="booking-status" style="background:#DCFCE7;color:#16A34A;">
+          ● Confirmed
+        </div>
+
+        <div class="booking-actions">
+          <button class="action-btn action-primary">View Details</button>
+          <button class="action-btn action-secondary">Reschedule</button>
+        </div>
+      </div>
+
+      <!-- Booking 3 - Lab Test (Upcoming) -->
+      <div class="booking-card" onclick="showScreen(4)">
+        <div class="booking-header">
+          <div class="booking-icon" style="background:linear-gradient(135deg,rgba(139,92,246,.1),rgba(167,139,250,.1));">
+            🔬
+          </div>
+          <div class="booking-info">
+            <div class="booking-type">Lab Test</div>
+            <div class="booking-title">HbA1c Blood Test</div>
+            <div class="booking-subtitle">Home Collection</div>
+          </div>
+        </div>
+
+        <div class="booking-details">
+          <div class="detail-item">
+            <div class="detail-icon">📅</div>
+            <div class="detail-text">Mar 16 (Saturday)</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">🕐</div>
+            <div class="detail-text">7:00 AM - 8:00 AM</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">🏠</div>
+            <div class="detail-text">Home Collection</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">💰</div>
+            <div class="detail-text">AED 120</div>
+          </div>
+        </div>
+
+        <div class="booking-status" style="background:#DCFCE7;color:#16A34A;">
+          ● Confirmed
+        </div>
+
+        <div class="booking-actions">
+          <button class="action-btn action-primary">View Details</button>
+          <button class="action-btn action-secondary">Reschedule</button>
+        </div>
+      </div>
+
+      <div class="sec-head" style="margin-top:24px;">
+        <div class="sec-title">Completed</div>
+      </div>
+
+      <!-- Booking 4 - Quick Consultation (Completed) -->
+      <div class="booking-card">
+        <div class="booking-header">
+          <div class="booking-icon" style="background:linear-gradient(135deg,rgba(220,38,38,.1),rgba(239,68,68,.1));">
+            ⚡
+          </div>
+          <div class="booking-info">
+            <div class="booking-type">Quick Consultation</div>
+            <div class="booking-title">Video Consultation</div>
+            <div class="booking-subtitle">Dr. Sarah Farooq</div>
+          </div>
+        </div>
+
+        <div class="booking-details">
+          <div class="detail-item">
+            <div class="detail-icon">📅</div>
+            <div class="detail-text">Mar 10, 2026</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">🕐</div>
+            <div class="detail-text">11:36 AM (9 min)</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">✓</div>
+            <div class="detail-text">Prescription Issued</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">💰</div>
+            <div class="detail-text">AED 110</div>
+          </div>
+        </div>
+
+        <div class="booking-status" style="background:#F0FDF4;color:#15803D;">
+          ✓ Completed
+        </div>
+
+        <div class="booking-actions">
+          <button class="action-btn action-primary" onclick="alert('View summary')">View Summary</button>
+          <button class="action-btn action-secondary" onclick="alert('Download')">Download</button>
+        </div>
+      </div>
+
+      <!-- Booking 5 - Home Visit (Completed) -->
+      <div class="booking-card">
+        <div class="booking-header">
+          <div class="booking-icon" style="background:linear-gradient(135deg,rgba(16,185,129,.1),rgba(5,150,105,.1));">
+            🏠
+          </div>
+          <div class="booking-info">
+            <div class="booking-type">Home Visit</div>
+            <div class="booking-title">Physiotherapy Session</div>
+            <div class="booking-subtitle">Dr. Omar Hassan</div>
+          </div>
+        </div>
+
+        <div class="booking-details">
+          <div class="detail-item">
+            <div class="detail-icon">📅</div>
+            <div class="detail-text">Mar 7, 2026</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">🕐</div>
+            <div class="detail-text">3:00 PM (45 min)</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">✓</div>
+            <div class="detail-text">Session Complete</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-icon">💰</div>
+            <div class="detail-text">AED 200</div>
+          </div>
+        </div>
+
+        <div class="booking-status" style="background:#F0FDF4;color:#15803D;">
+          ✓ Completed
+        </div>
+
+        <div class="booking-actions">
+          <button class="action-btn action-primary" onclick="alert('View summary')">View Summary</button>
+          <button class="action-btn action-secondary" onclick="alert('Book again')">Book Again</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 2: HOME VISIT DETAILS
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="screen-2" style="display:none;flex-direction:column;flex:1;">
+    
+    <div class="statusbar">
+      <span class="time">14:31</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+        <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+      </div>
+    </div>
+
+    <div class="header">
+      <div class="top-row">
+        <div class="back-btn" onclick="showScreen(1)">←</div>
+        <div class="header-title">Booking Details</div>
+        <div class="header-action" onclick="alert('Share booking')">⤴</div>
+      </div>
+    </div>
+
+    <div class="scroll">
+
+      <!-- Status Badge -->
+      <div style="text-align:center;margin-bottom:20px;">
+        <div style="display:inline-block;padding:10px 20px;background:linear-gradient(135deg,#DCFCE7,#BBF7D0);border:2px solid #10B981;border-radius:12px;">
+          <div style="font-size:13px;font-weight:900;color:#047857;font-family:'Sora',sans-serif;">
+            ● Confirmed
+          </div>
+        </div>
+        <div style="font-size:12px;color:#64748B;margin-top:10px;">
+          Booking ID: <strong>#HV-2489</strong>
+        </div>
+      </div>
+
+      <!-- Service Details -->
+      <div class="detail-section">
+        <div class="section-title">🏠 Service Details</div>
+        
+        <div class="info-row">
+          <div class="info-label">Service Type</div>
+          <div class="info-value">Home Nursing Visit</div>
+        </div>
+        
+        <div class="info-row">
+          <div class="info-label">Date</div>
+          <div class="info-value">Today, Mar 14, 2026</div>
+        </div>
+        
+        <div class="info-row">
+          <div class="info-label">Time Slot</div>
+          <div class="info-value">4:45 PM - 5:15 PM</div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">Duration</div>
+          <div class="info-value">30 minutes</div>
+        </div>
+        
+        <div class="info-row">
+          <div class="info-label">Starts In</div>
+          <div class="info-value" style="color:#10B981;">2 hrs 15 min</div>
+        </div>
+      </div>
+
+      <!-- Nurse Details -->
+      <div class="detail-section">
+        <div class="section-title">👩‍⚕️ Healthcare Provider</div>
+        
+        <div class="doctor-mini">
+          <div class="doctor-avatar" style="background:linear-gradient(135deg,#10B981,#059669);">AK</div>
+          <div class="doctor-details">
+            <div class="doctor-name">Nurse Aisha Khan</div>
+            <div class="doctor-spec">Registered Nurse (RN) • DHA #12045</div>
+            <div style="font-size:11px;color:#10B981;font-weight:800;margin-top:4px;">
+              ⭐ 4.9 (156 reviews) • 8 years exp
+            </div>
+          </div>
+        </div>
+
+        <div style="background:#F8FAFC;border-radius:10px;padding:12px;font-size:11px;color:#475569;line-height:1.6;">
+          <strong>Services:</strong> Vital signs monitoring, wound care, medication administration, IV therapy, blood draws
+        </div>
+      </div>
+
+      <!-- Visit Address -->
+      <div class="detail-section">
+        <div class="section-title">📍 Visit Address</div>
+        
+        <div style="background:#F8FAFC;border-radius:10px;padding:14px;margin-bottom:10px;">
+          <div style="font-size:13px;font-weight:800;color:#1A2744;margin-bottom:6px;">
+            Your Home
+          </div>
+          <div style="font-size:12px;color:#475569;line-height:1.6;">
+            Villa 42, Palm Jumeirah<br>
+            Dubai, UAE
+          </div>
+        </div>
+
+        <button class="btn-secondary" style="margin:0;" onclick="alert('View on map')">
+          🗺️ View on Map
+        </button>
+      </div>
+
+      <!-- Services Requested -->
+      <div class="detail-section">
+        <div class="section-title">📋 Services Requested</div>
+        
+        <div style="font-size:12px;color:#475569;line-height:1.8;">
+          ✓ Vital signs check (BP, SpO₂, Temperature)<br>
+          ✓ Wound dressing change (knee surgery)<br>
+          ✓ Medication reminder setup<br>
+          ✓ Health status report
+        </div>
+      </div>
+
+      <!-- Payment Summary -->
+      <div class="detail-section">
+        <div class="section-title">💰 Payment Summary</div>
+        
+        <div class="info-row">
+          <div class="info-label">Service Fee</div>
+          <div class="info-value">AED 120</div>
+        </div>
+        
+        <div class="info-row">
+          <div class="info-label">Travel Fee</div>
+          <div class="info-value">AED 30</div>
+        </div>
+
+        <div class="info-row" style="border-top:2px solid #E2E8F0;margin-top:10px;padding-top:14px;">
+          <div style="font-size:14px;font-weight:900;color:#1A2744;">Total</div>
+          <div style="font-size:18px;font-weight:900;color:#10B981;font-family:'Sora',sans-serif;">AED 150</div>
+        </div>
+
+        <div style="margin-top:10px;font-size:11px;color:#64748B;">
+          ✓ Paid via Credit Card ending in 4242
+        </div>
+      </div>
+
+      <!-- What to Expect -->
+      <div class="detail-section">
+        <div class="section-title">ℹ️ What to Expect</div>
+        
+        <div class="timeline-item">
+          <div class="timeline-dot">1</div>
+          <div class="timeline-content">
+            <div class="timeline-title">Nurse Arrival (4:45 PM)</div>
+            <div class="timeline-text">Nurse Aisha will arrive at your location. You'll receive a notification when she's nearby.</div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot">2</div>
+          <div class="timeline-content">
+            <div class="timeline-title">Service Delivery (30 min)</div>
+            <div class="timeline-text">Vital signs check, wound care, and medication review will be performed.</div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot">3</div>
+          <div class="timeline-content">
+            <div class="timeline-title">Completion & Report</div>
+            <div class="timeline-text">Digital report will be sent to your Health Passport with recommendations.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <button class="btn-primary" onclick="alert('Contact nurse')">
+        📞 Contact Nurse
+      </button>
+
+      <button class="btn-secondary" onclick="alert('Reschedule')">
+        📅 Reschedule Visit
+      </button>
+
+      <button class="btn-text" style="color:#DC2626;font-weight:900;" onclick="showScreen(1)">
+        Cancel Booking
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 3: TELECONSULTATION DETAILS
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="screen-3" style="display:none;flex-direction:column;flex:1;">
+    
+    <div class="statusbar">
+      <span class="time">14:32</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+        <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+      </div>
+    </div>
+
+    <div class="header">
+      <div class="top-row">
+        <div class="back-btn" onclick="showScreen(1)">←</div>
+        <div class="header-title">Teleconsultation</div>
+        <div class="header-action" onclick="alert('Add to calendar')">📅</div>
+      </div>
+    </div>
+
+    <div class="scroll">
+
+      <!-- Status Badge -->
+      <div style="text-align:center;margin-bottom:20px;">
+        <div style="display:inline-block;padding:10px 20px;background:linear-gradient(135deg,#DCFCE7,#BBF7D0);border:2px solid #10B981;border-radius:12px;">
+          <div style="font-size:13px;font-weight:900;color:#047857;font-family:'Sora',sans-serif;">
+            ● Confirmed
+          </div>
+        </div>
+        <div style="font-size:12px;color:#64748B;margin-top:10px;">
+          Booking ID: <strong>#TC-5621</strong>
+        </div>
+      </div>
+
+      <!-- Appointment Details -->
+      <div class="detail-section">
+        <div class="section-title">📹 Appointment Details</div>
+        
+        <div class="info-row">
+          <div class="info-label">Type</div>
+          <div class="info-value">Video Consultation</div>
+        </div>
+        
+        <div class="info-row">
+          <div class="info-label">Date</div>
+          <div class="info-value">Tomorrow, Mar 15, 2026</div>
+        </div>
+        
+        <div class="info-row">
+          <div class="info-label">Time</div>
+          <div class="info-value">10:00 AM - 10:30 AM</div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">Duration</div>
+          <div class="info-value">30 minutes</div>
+        </div>
+        
+        <div class="info-row">
+          <div class="info-label">Platform</div>
+          <div class="info-value">Humania Video Call</div>
+        </div>
+      </div>
+
+      <!-- Doctor Details -->
+      <div class="detail-section">
+        <div class="section-title">👨‍⚕️ Your Doctor</div>
+        
+        <div class="doctor-mini">
+          <div class="doctor-avatar">BH</div>
+          <div class="doctor-details">
+            <div class="doctor-name">Dr. Bilal Hussain</div>
+            <div class="doctor-spec">General Physician & Diabetologist</div>
+            <div style="font-size:11px;color:#10B981;font-weight:800;margin-top:4px;">
+              ⭐ 4.9 (234 reviews) • 15 years exp
+            </div>
+          </div>
+        </div>
+
+        <div style="background:#F8FAFC;border-radius:10px;padding:12px;font-size:11px;color:#475569;line-height:1.6;">
+          <strong>Specializations:</strong> Diabetes management, hypertension, preventive care, chronic disease management
+        </div>
+      </div>
+
+      <!-- Reason for Visit -->
+      <div class="detail-section">
+        <div class="section-title">📋 Reason for Visit</div>
+        
+        <div style="background:#F8FAFC;border-radius:10px;padding:14px;">
+          <div style="font-size:12px;color:#475569;line-height:1.6;">
+            Follow-up consultation for diabetes management. Recent HbA1c test results review and medication adjustment discussion.
+          </div>
+        </div>
+      </div>
+
+      <!-- Shared Information -->
+      <div class="detail-section">
+        <div class="section-title">📤 Pre-shared with Doctor</div>
+        
+        <div style="font-size:11px;color:#475569;line-height:1.8;">
+          ✓ Medical History (Type 2 Diabetes, Hypertension)<br>
+          ✓ Current Medications (5 active prescriptions)<br>
+          ✓ Recent Lab Results (HbA1c: 6.8%)<br>
+          ✓ Latest Vitals (BP: 118/76, Glucose: 102)<br>
+          ✓ Health Passport Access
+        </div>
+      </div>
+
+      <!-- Payment Summary -->
+      <div class="detail-section">
+        <div class="section-title">💰 Payment Summary</div>
+        
+        <div class="info-row">
+          <div class="info-label">Consultation Fee</div>
+          <div class="info-value">AED 180</div>
+        </div>
+
+        <div class="info-row" style="border-top:2px solid #E2E8F0;margin-top:10px;padding-top:14px;">
+          <div style="font-size:14px;font-weight:900;color:#1A2744;">Total Paid</div>
+          <div style="font-size:18px;font-weight:900;color:#10B981;font-family:'Sora',sans-serif;">AED 180</div>
+        </div>
+
+        <div style="margin-top:10px;font-size:11px;color:#64748B;">
+          ✓ Paid via Credit Card ending in 4242
+        </div>
+      </div>
+
+      <!-- Preparation Tips -->
+      <div class="detail-section">
+        <div class="section-title">💡 Before Your Consultation</div>
+        
+        <div style="font-size:12px;color:#475569;line-height:1.8;">
+          • Join the call 5 minutes early to test your connection<br>
+          • Be in a quiet, well-lit room<br>
+          • Have your current medications nearby<br>
+          • Prepare questions you want to ask<br>
+          • Keep notepad ready for recommendations
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <button class="btn-primary" onclick="alert('Test video connection')">
+        🎥 Test Video Connection
+      </button>
+
+      <button class="btn-secondary" onclick="alert('Add to calendar')">
+        📅 Add to Calendar
+      </button>
+
+      <button class="btn-secondary" onclick="alert('Reschedule')">
+        🔄 Reschedule Appointment
+      </button>
+
+      <button class="btn-text" style="color:#DC2626;font-weight:900;" onclick="showScreen(1)">
+        Cancel Appointment
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 4: LAB TEST DETAILS
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="screen-4" style="display:none;flex-direction:column;flex:1;">
+    
+    <div class="statusbar">
+      <span class="time">14:33</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+        <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+      </div>
+    </div>
+
+    <div class="header">
+      <div class="top-row">
+        <div class="back-btn" onclick="showScreen(1)">←</div>
+        <div class="header-title">Lab Test Booking</div>
+        <div class="header-action" onclick="alert('Share booking')">⤴</div>
+      </div>
+    </div>
+
+    <div class="scroll">
+
+      <!-- Status Badge -->
+      <div style="text-align:center;margin-bottom:20px;">
+        <div style="display:inline-block;padding:10px 20px;background:linear-gradient(135deg,#DCFCE7,#BBF7D0);border:2px solid #10B981;border-radius:12px;">
+          <div style="font-size:13px;font-weight:900;color:#047857;font-family:'Sora',sans-serif;">
+            ● Confirmed
+          </div>
+        </div>
+        <div style="font-size:12px;color:#64748B;margin-top:10px;">
+          Booking ID: <strong>#LAB-8934</strong>
+        </div>
+      </div>
+
+      <!-- Test Details -->
+      <div class="detail-section">
+        <div class="section-title">🔬 Test Details</div>
+        
+        <div class="info-row">
+          <div class="info-label">Test Name</div>
+          <div class="info-value">HbA1c (Glycated Hemoglobin)</div>
+        </div>
+        
+        <div class="info-row">
+          <div class="info-label">Test Code</div>
+          <div class="info-value">HBA1C-001</div>
+        </div>
+        
+        <div class="info-row">
+          <div class="info-label">Sample Type</div>
+          <div class="info-value">Blood (Venous)</div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">Fasting Required</div>
+          <div class="info-value">No</div>
+        </div>
+        
+        <div class="info-row">
+          <div class="info-label">Results Timeline</div>
+          <div class="info-value">24-48 hours</div>
+        </div>
+      </div>
+
+      <!-- Collection Details -->
+      <div class="detail-section">
+        <div class="section-title">🏠 Collection Details</div>
+        
+        <div class="info-row">
+          <div class="info-label">Collection Type</div>
+          <div class="info-value">Home Collection</div>
+        </div>
+        
+        <div class="info-row">
+          <div class="info-label">Date</div>
+          <div class="info-value">Saturday, Mar 16, 2026</div>
+        </div>
+        
+        <div class="info-row">
+          <div class="info-label">Time Slot</div>
+          <div class="info-value">7:00 AM - 8:00 AM</div>
+        </div>
+
+        <div class="info-row">
+          <div class="info-label">Collection Address</div>
+          <div class="info-value">Your Home Address</div>
+        </div>
+      </div>
+
+      <!-- Lab Partner -->
+      <div class="detail-section">
+        <div class="section-title">🏥 Lab Partner</div>
+        
+        <div style="background:#F8FAFC;border-radius:10px;padding:14px;margin-bottom:10px;">
+          <div style="font-size:14px;font-weight:900;color:#1A2744;margin-bottom:6px;">
+            Emirates Diagnostic Center
+          </div>
+          <div style="font-size:11px;color:#64748B;margin-bottom:8px;">
+            DHA Licensed • NABL Accredited
+          </div>
+          <div style="font-size:11px;color:#10B981;font-weight:800;">
+            ⭐ 4.8 (2,341 reviews)
+          </div>
+        </div>
+
+        <div style="font-size:11px;color:#475569;line-height:1.6;">
+          Professional phlebotomist will visit your home for blood sample collection. Sample will be processed at our Dubai laboratory.
+        </div>
+      </div>
+
+      <!-- Ordered By -->
+      <div class="detail-section">
+        <div class="section-title">👨‍⚕️ Prescribed By</div>
+        
+        <div class="doctor-mini">
+          <div class="doctor-avatar">BH</div>
+          <div class="doctor-details">
+            <div class="doctor-name">Dr. Bilal Hussain</div>
+            <div class="doctor-spec">General Physician & Diabetologist</div>
+            <div style="font-size:10px;color:#64748B;margin-top:4px;">
+              Prescribed on Mar 10, 2026
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Summary -->
+      <div class="detail-section">
+        <div class="section-title">💰 Payment Summary</div>
+        
+        <div class="info-row">
+          <div class="info-label">Test Fee</div>
+          <div class="info-value">AED 90</div>
+        </div>
+        
+        <div class="info-row">
+          <div class="info-label">Home Collection</div>
+          <div class="info-value">AED 30</div>
+        </div>
+
+        <div class="info-row" style="border-top:2px solid #E2E8F0;margin-top:10px;padding-top:14px;">
+          <div style="font-size:14px;font-weight:900;color:#1A2744;">Total Paid</div>
+          <div style="font-size:18px;font-weight:900;color:#10B981;font-family:'Sora',sans-serif;">AED 120</div>
+        </div>
+
+        <div style="margin-top:10px;font-size:11px;color:#64748B;">
+          ✓ Paid via Credit Card ending in 4242
+        </div>
+      </div>
+
+      <!-- Preparation Instructions -->
+      <div class="detail-section">
+        <div class="section-title">📋 Preparation Instructions</div>
+        
+        <div style="font-size:12px;color:#475569;line-height:1.8;">
+          ✓ <strong>No fasting required</strong> for HbA1c test<br>
+          ✓ Drink normal amount of water<br>
+          ✓ Take your regular medications as prescribed<br>
+          ✓ Phlebotomist will bring all equipment<br>
+          ✓ Test takes only 5 minutes
+        </div>
+      </div>
+
+      <!-- Results Delivery -->
+      <div class="detail-section">
+        <div class="section-title">📊 Results Delivery</div>
+        
+        <div class="timeline-item">
+          <div class="timeline-dot">1</div>
+          <div class="timeline-content">
+            <div class="timeline-title">Sample Collection (Mar 16, 7:00 AM)</div>
+            <div class="timeline-text">Phlebotomist will collect blood sample at your home</div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot">2</div>
+          <div class="timeline-content">
+            <div class="timeline-title">Lab Processing (24-48 hours)</div>
+            <div class="timeline-text">Sample analyzed at Emirates Diagnostic Center</div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot">3</div>
+          <div class="timeline-content">
+            <div class="timeline-title">Results Available (Mar 17-18)</div>
+            <div class="timeline-text">Digital report sent to your Health Passport with doctor review</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <button class="btn-primary" onclick="alert('Download test info')">
+        📄 Download Test Information
+      </button>
+
+      <button class="btn-secondary" onclick="alert('Reschedule collection')">
+        📅 Reschedule Collection
+      </button>
+
+      <button class="btn-text" style="color:#DC2626;font-weight:900;" onclick="showScreen(1)">
+        Cancel Booking
+      </button>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+let currentScreen = 1;
+
+function showScreen(screenNum) {
+  for (let i = 1; i <= 4; i++) {
+    const screen = document.getElementById('screen-' + i);
+    if (screen) screen.style.display = 'none';
+  }
+  
+  const targetScreen = document.getElementById('screen-' + screenNum);
+  if (targetScreen) {
+    targetScreen.style.display = 'flex';
+    currentScreen = screenNum;
+  }
+}
+
+function selectTab(element) {
+  document.querySelectorAll('.category-tab').forEach(tab => {
+    tab.classList.remove('active');
+  });
+  element.classList.add('active');
+}
+
+
+  function redirect(url) {
+    window.location.href = url;
+  }
+console.log('My Bookings Loaded');
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Humania - Physiotherapy Service Flow</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800;900&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 30px 15px;
+}
+
+.phone {
+  width: 390px;
+  height: 844px;
+  background: #F8FAFC;
+  border-radius: 52px;
+  box-shadow: 0 25px 80px rgba(0,0,0,0.35);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.status-bar {
+  padding: 12px 24px 6px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+}
+
+.screen {
+  display: none;
+  flex: 1;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.screen.active {
+  display: flex;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.top-nav {
+  background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+  padding: 16px 18px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.back-btn {
+  width: 36px;
+  height: 36px;
+  background: rgba(255,255,255,0.15);
+  border: 1.5px solid rgba(255,255,255,0.25);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  color: #fff;
+}
+
+.nav-title {
+  font-size: 17px;
+  font-weight: 900;
+  color: #fff;
+  font-family: 'Sora', sans-serif;
+}
+
+.scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 18px 28px;
+}
+
+.scroll::-webkit-scrollbar { display: none; }
+
+/* HERO CARD */
+.hero-card {
+  background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+  border-radius: 24px;
+  padding: 28px 24px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(139,92,246,0.3);
+}
+
+.hero-card::before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+}
+
+.hero-icon {
+  font-size: 56px;
+  margin-bottom: 16px;
+}
+
+.hero-title {
+  font-size: 26px;
+  font-weight: 900;
+  color: #fff;
+  font-family: 'Sora', sans-serif;
+  margin-bottom: 8px;
+}
+
+.hero-desc {
+  font-size: 14px;
+  color: rgba(255,255,255,0.9);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.hero-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.2);
+  border: 1.5px solid rgba(255,255,255,0.3);
+  padding: 6px 14px;
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 800;
+  color: #fff;
+}
+
+/* SECTION */
+.section-title {
+  font-size: 18px;
+  font-weight: 900;
+  color: #1A2744;
+  font-family: 'Sora', sans-serif;
+  margin-bottom: 14px;
+}
+
+/* CARD */
+.card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  border: 1.5px solid rgba(139,92,246,0.1);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.card-icon {
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.card-title {
+  font-size: 16px;
+  font-weight: 900;
+  color: #1A2744;
+  font-family: 'Sora', sans-serif;
+}
+
+.card-subtitle {
+  font-size: 12px;
+  color: #64748B;
+  margin-top: 2px;
+}
+
+/* SERVICE OPTIONS */
+.option-card {
+  background: #fff;
+  border: 2px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.option-card:hover {
+  border-color: #8B5CF6;
+  background: rgba(139,92,246,0.02);
+}
+
+.option-card.selected {
+  border-color: #8B5CF6;
+  background: linear-gradient(135deg, rgba(139,92,246,0.08), rgba(124,58,237,0.08));
+}
+
+.option-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.option-title {
+  font-size: 15px;
+  font-weight: 900;
+  color: #1A2744;
+  font-family: 'Sora', sans-serif;
+}
+
+.option-price {
+  font-size: 18px;
+  font-weight: 900;
+  color: #8B5CF6;
+  font-family: 'Sora', sans-serif;
+}
+
+.option-desc {
+  font-size: 13px;
+  color: #64748B;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+.option-features {
+  list-style: none;
+  font-size: 12px;
+  color: #475569;
+}
+
+.option-features li {
+  padding: 4px 0 4px 18px;
+  position: relative;
+}
+
+.option-features li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #10B981;
+  font-weight: 800;
+}
+
+/* THERAPIST CARD */
+.therapist-card {
+  background: #fff;
+  border: 2px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.therapist-card.selected {
+  border-color: #8B5CF6;
+  background: rgba(139,92,246,0.03);
+}
+
+.therapist-header {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.therapist-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: #fff;
+  font-weight: 900;
+  flex-shrink: 0;
+  border: 3px solid rgba(139,92,246,0.2);
+}
+
+.therapist-info {
+  flex: 1;
+}
+
+.therapist-name {
+  font-size: 15px;
+  font-weight: 900;
+  color: #1A2744;
+  font-family: 'Sora', sans-serif;
+}
+
+.therapist-specialty {
+  font-size: 12px;
+  color: #64748B;
+  margin-top: 2px;
+}
+
+.therapist-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.stars {
+  color: #F59E0B;
+  font-size: 14px;
+}
+
+.rating-text {
+  font-size: 12px;
+  font-weight: 700;
+  color: #475569;
+}
+
+.therapist-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.badge {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 800;
+  background: rgba(139,92,246,0.1);
+  color: #8B5CF6;
+}
+
+.badge.available {
+  background: rgba(16,185,129,0.1);
+  color: #10B981;
+}
+
+/* CALENDAR */
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.day-header {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 800;
+  color: #64748B;
+  padding: 8px 0;
+}
+
+.day {
+  aspect-ratio: 1;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  background: #F8FAFC;
+  border: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.day:hover {
+  background: rgba(139,92,246,0.05);
+}
+
+.day.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.day.selected {
+  background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+  color: #fff;
+  font-weight: 900;
+}
+
+.day.today {
+  border-color: #8B5CF6;
+}
+
+/* TIME SLOTS */
+.time-slots {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.time-slot {
+  padding: 12px 8px;
+  border-radius: 10px;
+  background: #F8FAFC;
+  border: 2px solid #E2E8F0;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 13px;
+  font-weight: 700;
+  color: #475569;
+}
+
+.time-slot:hover {
+  border-color: #8B5CF6;
+  background: rgba(139,92,246,0.05);
+}
+
+.time-slot.selected {
+  border-color: #8B5CF6;
+  background: linear-gradient(135deg, rgba(139,92,246,0.1), rgba(124,58,237,0.1));
+  color: #8B5CF6;
+  font-weight: 900;
+}
+
+.time-slot.unavailable {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* ASSESSMENT FORM */
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-label {
+  font-size: 13px;
+  font-weight: 800;
+  color: #1A2744;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid #E2E8F0;
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: 'Nunito', sans-serif;
+  transition: all 0.2s;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  outline: none;
+  border-color: #8B5CF6;
+  background: rgba(139,92,246,0.02);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* PAIN SCALE */
+.pain-scale {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.pain-level {
+  flex: 1;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  background: #F8FAFC;
+  border: 2px solid #E2E8F0;
+  transition: all 0.2s;
+  font-size: 20px;
+}
+
+.pain-level:hover {
+  border-color: #8B5CF6;
+}
+
+.pain-level.selected {
+  border-color: #8B5CF6;
+  background: linear-gradient(135deg, rgba(139,92,246,0.1), rgba(124,58,237,0.1));
+}
+
+.pain-number {
+  font-size: 18px;
+  font-weight: 900;
+  font-family: 'Sora', sans-serif;
+  color: #1A2744;
+}
+
+/* EXERCISE CARD */
+.exercise-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+  border: 1.5px solid rgba(139,92,246,0.1);
+}
+
+.exercise-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.exercise-thumb {
+  width: 72px;
+  height: 72px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  flex-shrink: 0;
+}
+
+.exercise-info {
+  flex: 1;
+}
+
+.exercise-name {
+  font-size: 14px;
+  font-weight: 900;
+  color: #1A2744;
+  margin-bottom: 4px;
+}
+
+.exercise-details {
+  font-size: 11px;
+  color: #64748B;
+  line-height: 1.4;
+}
+
+.exercise-progress {
+  margin-top: 12px;
+}
+
+.progress-bar-container {
+  height: 6px;
+  background: #E2E8F0;
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #8B5CF6, #7C3AED);
+  transition: width 0.3s;
+}
+
+.progress-text {
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748B;
+}
+
+/* SESSION SUMMARY */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.summary-item {
+  background: #F8FAFC;
+  border-radius: 12px;
+  padding: 14px;
+  text-align: center;
+}
+
+.summary-icon {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.summary-value {
+  font-size: 20px;
+  font-weight: 900;
+  color: #1A2744;
+  font-family: 'Sora', sans-serif;
+  margin-bottom: 4px;
+}
+
+.summary-label {
+  font-size: 11px;
+  color: #64748B;
+  font-weight: 700;
+}
+
+/* BUTTONS */
+.btn-primary {
+  width: 100%;
+  background: linear-gradient(135deg, #8B5CF6, #7C3AED);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  margin-bottom: 10px;
+  box-shadow: 0 6px 24px rgba(139,92,246,0.3);
+  transition: all 0.2s;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(139,92,246,0.4);
+}
+
+.btn-secondary {
+  width: 100%;
+  background: #fff;
+  color: #8B5CF6;
+  border: 2px solid #8B5CF6;
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.btn-text {
+  width: 100%;
+  background: transparent;
+  color: #64748B;
+  border: none;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* SUCCESS */
+.success-icon {
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, #10B981, #059669);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 56px;
+  margin: 40px auto 24px;
+  box-shadow: 0 12px 40px rgba(16,185,129,0.3);
+}
+
+.success-title {
+  font-size: 24px;
+  font-weight: 900;
+  color: #1A2744;
+  font-family: 'Sora', sans-serif;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.success-text {
+  font-size: 14px;
+  color: #64748B;
+  text-align: center;
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+</style>
+</head>
+<body>
+
+<div class="phone">
+  
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span>9:41</span>
+    <span>🔋 📶 WiFi</span>
+  </div>
+  
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 1: SERVICE OVERVIEW
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div class="screen active" id="screen-1">
+    <div class="top-nav">
+      <div class="back-btn" onclick="alert('Back to Home')">←</div>
+      <div class="nav-title">Physiotherapy</div>
+      <div style="width:36px;"></div>
+    </div>
+    
+    <div class="scroll">
+      <!-- Hero -->
+      <div class="hero-card">
+        <div class="hero-icon">🏃</div>
+        <div class="hero-title">Physiotherapy Services</div>
+        <div class="hero-desc">
+          Professional rehabilitation and pain management at your doorstep. Expert therapists, personalized programs.
+        </div>
+        <div class="hero-badge">Certified Therapists • Home Sessions</div>
+      </div>
+      
+      <!-- What We Treat -->
+      <div class="section-title">What We Treat</div>
+      
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">🦴</div>
+          <div>
+            <div class="card-title">Musculoskeletal Issues</div>
+            <div class="card-subtitle">Back pain, joint pain, arthritis</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background:linear-gradient(135deg,#10B981,#059669);">🤕</div>
+          <div>
+            <div class="card-title">Post-Surgery Recovery</div>
+            <div class="card-subtitle">Orthopedic, cardiac rehab</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background:linear-gradient(135deg,#F59E0B,#D97706);">⚡</div>
+          <div>
+            <div class="card-title">Sports Injuries</div>
+            <div class="card-subtitle">Sprains, strains, rehabilitation</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon" style="background:linear-gradient(135deg,#EF4444,#DC2626);">🧓</div>
+          <div>
+            <div class="card-title">Elderly Care</div>
+            <div class="card-subtitle">Balance, mobility, fall prevention</div>
+          </div>
+        </div>
+      </div>
+      
+      <button class="btn-primary" onclick="showScreen(2)">
+        Book Physiotherapy Session
+      </button>
+      
+      <button class="btn-secondary" onclick="alert('Viewing exercise programs')">
+        View Exercise Programs
+      </button>
+    </div>
+  </div>
+  
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 2: SELECT SERVICE TYPE
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div class="screen" id="screen-2">
+    <div class="top-nav">
+      <div class="back-btn" onclick="showScreen(1)">←</div>
+      <div class="nav-title">Select Service</div>
+      <div style="width:36px;"></div>
+    </div>
+    
+    <div class="scroll">
+      <div class="section-title">Choose Service Type</div>
+      
+      <!-- Initial Assessment -->
+      <div class="option-card" onclick="selectOption(this)">
+        <div class="option-header">
+          <div class="option-title">🔍 Initial Assessment</div>
+          <div class="option-price">$120</div>
+        </div>
+        <div class="option-desc">
+          Comprehensive evaluation with detailed treatment plan
+        </div>
+        <ul class="option-features">
+          <li>60-minute session</li>
+          <li>Full physical assessment</li>
+          <li>Personalized exercise plan</li>
+          <li>Progress tracking setup</li>
+        </ul>
+      </div>
+      
+      <!-- Single Session -->
+      <div class="option-card selected" onclick="selectOption(this)">
+        <div class="option-header">
+          <div class="option-title">🏠 Home Session</div>
+          <div class="option-price">$80</div>
+        </div>
+        <div class="option-desc">
+          Standard physiotherapy session at your home
+        </div>
+        <ul class="option-features">
+          <li>45-minute session</li>
+          <li>Manual therapy</li>
+          <li>Exercise guidance</li>
+          <li>Progress monitoring</li>
+        </ul>
+      </div>
+      
+      <!-- Package -->
+      <div class="option-card" onclick="selectOption(this)">
+        <div class="option-header">
+          <div class="option-title">📦 Package (10 Sessions)</div>
+          <div class="option-price">$700</div>
+        </div>
+        <div class="option-desc">
+          Save $100 with our 10-session package
+        </div>
+        <ul class="option-features">
+          <li>10 × 45-minute sessions</li>
+          <li>Priority booking</li>
+          <li>Same therapist guaranteed</li>
+          <li>Free assessment included</li>
+        </ul>
+        <div style="background:rgba(16,185,129,0.1); color:#10B981; padding:8px 12px; border-radius:8px; font-size:12px; font-weight:800; margin-top:10px;">
+          💰 Save $100 • Best Value
+        </div>
+      </div>
+      
+      <button class="btn-primary" onclick="showScreen(3)">
+        Continue to Therapist Selection
+      </button>
+    </div>
+  </div>
+  
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 3: SELECT THERAPIST
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div class="screen" id="screen-3">
+    <div class="top-nav">
+      <div class="back-btn" onclick="showScreen(2)">←</div>
+      <div class="nav-title">Select Therapist</div>
+      <div style="width:36px;"></div>
+    </div>
+    
+    <div class="scroll">
+      <div class="section-title">Available Physiotherapists</div>
+      
+      <!-- Therapist 1 -->
+      <div class="therapist-card selected" onclick="selectTherapist(this)">
+        <div class="therapist-header">
+          <div class="therapist-avatar">AK</div>
+          <div class="therapist-info">
+            <div class="therapist-name">Dr. Ahmed Khan</div>
+            <div class="therapist-specialty">Sports & Orthopedic Specialist</div>
+            <div class="therapist-rating">
+              <span class="stars">⭐⭐⭐⭐⭐</span>
+              <span class="rating-text">4.9 (127 reviews)</span>
+            </div>
+          </div>
+        </div>
+        <div class="therapist-badges">
+          <span class="badge available">🟢 Available Today</span>
+          <span class="badge">12 yrs exp</span>
+          <span class="badge">DPT, MSPT</span>
+        </div>
+      </div>
+      
+      <!-- Therapist 2 -->
+      <div class="therapist-card" onclick="selectTherapist(this)">
+        <div class="therapist-header">
+          <div class="therapist-avatar" style="background:linear-gradient(135deg,#10B981,#059669);">SF</div>
+          <div class="therapist-info">
+            <div class="therapist-name">Dr. Sarah Farooq</div>
+            <div class="therapist-specialty">Geriatric & Neuro Rehab</div>
+            <div class="therapist-rating">
+              <span class="stars">⭐⭐⭐⭐⭐</span>
+              <span class="rating-text">4.8 (94 reviews)</span>
+            </div>
+          </div>
+        </div>
+        <div class="therapist-badges">
+          <span class="badge">Available Tomorrow</span>
+          <span class="badge">9 yrs exp</span>
+          <span class="badge">DPT</span>
+        </div>
+      </div>
+      
+      <!-- Therapist 3 -->
+      <div class="therapist-card" onclick="selectTherapist(this)">
+        <div class="therapist-header">
+          <div class="therapist-avatar" style="background:linear-gradient(135deg,#F59E0B,#D97706);">RH</div>
+          <div class="therapist-info">
+            <div class="therapist-name">Rashid Hameed</div>
+            <div class="therapist-specialty">Manual Therapy Expert</div>
+            <div class="therapist-rating">
+              <span class="stars">⭐⭐⭐⭐⭐</span>
+              <span class="rating-text">4.7 (82 reviews)</span>
+            </div>
+          </div>
+        </div>
+        <div class="therapist-badges">
+          <span class="badge available">🟢 Available Today</span>
+          <span class="badge">15 yrs exp</span>
+          <span class="badge">OMPT</span>
+        </div>
+      </div>
+      
+      <button class="btn-primary" onclick="showScreen(4)">
+        Continue to Date & Time
+      </button>
+    </div>
+  </div>
+  
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 4: SELECT DATE & TIME
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div class="screen" id="screen-4">
+    <div class="top-nav">
+      <div class="back-btn" onclick="showScreen(3)">←</div>
+      <div class="nav-title">Date & Time</div>
+      <div style="width:36px;"></div>
+    </div>
+    
+    <div class="scroll">
+      <div class="section-title">Select Date</div>
+      
+      <!-- Calendar -->
+      <div class="card">
+        <div style="text-align:center; font-size:15px; font-weight:900; color:#1A2744; margin-bottom:14px; font-family:'Sora',sans-serif;">
+          March 2026
+        </div>
+        <div class="calendar">
+          <div class="day-header">Mo</div>
+          <div class="day-header">Tu</div>
+          <div class="day-header">We</div>
+          <div class="day-header">Th</div>
+          <div class="day-header">Fr</div>
+          <div class="day-header">Sa</div>
+          <div class="day-header">Su</div>
+          
+          <div class="day disabled">26</div>
+          <div class="day disabled">27</div>
+          <div class="day disabled">28</div>
+          <div class="day disabled">29</div>
+          <div class="day disabled">30</div>
+          <div class="day">1</div>
+          <div class="day">2</div>
+          
+          <div class="day">3</div>
+          <div class="day">4</div>
+          <div class="day">5</div>
+          <div class="day">6</div>
+          <div class="day">7</div>
+          <div class="day">8</div>
+          <div class="day">9</div>
+          
+          <div class="day">10</div>
+          <div class="day">11</div>
+          <div class="day">12</div>
+          <div class="day today">13</div>
+          <div class="day">14</div>
+          <div class="day selected" onclick="selectDate(this)">15</div>
+          <div class="day">16</div>
+        </div>
+      </div>
+      
+      <div class="section-title" style="margin-top:24px;">Available Time Slots</div>
+      
+      <div class="card">
+        <div class="time-slots">
+          <div class="time-slot">09:00 AM</div>
+          <div class="time-slot">10:00 AM</div>
+          <div class="time-slot unavailable">11:00 AM</div>
+          <div class="time-slot selected" onclick="selectTime(this)">02:00 PM</div>
+          <div class="time-slot">03:00 PM</div>
+          <div class="time-slot">04:00 PM</div>
+          <div class="time-slot unavailable">05:00 PM</div>
+          <div class="time-slot">06:00 PM</div>
+          <div class="time-slot">07:00 PM</div>
+        </div>
+      </div>
+      
+      <button class="btn-primary" onclick="showScreen(5)">
+        Continue to Assessment
+      </button>
+    </div>
+  </div>
+  
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 5: INITIAL ASSESSMENT FORM
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div class="screen" id="screen-5">
+    <div class="top-nav">
+      <div class="back-btn" onclick="showScreen(4)">←</div>
+      <div class="nav-title">Pre-Session Info</div>
+      <div style="width:36px;"></div>
+    </div>
+    
+    <div class="scroll">
+      <div class="section-title">Help us prepare for your session</div>
+      
+      <div class="card">
+        <div class="form-group">
+          <label class="form-label">What's bothering you?</label>
+          <select class="form-select">
+            <option>Select primary concern</option>
+            <option>Back pain</option>
+            <option>Knee pain</option>
+            <option>Shoulder pain</option>
+            <option>Neck pain</option>
+            <option>Post-surgery recovery</option>
+            <option>Sports injury</option>
+            <option>Other</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">When did it start?</label>
+          <select class="form-select">
+            <option>Select duration</option>
+            <option>Less than a week</option>
+            <option>1-2 weeks</option>
+            <option>2-4 weeks</option>
+            <option>1-3 months</option>
+            <option>More than 3 months</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Pain Level (0-10)</label>
+          <div class="pain-scale">
+            <div class="pain-level">
+              <div>😊</div>
+              <div class="pain-number">0</div>
+            </div>
+            <div class="pain-level">
+              <div>🙂</div>
+              <div class="pain-number">2</div>
+            </div>
+            <div class="pain-level">
+              <div>😐</div>
+              <div class="pain-number">4</div>
+            </div>
+            <div class="pain-level selected" onclick="selectPain(this)">
+              <div>😣</div>
+              <div class="pain-number">6</div>
+            </div>
+            <div class="pain-level">
+              <div>😫</div>
+              <div class="pain-number">8</div>
+            </div>
+            <div class="pain-level">
+              <div>😖</div>
+              <div class="pain-number">10</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Additional details (optional)</label>
+          <textarea class="form-textarea" placeholder="Describe your symptoms, any triggers, previous treatments..."></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label">Have you done physiotherapy before?</label>
+          <select class="form-select">
+            <option>No, this is my first time</option>
+            <option>Yes, for the same issue</option>
+            <option>Yes, for a different issue</option>
+          </select>
+        </div>
+      </div>
+      
+      <button class="btn-primary" onclick="showScreen(6)">
+        Continue to Confirmation
+      </button>
+    </div>
+  </div>
+  
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 6: BOOKING CONFIRMATION
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div class="screen" id="screen-6">
+    <div class="top-nav">
+      <div class="back-btn" onclick="showScreen(5)">←</div>
+      <div class="nav-title">Confirm Booking</div>
+      <div style="width:36px;"></div>
+    </div>
+    
+    <div class="scroll">
+      <div class="section-title">Review Your Booking</div>
+      
+      <!-- Booking Summary -->
+      <div class="card">
+        <div style="font-size:14px; font-weight:900; color:#1A2744; margin-bottom:14px;">
+          📋 Session Details
+        </div>
+        
+        <div style="display:grid; gap:12px;">
+          <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #F1F5F9;">
+            <span style="font-size:13px; color:#64748B;">Service</span>
+            <span style="font-size:13px; font-weight:800; color:#1A2744;">Home Session</span>
+          </div>
+          
+          <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #F1F5F9;">
+            <span style="font-size:13px; color:#64748B;">Therapist</span>
+            <span style="font-size:13px; font-weight:800; color:#1A2744;">Dr. Ahmed Khan</span>
+          </div>
+          
+          <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #F1F5F9;">
+            <span style="font-size:13px; color:#64748B;">Date & Time</span>
+            <span style="font-size:13px; font-weight:800; color:#1A2744;">Mar 15, 2:00 PM</span>
+          </div>
+          
+          <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #F1F5F9;">
+            <span style="font-size:13px; color:#64748B;">Duration</span>
+            <span style="font-size:13px; font-weight:800; color:#1A2744;">45 minutes</span>
+          </div>
+          
+          <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid #F1F5F9;">
+            <span style="font-size:13px; color:#64748B;">Location</span>
+            <span style="font-size:13px; font-weight:800; color:#1A2744;">Your Home</span>
+          </div>
+          
+          <div style="display:flex; justify-content:space-between; padding:14px 0;">
+            <span style="font-size:15px; font-weight:900; color:#1A2744;">Total</span>
+            <span style="font-size:20px; font-weight:900; color:#8B5CF6; font-family:'Sora',sans-serif;">$80</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Address -->
+      <div class="card">
+        <div style="font-size:14px; font-weight:900; color:#1A2744; margin-bottom:10px;">
+          📍 Session Location
+        </div>
+        <div style="font-size:13px; color:#475569; line-height:1.6;">
+          <strong>Muhammad Ali</strong><br>
+          House #45, Street 12<br>
+          F-7/2, Islamabad<br>
+          Phone: +92 300 1234567
+        </div>
+        <button class="btn-text" style="margin-top:10px; text-align:left; padding:0; color:#8B5CF6;">
+          ✏️ Edit Address
+        </button>
+      </div>
+      
+      <!-- Payment -->
+      <div class="card">
+        <div style="font-size:14px; font-weight:900; color:#1A2744; margin-bottom:10px;">
+          💳 Payment Method
+        </div>
+        <div style="font-size:13px; color:#475569;">
+          💳 Credit Card ending in 4242<br>
+          <button class="btn-text" style="margin-top:6px; text-align:left; padding:0; color:#8B5CF6;">
+            Change payment method
+          </button>
+        </div>
+      </div>
+      
+      <button class="btn-primary" onclick="showScreen(7)">
+        Confirm & Pay $80
+      </button>
+      
+      <button class="btn-text">
+        Cancel Booking
+      </button>
+    </div>
+  </div>
+  
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 7: BOOKING SUCCESS
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div class="screen" id="screen-7">
+    <div class="top-nav">
+      <div style="width:36px;"></div>
+      <div class="nav-title">Booking Confirmed</div>
+      <div style="width:36px;"></div>
+    </div>
+    
+    <div class="scroll">
+      <div class="success-icon">✓</div>
+      <div class="success-title">Session Booked!</div>
+      <div class="success-text">
+        Your physiotherapy session has been confirmed. Dr. Ahmed Khan will arrive at your home on March 15 at 2:00 PM.
+      </div>
+      
+      <!-- Quick Info -->
+      <div class="summary-grid">
+        <div class="summary-item">
+          <div class="summary-icon">📅</div>
+          <div class="summary-value">Mar 15</div>
+          <div class="summary-label">Session Date</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-icon">⏰</div>
+          <div class="summary-value">2:00 PM</div>
+          <div class="summary-label">Arrival Time</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-icon">👨‍⚕️</div>
+          <div class="summary-value">Dr. Ahmed</div>
+          <div class="summary-label">Therapist</div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-icon">⏱️</div>
+          <div class="summary-value">45 min</div>
+          <div class="summary-label">Duration</div>
+        </div>
+      </div>
+      
+      <!-- Reminders -->
+      <div class="card">
+        <div style="font-size:14px; font-weight:900; color:#1A2744; margin-bottom:12px;">
+          📝 Before Your Session
+        </div>
+        <ul class="option-features" style="margin:0;">
+          <li>Wear comfortable, loose clothing</li>
+          <li>Clear a space for exercises (6x6 feet)</li>
+          <li>Have a mat or towel ready</li>
+          <li>Stay hydrated</li>
+        </ul>
+      </div>
+      
+      <button class="btn-primary" onclick="showScreen(8)">
+        View Exercise Prep
+      </button>
+      
+      <button class="btn-secondary" onclick="alert('Add to calendar')">
+        📅 Add to Calendar
+      </button>
+      
+      <button class="btn-text" onclick="alert('Back to home')">
+        Back to Home
+      </button>
+    </div>
+  </div>
+  
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 8: EXERCISE PROGRAM (Ongoing Care)
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div class="screen" id="screen-8">
+    <div class="top-nav">
+      <div class="back-btn" onclick="showScreen(7)">←</div>
+      <div class="nav-title">My Exercise Program</div>
+      <div style="width:36px;"></div>
+    </div>
+    
+    <div class="scroll">
+      <!-- Progress Header -->
+      <div class="hero-card">
+        <div style="font-size:14px; color:rgba(255,255,255,0.8); margin-bottom:8px;">
+          Today's Progress
+        </div>
+        <div style="font-size:36px; font-weight:900; color:#fff; font-family:'Sora',sans-serif; margin-bottom:16px;">
+          3 / 5 Exercises
+        </div>
+        <div style="height:8px; background:rgba(255,255,255,0.2); border-radius:4px; overflow:hidden; margin-bottom:12px;">
+          <div style="width:60%; height:100%; background:#fff;"></div>
+        </div>
+        <div style="font-size:13px; color:rgba(255,255,255,0.9);">
+          🔥 Keep going! 2 more to complete today's routine
+        </div>
+      </div>
+      
+      <div class="section-title">Assigned by Dr. Ahmed Khan</div>
+      
+      <!-- Exercise 1 - Completed -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-thumb">🧘</div>
+          <div class="exercise-info">
+            <div class="exercise-name">Knee Flexion Stretch</div>
+            <div class="exercise-details">
+              3 sets × 10 reps<br>
+              Hold 5 seconds each
+            </div>
+          </div>
+        </div>
+        <div class="exercise-progress">
+          <div class="progress-bar-container">
+            <div class="progress-bar" style="width:100%;"></div>
+          </div>
+          <div class="progress-text">✓ Completed today at 9:30 AM</div>
+        </div>
+      </div>
+      
+      <!-- Exercise 2 - Completed -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-thumb" style="background:linear-gradient(135deg,#10B981,#059669);">🏋️</div>
+          <div class="exercise-info">
+            <div class="exercise-name">Straight Leg Raises</div>
+            <div class="exercise-details">
+              2 sets × 15 reps<br>
+              Rest 30 seconds between sets
+            </div>
+          </div>
+        </div>
+        <div class="exercise-progress">
+          <div class="progress-bar-container">
+            <div class="progress-bar" style="width:100%; background:linear-gradient(90deg,#10B981,#059669);"></div>
+          </div>
+          <div class="progress-text">✓ Completed today at 9:45 AM</div>
+        </div>
+      </div>
+      
+      <!-- Exercise 3 - Completed -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-thumb" style="background:linear-gradient(135deg,#F59E0B,#D97706);">🚶</div>
+          <div class="exercise-info">
+            <div class="exercise-name">Heel Slides</div>
+            <div class="exercise-details">
+              3 sets × 12 reps<br>
+              Slow and controlled
+            </div>
+          </div>
+        </div>
+        <div class="exercise-progress">
+          <div class="progress-bar-container">
+            <div class="progress-bar" style="width:100%; background:linear-gradient(90deg,#F59E0B,#D97706);"></div>
+          </div>
+          <div class="progress-text">✓ Completed today at 10:00 AM</div>
+        </div>
+      </div>
+      
+      <!-- Exercise 4 - Pending -->
+      <div class="exercise-card" style="border-color:#8B5CF6;">
+        <div class="exercise-header">
+          <div class="exercise-thumb" style="background:linear-gradient(135deg,#EF4444,#DC2626);">🦵</div>
+          <div class="exercise-info">
+            <div class="exercise-name">Quadriceps Sets</div>
+            <div class="exercise-details">
+              4 sets × 10 reps<br>
+              Hold 5 seconds, relax 5 seconds
+            </div>
+          </div>
+        </div>
+        <div class="exercise-progress">
+          <div class="progress-bar-container">
+            <div class="progress-bar" style="width:0%;"></div>
+          </div>
+          <div class="progress-text">⏱️ Pending - Do next</div>
+        </div>
+        <button class="btn-primary" style="margin-top:12px; font-size:13px; padding:10px;" onclick="alert('Starting exercise with video guide')">
+          ▶️ Start Exercise
+        </button>
+      </div>
+      
+      <!-- Exercise 5 - Pending -->
+      <div class="exercise-card">
+        <div class="exercise-header">
+          <div class="exercise-thumb" style="background:linear-gradient(135deg,#06B6D4,#0891B2);">🧊</div>
+          <div class="exercise-info">
+            <div class="exercise-name">Ice Application</div>
+            <div class="exercise-details">
+              15 minutes<br>
+              After exercises
+            </div>
+          </div>
+        </div>
+        <div class="exercise-progress">
+          <div class="progress-bar-container">
+            <div class="progress-bar" style="width:0%;"></div>
+          </div>
+          <div class="progress-text">⏱️ Pending</div>
+        </div>
+      </div>
+      
+      <button class="btn-secondary" onclick="alert('Viewing progress history')">
+        📊 View Progress History
+      </button>
+    </div>
+  </div>
+  
+</div>
+
+<script>
+function showScreen(screenNum) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const screen = document.getElementById('screen-' + screenNum);
+  if (screen) screen.classList.add('active');
+}
+
+function selectOption(element) {
+  document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
+  element.classList.add('selected');
+}
+
+function selectTherapist(element) {
+  document.querySelectorAll('.therapist-card').forEach(c => c.classList.remove('selected'));
+  element.classList.add('selected');
+}
+
+function selectDate(element) {
+  document.querySelectorAll('.day').forEach(d => d.classList.remove('selected'));
+  element.classList.add('selected');
+}
+
+function selectTime(element) {
+  if (!element.classList.contains('unavailable')) {
+    document.querySelectorAll('.time-slot').forEach(t => t.classList.remove('selected'));
+    element.classList.add('selected');
+  }
+}
+
+function selectPain(element) {
+  document.querySelectorAll('.pain-level').forEach(p => p.classList.remove('selected'));
+  element.classList.add('selected');
+}
+
+console.log('Physiotherapy Service Flow Loaded');
+</script>
+
+</body>
+</html>

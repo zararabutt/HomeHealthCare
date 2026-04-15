@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SSI EMEA — Home Healthcare System</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Sora:wght@400;600;700;800&display=swap');
+
+:root {
+    --primary: #60A5FA;
+    --secondary: #818CF8;
+    --bg-dark: #080C14;
+    --card-bg: rgba(255, 255, 255, 0.04);
+    --border-color: rgba(255, 255, 255, 0.1);
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+
+body {
+    background: radial-gradient(circle at top center, #111827 0%, #080C14 100%);
+    min-height: 100vh;
+    font-family: 'Nunito', sans-serif;
+    color: #fff;
+    padding: 60px 24px;
+}
+
+/* ══════════════════════════════
+   HEADER SECTION
+══════════════════════════════ */
+.header-container {
+    text-align: center;
+    margin-bottom: 80px;
+    border-bottom: 0.1px solid #80808059;
+    padding-bottom: 18px;
+}
+
+.brand-title {
+    font-family: 'Sora', sans-serif;
+    font-size: 41px;
+    letter-spacing: 4px;
+    color: #e90c0c;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin-bottom: -6px;
+    float: left;
+}
+.brand-title > img{
+        width: 90%;
+}
+
+.brand-subtitle {
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 30px;
+}
+
+.main-headline {
+    font-family: 'Sora', sans-serif;
+    font-size: clamp(32px, 5vw, 48px);
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 16px;
+    margin-right: 21rem;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.description {
+    max-width: 600px;
+    margin: 0 auto;
+    font-size: 16px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.6;
+}
+
+/* ══════════════════════════════
+   PORTAL GRID
+══════════════════════════════ */
+.portals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 32px;
+    max-width: 1229px;
+    margin: 0 auto;
+}
+
+.portal-card {
+    text-decoration: none;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+    padding: 24px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    backdrop-filter: blur(10px);
+}
+
+.portal-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--primary);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 20px rgba(96, 165, 250, 0.2);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.img-container {
+    width: 100%;
+    height: 222px;
+    border-radius: 16px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    background: #000;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+.img-container img {
+    width: 100%;
+    height: 100%;
+    /* object-fit: cover; */
+    opacity: 0.8;
+    transition: opacity 0.3s;
+}
+
+.portal-card:hover img {
+    opacity: 1;
+}
+
+.portal-info {
+    text-align: center;
+}
+
+.portal-name {
+    font-family: 'Sora', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 6px;
+}
+
+.portal-meta {
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
+    font-weight: 500;
+}
+
+/* ══════════════════════════════
+   FOOTER
+══════════════════════════════ */
+.footer {
+    margin-top: 93px;
+    text-align: center;
+    border-top: 1px solid var(--border-color);
+    padding-top: 40px;
+}
+
+.footer-text {
+    font-family: 'Sora', sans-serif;
+    font-size: 14px;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.author {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--primary);
+    opacity: 0.7;
+}
+</style>
+</head>
+<body>
+
+    <header class="header-container">
+        <div class="brand-title"><img src="./SSI.jpg" alt=""></div>
+        
+        <h1 class="main-headline">Smart Login <br><span class="gradient-text">Home Health Care System</span></h1>
+        <p class="description">Select your destination portal. Each interface is optimized for your specific role within the healthcare ecosystem.</p>
+    </header>
+
+    <main class="portals-grid">
+        
+        <a href="./Patient_Auth.html" class="portal-card">
+            <div class="img-container">
+                <img src="pat_app.png" alt="Patient App">
+            </div>
+            <div class="portal-info">
+                <div class="portal-name">Patient App</div>
+                <div class="portal-meta">Mobile • OTP-first • Family-aware</div>
+            </div>
+        </a>
+
+        <a href="./nur_auth.html" class="portal-card">
+            <div class="img-container">
+                <img src="nurse_app.png" alt="Nurse App">
+            </div>
+            <div class="portal-info">
+                <div class="portal-name">Nurse App</div>
+                <div class="portal-meta">Mobile • Staff ID • Shift-aware</div>
+            </div>
+        </a>
+
+        <a href="./doc_auth.html" class="portal-card">
+            <div class="img-container">
+                <img src="doctor_portal.png" alt="Doctor Portal">
+            </div>
+            <div class="portal-info">
+                <div class="portal-name">Doctor Portal</div>
+                <div class="portal-meta">Web • Medical License • 2FA</div>
+            </div>
+        </a>
+
+        <a href="./admin_auth.html" class="portal-card">
+            <div class="img-container">
+                <img src="admin_dashboard.png" alt="Admin Dashboard">
+            </div>
+            <div class="portal-info">
+                <div class="portal-name">Admin Dashboard</div>
+                <div class="portal-meta">Web • Role-based • MFA Enforced</div>
+            </div>
+        </a>
+
+    </main>
+
+    <footer class="footer">
+        <div class="footer-text">Complete Healthcare Application Suite</div>
+        <div class="author">Concept by Zarar Ahmed Butt</div>
+    </footer>
+
+</body>
+</html>

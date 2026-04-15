@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Home Healthcare — Home Nursing Flow</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Sora:wght@400;600;700;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+
+/* ── COLOUR PALETTE ────────────────────────────────────
+   Aesthetic: "Clinical Teal" — deep teal/cyan primary,
+   soft aqua surfaces, dark charcoal background.
+   Completes the 5-service rainbow:
+   Blue(Tele) | Red(Fauri) | Green(Lab) | Amber(Pharm) | Teal(Nursing)
+───────────────────────────────────────────────────── */
+:root{
+  --teal:   #0891B2;
+  --teal2:  #06B6D4;
+  --tealL:  #67E8F9;
+  --cyan:   #22D3EE;
+  --navy:   #1A2744;
+  --surf:   #F0FAFB;
+  --cream:  #F5FEFF;
+  --border: #C8EEF5;
+  --border2:#A5DCEA;
+  --text2:  #4A7A8A;
+  --text3:  #90B8C4;
+  --green:  #16A34A;
+  --blue:   #1148A4;
+  --red:    #DC2626;
+  --amber:  #D97706;
+  --purple: #7C3AED;
+  --pink:   #DB2777;
+  --white:  #FFFFFF;
+}
+
+body{
+  background:linear-gradient(150deg,#020E10 0%,#041820 35%,#071420 70%,#060D1A 100%);
+  min-height:100vh;font-family:'Nunito',sans-serif;padding:36px 20px 64px;
+}
+
+/* ── PAGE HEADER ──────────────────────────── */
+.ph{text-align:center;margin-bottom:44px;}
+.ph-brand{display:inline-flex;align-items:center;gap:8px;background:rgba(8,145,178,.15);border:1px solid rgba(8,145,178,.4);border-radius:99px;padding:7px 20px;margin-bottom:18px;}
+.ph-dot{width:8px;height:8px;border-radius:50%;background:var(--teal2);animation:blink 1.5s infinite;}
+.ph-name{font-size:11px;font-weight:800;color:var(--teal2);letter-spacing:1.5px;}
+.ph-title{font-family:'Sora',sans-serif;font-size:38px;font-weight:800;color:#fff;line-height:1.1;margin-bottom:10px;}
+.ph-title span{background:linear-gradient(135deg,#06B6D4,#0EA5E9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.ph-sub{font-size:14px;color:rgba(255,255,255,.42);max-width:580px;margin:0 auto;}
+
+/* ── FLOW STEPS ──────────────────────────── */
+.fbar{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:5px;margin-bottom:44px;}
+.fs{padding:7px 13px;border-radius:99px;font-size:11px;font-weight:800;white-space:nowrap;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.3);}
+.fs.on{background:rgba(8,145,178,.22);border-color:rgba(8,145,178,.5);color:var(--tealL);}
+.fa{font-size:11px;color:rgba(255,255,255,.15);margin:0 1px;}
+
+/* ── PHONES GRID ─────────────────────────── */
+.pgrid{display:flex;align-items:flex-start;justify-content:center;gap:22px;flex-wrap:wrap;margin-bottom:52px;}
+
+/* ── PHONE SHELL ─────────────────────────── */
+.phone{width:356px;background:var(--cream);border-radius:48px;overflow:hidden;box-shadow:0 50px 110px rgba(0,0,0,.45),0 0 0 1.5px #A0C8D4,inset 0 0 0 1px #fff;display:flex;flex-direction:column;flex-shrink:0;}
+
+/* SCREEN LABEL */
+.sl{text-align:center;margin-top:12px;}
+.sn{display:inline-flex;align-items:center;gap:5px;background:rgba(8,145,178,.18);border:1px solid rgba(8,145,178,.35);border-radius:99px;padding:5px 14px;font-size:11px;font-weight:800;color:var(--tealL);}
+.st{font-size:12px;font-weight:600;color:rgba(255,255,255,.32);margin-top:5px;}
+
+/* ── STATUS BAR ──────────────────────────── */
+.sb{height:46px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 24px 9px;flex-shrink:0;}
+.sbt{font-family:'Sora',sans-serif;font-size:13px;font-weight:700;color:#fff;}
+.sbi{display:flex;gap:5px;align-items:center;}
+
+/* ── TOP BAR ─────────────────────────────── */
+.tb{background:#fff;padding:13px 17px;display:flex;align-items:center;gap:11px;border-bottom:1px solid var(--border);flex-shrink:0;box-shadow:0 2px 8px rgba(8,145,178,.07);}
+.bk{width:36px;height:36px;border-radius:12px;background:#E0F8FC;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
+.tt{font-family:'Sora',sans-serif;font-size:15px;font-weight:800;color:var(--navy);flex:1;line-height:1.2;}
+.ts{font-size:10px;color:var(--text2);margin-top:1px;}
+
+/* ── SCROLL ──────────────────────────────── */
+.scr{overflow-y:auto;flex:1;padding:18px 18px 24px;}
+.scr::-webkit-scrollbar{display:none;}
+
+/* ── PROGRESS BAR ────────────────────────── */
+.pb{height:3px;background:#C8EEF5;flex-shrink:0;}
+.pbf{height:100%;background:linear-gradient(90deg,#0891B2,#06B6D4);border-radius:99px;}
+
+/* ── BOTTOM NAV ──────────────────────────── */
+.bnav{background:#fff;border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:10px 0 18px;flex-shrink:0;box-shadow:0 -4px 20px rgba(8,145,178,.07);}
+.bn{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;flex:1;}
+.bni{width:40px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;}
+.bn.on .bni{background:#E0F8FC;}
+.bnl{font-size:9px;font-weight:700;color:#A8C8D4;}
+.bn.on .bnl{color:var(--teal);}
+
+/* ── BUTTONS ─────────────────────────────── */
+.btn-t{background:linear-gradient(135deg,#0891B2,#06B6D4);color:#fff;border:none;border-radius:14px;padding:14px 20px;font-size:14px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;width:100%;text-align:center;box-shadow:0 6px 20px rgba(8,145,178,.32);}
+.btn-out{background:transparent;color:var(--teal);border:2px solid var(--teal);border-radius:14px;padding:13px 20px;font-size:13px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;width:100%;text-align:center;}
+.btn-sm{border:none;border-radius:11px;padding:8px 16px;font-size:11px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;}
+
+/* ── PRIMITIVES ──────────────────────────── */
+.card{background:#fff;border-radius:18px;border:1.5px solid var(--border);box-shadow:0 2px 10px rgba(8,145,178,.06);}
+.inp{background:#EEF9FC;border:1.5px solid var(--border);border-radius:12px;padding:12px 14px;font-size:13px;color:var(--navy);font-family:'Nunito',sans-serif;width:100%;}
+.inp::placeholder{color:var(--text3);}
+.tag{display:inline-flex;align-items:center;gap:3px;padding:3px 9px;border-radius:99px;font-size:10px;font-weight:800;white-space:nowrap;}
+.chip-t{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;border-radius:99px;font-size:11px;font-weight:700;background:#E0F8FC;color:var(--teal);border:1.5px solid var(--border2);cursor:pointer;}
+.chip-off{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;border-radius:99px;font-size:11px;font-weight:700;background:var(--surf);color:var(--text2);border:1.5px solid var(--border);cursor:pointer;}
+.divl{height:1px;background:var(--border);margin:6px 0;}
+
+/* ── SECTION DIVIDER ─────────────────────── */
+.sdiv{display:flex;align-items:center;gap:14px;margin:44px auto 32px;max-width:1500px;}
+.sdl{flex:1;height:1px;background:rgba(8,145,178,.1);}
+.sdt{font-size:10px;font-weight:800;color:rgba(8,145,178,.3);letter-spacing:2px;white-space:nowrap;}
+
+/* ── ANIMATIONS ──────────────────────────── */
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes ping{0%{transform:scale(1);opacity:.8}100%{transform:scale(2);opacity:0}}
+@keyframes rideMove{0%,100%{transform:translateX(0)}50%{transform:translateX(6px)}}
+.fu{animation:fadeUp .38s ease both;}
+
+
+.home-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: inline-block;
+    padding: 12px 28px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 15px;
+    border-radius: 30px;
+    background: linear-gradient(155deg,#04414E,#06768A,#0891B2);
+    overflow: hidden;
+    transition: all 0.4s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* Shine animation */
+.home-btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(155deg,#04414E,#06768A,#0891B2);
+    transition: 0.5s;
+}
+
+.home-btn:hover::before {
+    left: 100%;
+}
+
+/* Hover effect */
+.home-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+/* Click effect */
+.home-btn:active {
+    transform: scale(0.95);
+}
+</style>
+</head>
+<body>
+
+
+  <div>
+    <a href="./Patient_App_Home.html" class="home-btn">← Back to Home</a>
+  </div>
+<!-- PAGE HEADER -->
+<div class="ph">
+  <div class="ph-brand"><div class="ph-dot"></div><span class="ph-name">HOME NURSING — HOME HEALTHCARE</span><div class="ph-dot"></div></div>
+  <div class="ph-title">Home Nursing<br/><span>Services Flow</span></div>
+  <div class="ph-sub">Complete 10-screen journey — from selecting a nursing service to real-time wound monitoring, MAAS integration, nurse dispatch, clinical documentation, and follow-up care.</div>
+</div>
+
+<!-- FLOW STEPS -->
+<div class="fbar">
+  <div class="fs on">01 · Entry</div><div class="fa">→</div>
+  <div class="fs">02 · Service Selection</div><div class="fa">→</div>
+  <div class="fs">03 · Clinical Assessment</div><div class="fa">→</div>
+  <div class="fs">04 · Care Plan Match</div><div class="fa">→</div>
+  <div class="fs">05 · Schedule + Pay</div><div class="fa">→</div>
+  <div class="fs">06 · Nurse Dispatch</div><div class="fa">→</div>
+  <div class="fs">07 · Active Visit</div><div class="fa">→</div>
+  <div class="fs">08 · WMS + MAAS</div><div class="fa">→</div>
+  <div class="fs">09 · Post-Visit Summary</div><div class="fa">→</div>
+  <div class="fs">10 · Ongoing Care</div>
+</div>
+
+<!-- ══════════════ ROW 1 — Screens 1, 2, 3 ══════════════ -->
+<div class="pgrid">
+
+<!-- ══ S1: ENTRY / DIGITAL FRONT DOOR ══ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="phone" style="min-height:740px;">
+  <div class="sb" style="background:linear-gradient(135deg,#04414E,#06768A);">
+    <span class="sbt">11:20</span>
+    <div class="sbi"><svg width="15" height="11" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/></svg><svg width="22" height="11" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".6"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg></div>
+  </div>
+  <!-- Hero -->
+  <div style="background:linear-gradient(155deg,#04414E,#06768A,#0891B2);padding:18px 20px 30px;position:relative;overflow:hidden;flex-shrink:0;">
+    <div style="position:absolute;top:-60px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.06);"></div>
+    <div style="position:absolute;bottom:-40px;left:20px;width:110px;height:110px;border-radius:50%;background:rgba(255,255,255,.04);"></div>
+    <div style="display:flex;align-items:center;gap:13px;position:relative;z-index:1;">
+      <div style="width:54px;height:54px;border-radius:18px;background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;">👩‍⚕️</div>
+      <div>
+        <div style="font-size:10px;color:rgba(255,255,255,.65);font-weight:700;letter-spacing:1px;text-transform:uppercase;">Home Nursing</div>
+        <div style="font-family:'Sora',sans-serif;font-size:21px;font-weight:800;color:#fff;line-height:1.1;margin-top:2px;">Care at Home</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.65);margin-top:3px;">DHA-certified nurses · Dispatch in 60 min</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:16px;position:relative;z-index:1;">
+      <div style="flex:1;background:rgba(255,255,255,.13);border-radius:12px;padding:9px 10px;text-align:center;border:1px solid rgba(255,255,255,.15);">
+        <div style="font-family:'Sora',sans-serif;font-size:16px;font-weight:800;color:#fff;">50+</div>
+        <div style="font-size:9px;color:rgba(255,255,255,.65);margin-top:1px;">Nurses online</div>
+      </div>
+      <div style="flex:1;background:rgba(255,255,255,.13);border-radius:12px;padding:9px 10px;text-align:center;border:1px solid rgba(255,255,255,.15);">
+        <div style="font-family:'Sora',sans-serif;font-size:16px;font-weight:800;color:#fff;">~60m</div>
+        <div style="font-size:9px;color:rgba(255,255,255,.65);margin-top:1px;">Dispatch time</div>
+      </div>
+      <div style="flex:1;background:rgba(255,255,255,.13);border-radius:12px;padding:9px 10px;text-align:center;border:1px solid rgba(255,255,255,.15);">
+        <div style="font-family:'Sora',sans-serif;font-size:16px;font-weight:800;color:var(--tealL);">DHA</div>
+        <div style="font-size:9px;color:rgba(255,255,255,.65);margin-top:1px;">Certified</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scr" style="background:var(--surf);">
+    <!-- Who is it for -->
+    <div class="card" style="padding:14px 15px;margin-bottom:14px;">
+      <div style="font-size:11px;font-weight:800;color:var(--text2);letter-spacing:.5px;margin-bottom:10px;">CARE FOR</div>
+      <div style="display:flex;gap:8px;">
+        <div style="flex:1;background:linear-gradient(135deg,#E0F8FC,#BAF0FF);border:2px solid var(--teal);border-radius:14px;padding:12px 10px;text-align:center;cursor:pointer;box-shadow:0 4px 12px rgba(8,145,178,.18);">
+          <div style="font-size:20px;margin-bottom:5px;">👤</div>
+          <div style="font-size:12px;font-weight:800;color:var(--teal);">Myself</div>
+          <div style="font-size:9px;color:var(--text2);margin-top:2px;">MA · MRN 226589</div>
+        </div>
+        <div style="flex:1;background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:12px 10px;text-align:center;cursor:pointer;">
+          <div style="font-size:20px;margin-bottom:5px;">👨‍👩‍👧</div>
+          <div style="font-size:12px;font-weight:800;color:var(--text2);">Family Member</div>
+          <div style="font-size:9px;color:var(--text3);margin-top:2px;">Add / select</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 booking modes -->
+    <div style="font-size:12px;font-weight:800;color:var(--text2);letter-spacing:.5px;margin-bottom:11px;">SELECT BOOKING TYPE</div>
+
+    <!-- One-Time -->
+    <div class="card" style="margin-bottom:10px;border:2px solid var(--teal);box-shadow:0 6px 20px rgba(8,145,178,.15);cursor:pointer;overflow:hidden;">
+      <div style="height:3px;background:linear-gradient(90deg,#0891B2,#06B6D4);"></div>
+      <div style="padding:16px 17px;display:flex;gap:14px;align-items:flex-start;">
+        <div style="width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,#0891B2,#06B6D4);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;box-shadow:0 4px 14px rgba(8,145,178,.35);">🩺</div>
+        <div style="flex:1;">
+          <div style="font-family:'Sora',sans-serif;font-size:15px;font-weight:800;color:var(--teal);">Book a Nurse</div>
+          <div style="font-size:11px;color:var(--text2);margin-top:3px;line-height:1.5;">One-time visit for injection, wound dressing, vitals, post-procedure care</div>
+          <div style="display:flex;gap:6px;margin-top:8px;"><span class="chip-t" style="font-size:10px;padding:3px 10px;">⚡ Within 60 min</span><span class="chip-t" style="font-size:10px;padding:3px 10px;">📅 Schedule</span></div>
+        </div>
+        <div style="width:26px;height:26px;border-radius:99px;background:var(--teal);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></div>
+      </div>
+    </div>
+
+    <!-- Care Plan -->
+    <div class="card" style="margin-bottom:10px;cursor:pointer;overflow:hidden;">
+      <div style="height:3px;background:linear-gradient(90deg,#7C3AED,#A78BFA);"></div>
+      <div style="padding:16px 17px;display:flex;gap:14px;align-items:flex-start;">
+        <div style="width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,#7C3AED,#A78BFA);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;box-shadow:0 4px 14px rgba(124,58,237,.22);">🏥</div>
+        <div style="flex:1;">
+          <div style="font-family:'Sora',sans-serif;font-size:15px;font-weight:800;color:#7C3AED;">Care Plan / Subscription</div>
+          <div style="font-size:11px;color:var(--text2);margin-top:3px;line-height:1.5;">Multi-visit plan for chronic illness, post-surgical recovery, elderly care</div>
+          <div style="display:flex;gap:6px;margin-top:8px;"><span style="background:#F5F0FF;color:#7C3AED;font-size:10px;font-weight:700;padding:3px 10px;border-radius:99px;border:1px solid #DDD0FF;">📦 Packages</span><span style="background:#F5F0FF;color:#7C3AED;font-size:10px;font-weight:700;padding:3px 10px;border-radius:99px;border:1px solid #DDD0FF;">🔁 Monthly</span></div>
+        </div>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#CBD5E0" stroke-width="2.2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+    </div>
+
+    <!-- Post-Discharge -->
+    <div class="card" style="margin-bottom:16px;cursor:pointer;overflow:hidden;">
+      <div style="height:3px;background:linear-gradient(90deg,#D97706,#F59E0B);"></div>
+      <div style="padding:16px 17px;display:flex;gap:14px;align-items:flex-start;">
+        <div style="width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,#D97706,#F59E0B);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;box-shadow:0 4px 14px rgba(217,119,6,.22);">📋</div>
+        <div style="flex:1;">
+          <div style="font-family:'Sora',sans-serif;font-size:15px;font-weight:800;color:#D97706;">Post-Discharge / Doctor Referral</div>
+          <div style="font-size:11px;color:var(--text2);margin-top:3px;line-height:1.5;">Continuing hospital care at home — doctor-supervised, discharge summary required</div>
+          <div style="display:flex;gap:6px;margin-top:8px;"><span style="background:#FFFBEB;color:#D97706;font-size:10px;font-weight:700;padding:3px 10px;border-radius:99px;border:1px solid #FCD34D;">👨‍⚕️ Doctor-linked</span></div>
+        </div>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#CBD5E0" stroke-width="2.2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+    </div>
+
+    <!-- Active care plan banner -->
+    <div style="background:linear-gradient(135deg,#E0F8FC,#BAF0FF);border:1.5px solid var(--border2);border-radius:16px;padding:13px 15px;display:flex;gap:11px;align-items:center;">
+      <div style="font-size:20px;flex-shrink:0;">🔔</div>
+      <div style="flex:1;"><div style="font-size:12px;font-weight:800;color:var(--teal);">Active Care Plan</div><div style="font-size:10px;color:var(--text2);margin-top:1px;">Wound Dressing · Visit 7 of 14 · Next: Tomorrow 10AM</div></div>
+      <div style="font-size:11px;font-weight:700;color:var(--teal);background:#fff;padding:4px 10px;border-radius:99px;cursor:pointer;flex-shrink:0;">View →</div>
+    </div>
+  </div>
+
+  <div class="bnav">
+    <div class="bn on"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0891B2" stroke-width="2.2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><span class="bnl" style="color:var(--teal);">Home</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A8C8D4" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/></svg></div><span class="bnl">Bookings</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A8C8D4" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/></svg></div><span class="bnl">Journey</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A8C8D4" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><span class="bnl">Chat</span></div>
+  </div>
+</div>
+<div class="sl"><div class="sn">👩‍⚕️ 01</div><div class="st">Entry / Digital Front Door</div></div>
+</div>
+
+<!-- ══ S2: SERVICE SELECTION + AI ASSIST ══ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="phone" style="min-height:740px;">
+  <div class="sb" style="background:linear-gradient(135deg,#04414E,#06768A);"><span class="sbt">11:22</span><div class="sbi"><svg width="15" height="11" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/></svg></div></div>
+  <div class="tb"><div class="bk"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0891B2" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></div><div><div class="tt">Select Nursing Service</div><div class="ts">What care does the patient need?</div></div><div style="background:#E0F8FC;border:1px solid var(--border2);border-radius:99px;padding:4px 10px;font-size:10px;font-weight:700;color:var(--teal);">2 of 10</div></div>
+  <div class="pb"><div class="pbf" style="width:20%;"></div></div>
+  <div class="scr" style="background:var(--surf);">
+    <!-- AI suggest banner -->
+    <div style="background:linear-gradient(135deg,#E0F8FC,#BAF0FF);border:1.5px solid var(--border2);border-radius:16px;padding:13px 15px;margin-bottom:16px;">
+      <div style="display:flex;gap:11px;align-items:center;">
+        <div style="width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,#0891B2,#06B6D4);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">🤖</div>
+        <div style="flex:1;"><div style="font-size:12px;font-weight:800;color:var(--teal);">AI Recommends</div><div style="font-size:10px;color:var(--text2);margin-top:1px;">Based on your active care plan: <b>Wound Dressing</b> + <b>Vital Monitoring</b></div></div>
+        <div style="font-size:11px;font-weight:700;color:var(--teal);cursor:pointer;flex-shrink:0;">Use →</div>
+      </div>
+    </div>
+
+    <!-- Service grid -->
+    <div style="font-size:12px;font-weight:800;color:var(--text2);letter-spacing:.5px;margin-bottom:11px;">AVAILABLE SERVICES</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+
+      <!-- Wound Dressing — selected -->
+      <div style="background:linear-gradient(135deg,#E0F8FC,#BAF0FF);border:2.5px solid var(--teal);border-radius:18px;padding:16px 13px;cursor:pointer;box-shadow:0 6px 18px rgba(8,145,178,.18);position:relative;">
+        <div style="position:absolute;top:10px;right:10px;width:20px;height:20px;border-radius:99px;background:var(--teal);display:flex;align-items:center;justify-content:center;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <div style="font-size:28px;margin-bottom:8px;">🩹</div>
+        <div style="font-size:12px;font-weight:800;color:var(--teal);">Wound Dressing</div>
+        <div style="font-size:10px;color:var(--text2);margin-top:3px;">WMS linked · Photo capture</div>
+        <div style="margin-top:7px;font-size:10px;font-weight:700;background:var(--teal);color:#fff;padding:3px 9px;border-radius:99px;display:inline-block;">AED 120/visit</div>
+      </div>
+
+      <div style="background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:16px 13px;cursor:pointer;box-shadow:0 2px 8px rgba(8,145,178,.06);">
+        <div style="font-size:28px;margin-bottom:8px;">💉</div>
+        <div style="font-size:12px;font-weight:800;color:var(--navy);">Injection / IV</div>
+        <div style="font-size:10px;color:var(--text2);margin-top:3px;">IM · IV · SC · Infusion</div>
+        <div style="margin-top:7px;font-size:10px;font-weight:700;background:#E0F8FC;color:var(--teal);padding:3px 9px;border-radius:99px;display:inline-block;">AED 100/visit</div>
+      </div>
+
+      <div style="background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:16px 13px;cursor:pointer;">
+        <div style="font-size:28px;margin-bottom:8px;">📊</div>
+        <div style="font-size:12px;font-weight:800;color:var(--navy);">Vital Monitoring</div>
+        <div style="font-size:10px;color:var(--text2);margin-top:3px;">BP · SpO₂ · ECG · Glucose</div>
+        <div style="margin-top:7px;font-size:10px;font-weight:700;background:#E0F8FC;color:var(--teal);padding:3px 9px;border-radius:99px;display:inline-block;">AED 80/visit</div>
+      </div>
+
+      <div style="background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:16px 13px;cursor:pointer;">
+        <div style="font-size:28px;margin-bottom:8px;">👴</div>
+        <div style="font-size:12px;font-weight:800;color:var(--navy);">Elderly Care</div>
+        <div style="font-size:10px;color:var(--text2);margin-top:3px;">Attendant · Hygiene · Mobility</div>
+        <div style="margin-top:7px;font-size:10px;font-weight:700;background:#E0F8FC;color:var(--teal);padding:3px 9px;border-radius:99px;display:inline-block;">AED 250/day</div>
+      </div>
+
+      <div style="background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:16px 13px;cursor:pointer;">
+        <div style="font-size:28px;margin-bottom:8px;">🏥</div>
+        <div style="font-size:12px;font-weight:800;color:var(--navy);">Post-Surgical</div>
+        <div style="font-size:10px;color:var(--text2);margin-top:3px;">Recovery · Drain care · Stitch removal</div>
+        <div style="margin-top:7px;font-size:10px;font-weight:700;background:#E0F8FC;color:var(--teal);padding:3px 9px;border-radius:99px;display:inline-block;">AED 150/visit</div>
+      </div>
+
+      <div style="background:#fff;border:1.5px solid var(--border);border-radius:18px;padding:16px 13px;cursor:pointer;">
+        <div style="font-size:28px;margin-bottom:8px;">🧪</div>
+        <div style="font-size:12px;font-weight:800;color:var(--navy);">Sample Collection</div>
+        <div style="font-size:10px;color:var(--text2);margin-top:3px;">Blood · Urine · Swab (Lab linked)</div>
+        <div style="margin-top:7px;font-size:10px;font-weight:700;background:#E0F8FC;color:var(--teal);padding:3px 9px;border-radius:99px;display:inline-block;">AED 50 + Lab</div>
+      </div>
+    </div>
+
+    <!-- Upload prescription option -->
+    <div class="card" style="padding:13px 14px;margin-bottom:16px;display:flex;gap:11px;align-items:center;">
+      <div style="font-size:20px;flex-shrink:0;">📋</div>
+      <div style="flex:1;"><div style="font-size:12px;font-weight:700;color:var(--navy);">Have a Doctor's Prescription?</div><div style="font-size:10px;color:var(--text2);margin-top:1px;">Upload discharge summary or prescription — care plan auto-configured</div></div>
+      <button style="background:var(--teal);border:none;border-radius:11px;padding:8px 13px;font-size:11px;font-weight:800;color:#fff;font-family:'Nunito',sans-serif;cursor:pointer;flex-shrink:0;">Upload</button>
+    </div>
+
+    <!-- Cart bar -->
+    <div style="background:linear-gradient(135deg,#04414E,#0891B2);border-radius:16px;padding:13px 16px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 6px 18px rgba(8,145,178,.28);">
+      <div><div style="font-size:11px;color:rgba(255,255,255,.7);font-weight:600;">1 service selected</div><div style="font-family:'Sora',sans-serif;font-size:17px;font-weight:900;color:#fff;">Wound Dressing</div></div>
+      <button style="background:#fff;color:var(--teal);border:none;border-radius:12px;padding:10px 18px;font-size:13px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;">Assess →</button>
+    </div>
+  </div>
+  <div class="bnav">
+    <div class="bn on"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0891B2" stroke-width="2.2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><span class="bnl" style="color:var(--teal);">Home</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A8C8D4" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/></svg></div><span class="bnl">Bookings</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A8C8D4" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div><span class="bnl">Journey</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A8C8D4" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><span class="bnl">Chat</span></div>
+  </div>
+</div>
+<div class="sl"><div class="sn">👩‍⚕️ 02</div><div class="st">Service Selection + AI Assist</div></div>
+</div>
+
+<!-- ══ S3: CLINICAL ASSESSMENT + CARE PLAN MATCH ══ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="phone" style="min-height:740px;">
+  <div class="sb" style="background:linear-gradient(135deg,#04414E,#06768A);"><span class="sbt">11:25</span><div class="sbi"><svg width="15" height="11" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/></svg></div></div>
+  <div class="tb"><div class="bk"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0891B2" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></div><div><div class="tt">Clinical Assessment</div><div class="ts">Help us understand the care needed</div></div><div style="font-size:10px;font-weight:700;color:var(--teal);background:#E0F8FC;border:1px solid var(--border2);padding:4px 10px;border-radius:99px;">3 of 10</div></div>
+  <div class="pb"><div class="pbf" style="width:30%;"></div></div>
+  <div class="scr" style="background:var(--surf);">
+    <!-- Progress header -->
+    <div style="text-align:center;margin-bottom:18px;padding:14px;background:linear-gradient(135deg,#E0F8FC,var(--surf));border-radius:16px;border:1px solid var(--border);">
+      <div style="font-family:'Sora',sans-serif;font-size:16px;font-weight:800;color:var(--navy);margin-bottom:3px;">Wound Dressing Assessment</div>
+      <div style="font-size:11px;color:var(--text2);">Takes 60 seconds · Determines care plan</div>
+    </div>
+
+    <!-- Q1: Condition -->
+    <div style="font-size:12px;font-weight:800;color:var(--text2);letter-spacing:.4px;margin-bottom:9px;">WOUND TYPE</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">
+      <div style="padding:11px 12px;border-radius:13px;background:linear-gradient(135deg,#E0F8FC,#BAF0FF);border:2px solid var(--teal);cursor:pointer;text-align:center;">
+        <div style="font-size:20px;margin-bottom:4px;">🦵</div><div style="font-size:11px;font-weight:800;color:var(--teal);">Surgical wound</div>
+      </div>
+      <div style="padding:11px 12px;border-radius:13px;background:#fff;border:1.5px solid var(--border);cursor:pointer;text-align:center;">
+        <div style="font-size:20px;margin-bottom:4px;">🩹</div><div style="font-size:11px;font-weight:700;color:var(--text2);">Pressure ulcer</div>
+      </div>
+      <div style="padding:11px 12px;border-radius:13px;background:#fff;border:1.5px solid var(--border);cursor:pointer;text-align:center;">
+        <div style="font-size:20px;margin-bottom:4px;">🔥</div><div style="font-size:11px;font-weight:700;color:var(--text2);">Burn / abrasion</div>
+      </div>
+      <div style="padding:11px 12px;border-radius:13px;background:#fff;border:1.5px solid var(--border);cursor:pointer;text-align:center;">
+        <div style="font-size:20px;margin-bottom:4px;">🦶</div><div style="font-size:11px;font-weight:700;color:var(--text2);">Diabetic foot</div>
+      </div>
+    </div>
+
+    <!-- Q2: Duration -->
+    <div style="font-size:12px;font-weight:800;color:var(--text2);letter-spacing:.4px;margin-bottom:9px;">HOW LONG HAS THE WOUND BEEN THERE?</div>
+    <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+      <div style="padding:8px 14px;border-radius:99px;background:linear-gradient(135deg,#0891B2,#06B6D4);color:#fff;font-size:11px;font-weight:700;cursor:pointer;">Less than 1 week</div>
+      <div style="padding:8px 14px;border-radius:99px;background:#fff;color:var(--text2);font-size:11px;font-weight:700;border:1.5px solid var(--border);cursor:pointer;">1–4 weeks</div>
+      <div style="padding:8px 14px;border-radius:99px;background:#fff;color:var(--text2);font-size:11px;font-weight:700;border:1.5px solid var(--border);cursor:pointer;">1–3 months</div>
+      <div style="padding:8px 14px;border-radius:99px;background:#fff;color:var(--text2);font-size:11px;font-weight:700;border:1.5px solid var(--border);cursor:pointer;">3+ months</div>
+    </div>
+
+    <!-- Q3: Urgency -->
+    <div style="font-size:12px;font-weight:800;color:var(--text2);letter-spacing:.4px;margin-bottom:9px;">URGENCY</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;">
+      <div style="padding:10px 8px;border-radius:13px;background:#FEF2F2;border:1.5px solid #FECACA;cursor:pointer;text-align:center;">
+        <div style="font-size:16px;margin-bottom:3px;">🚨</div><div style="font-size:10px;font-weight:800;color:#DC2626;">Emergency<br/>Now</div>
+      </div>
+      <div style="padding:10px 8px;border-radius:13px;background:linear-gradient(135deg,#E0F8FC,#BAF0FF);border:2px solid var(--teal);cursor:pointer;text-align:center;">
+        <div style="font-size:16px;margin-bottom:3px;">⚡</div><div style="font-size:10px;font-weight:800;color:var(--teal);">Urgent<br/>Today</div>
+      </div>
+      <div style="padding:10px 8px;border-radius:13px;background:#fff;border:1.5px solid var(--border);cursor:pointer;text-align:center;">
+        <div style="font-size:16px;margin-bottom:3px;">📅</div><div style="font-size:10px;font-weight:700;color:var(--text2);">Schedule<br/>Later</div>
+      </div>
+    </div>
+
+    <!-- AI care plan recommendation -->
+    <div style="background:linear-gradient(135deg,#04414E,#0891B2);border-radius:18px;padding:16px;margin-bottom:16px;box-shadow:0 6px 20px rgba(8,145,178,.25);">
+      <div style="display:flex;gap:11px;align-items:flex-start;margin-bottom:12px;">
+        <div style="width:36px;height:36px;border-radius:12px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">🤖</div>
+        <div><div style="font-size:13px;font-weight:800;color:#fff;">AI Care Plan Recommendation</div><div style="font-size:10px;color:rgba(255,255,255,.7);margin-top:2px;">Based on: surgical wound · &lt;1 week · urgent</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;">
+        <div style="background:rgba(255,255,255,.12);border-radius:11px;padding:10px 8px;text-align:center;">
+          <div style="font-family:'Sora',sans-serif;font-size:18px;font-weight:900;color:var(--tealL);">14</div>
+          <div style="font-size:9px;color:rgba(255,255,255,.65);margin-top:2px;">Visits</div>
+        </div>
+        <div style="background:rgba(255,255,255,.12);border-radius:11px;padding:10px 8px;text-align:center;">
+          <div style="font-family:'Sora',sans-serif;font-size:18px;font-weight:900;color:var(--tealL);">Daily</div>
+          <div style="font-size:9px;color:rgba(255,255,255,.65);margin-top:2px;">Frequency</div>
+        </div>
+        <div style="background:rgba(255,255,255,.12);border-radius:11px;padding:10px 8px;text-align:center;">
+          <div style="font-family:'Sora',sans-serif;font-size:18px;font-weight:900;color:var(--tealL);">RN</div>
+          <div style="font-size:9px;color:rgba(255,255,255,.65);margin-top:2px;">Nurse Level</div>
+        </div>
+      </div>
+      <div style="font-size:11px;color:rgba(255,255,255,.7);margin-top:10px;line-height:1.6;background:rgba(255,255,255,.08);border-radius:10px;padding:9px 11px;">
+        <b style="color:#fff;">Recommended:</b> Daily wound dressing (14-day plan) with WMS photo tracking + MAAS medication monitoring. Specialized wound-care nurse assigned.
+      </div>
+    </div>
+    <button class="btn-t">Accept Care Plan →</button>
+  </div>
+  <div class="bnav">
+    <div class="bn on"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0891B2" stroke-width="2.2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><span class="bnl" style="color:var(--teal);">Home</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A8C8D4" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/></svg></div><span class="bnl">Bookings</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A8C8D4" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div><span class="bnl">Journey</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A8C8D4" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><span class="bnl">Chat</span></div>
+  </div>
+</div>
+<div class="sl"><div class="sn">👩‍⚕️ 03</div><div class="st">Clinical Assessment + Care Plan</div></div>
+</div>
+
+</div><!-- end row 1 -->
+
+<!-- DIVIDER -->
+<div class="sdiv"><div class="sdl"></div><div class="sdt">SCREENS 04 – 07</div><div class="sdl"></div></div>
+
+<!-- ══════════════ ROW 2 — Screens 4, 5, 6, 7 ══════════════ -->
+<div class="pgrid">
+
+<!-- ══ S4: SCHEDULE + NURSE MATCH + PAYMENT ══ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="phone" style="min-height:740px;">
+  <div class="sb" style="background:linear-gradient(135deg,#04414E,#06768A);"><span class="sbt">11:28</span><div class="sbi"><svg width="15" height="11" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/></svg></div></div>
+  <div class="tb"><div class="bk"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0891B2" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></div><div><div class="tt">Schedule & Payment</div><div class="ts">First visit + 14-day plan</div></div><div style="font-size:10px;font-weight:700;color:var(--teal);background:#E0F8FC;border:1px solid var(--border2);padding:4px 10px;border-radius:99px;">4 of 10</div></div>
+  <div class="pb"><div class="pbf" style="width:40%;"></div></div>
+  <div class="scr" style="background:var(--surf);">
+    <!-- Care plan summary -->
+    <div style="background:linear-gradient(135deg,#E0F8FC,#BAF0FF);border:1.5px solid var(--border2);border-radius:18px;padding:16px;margin-bottom:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+        <div><div style="font-family:'Sora',sans-serif;font-size:15px;font-weight:800;color:var(--teal);">Wound Dressing — Plan A</div><div style="font-size:11px;color:var(--text2);margin-top:2px;">14 visits · Daily · Specialized RN</div></div>
+        <div style="font-family:'Sora',sans-serif;font-size:18px;font-weight:900;color:var(--teal);">AED 120<span style="font-size:11px;font-weight:600;">/visit</span></div>
+      </div>
+      <div style="display:flex;gap:7px;flex-wrap:wrap;">
+        <span class="chip-t" style="font-size:10px;padding:3px 10px;">📷 WMS Photo Track</span>
+        <span class="chip-t" style="font-size:10px;padding:3px 10px;">💊 MAAS Linked</span>
+        <span class="chip-t" style="font-size:10px;padding:3px 10px;">👩‍⚕️ Wound-Care RN</span>
+      </div>
+    </div>
+
+    <!-- First visit date -->
+    <div style="font-size:12px;font-weight:800;color:var(--text2);letter-spacing:.4px;margin-bottom:10px;">FIRST VISIT — SELECT DATE</div>
+    <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px;">
+      <div style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;padding:10px 8px;border-radius:14px;min-width:48px;background:#fff;border:1.5px solid var(--border);cursor:pointer;"><span style="font-size:9px;font-weight:700;color:var(--text3);">SAT</span><span style="font-size:17px;font-weight:900;color:var(--navy);font-family:'Sora',sans-serif;">29</span></div>
+      <div style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;padding:10px 8px;border-radius:14px;min-width:48px;background:linear-gradient(135deg,#0891B2,#06B6D4);border:none;cursor:pointer;box-shadow:0 4px 12px rgba(8,145,178,.3);"><span style="font-size:9px;font-weight:700;color:rgba(255,255,255,.75);">SUN</span><span style="font-size:17px;font-weight:900;color:#fff;font-family:'Sora',sans-serif;">30</span><span style="font-size:8px;font-weight:700;color:rgba(255,255,255,.7);margin-top:1px;">Today</span></div>
+      <div style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;padding:10px 8px;border-radius:14px;min-width:48px;background:#fff;border:1.5px solid var(--border);cursor:pointer;"><span style="font-size:9px;font-weight:700;color:var(--text3);">MON</span><span style="font-size:17px;font-weight:900;color:var(--navy);font-family:'Sora',sans-serif;">31</span></div>
+      <div style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;padding:10px 8px;border-radius:14px;min-width:48px;background:#fff;border:1.5px solid var(--border);cursor:pointer;"><span style="font-size:9px;font-weight:700;color:var(--text3);">TUE</span><span style="font-size:17px;font-weight:900;color:var(--navy);font-family:'Sora',sans-serif;">1</span></div>
+      <div style="flex-shrink:0;display:flex;flex-direction:column;align-items:center;padding:10px 8px;border-radius:14px;min-width:48px;background:#fff;border:1.5px solid var(--border);cursor:pointer;"><span style="font-size:9px;font-weight:700;color:var(--text3);">WED</span><span style="font-size:17px;font-weight:900;color:var(--navy);font-family:'Sora',sans-serif;">2</span></div>
+    </div>
+
+    <!-- Time slots -->
+    <div style="font-size:12px;font-weight:800;color:var(--text2);letter-spacing:.4px;margin-bottom:10px;">PREFERRED TIME</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;">
+      <div style="padding:11px 8px;border-radius:13px;background:linear-gradient(135deg,#0891B2,#06B6D4);text-align:center;cursor:pointer;box-shadow:0 4px 10px rgba(8,145,178,.25);"><div style="font-size:12px;font-weight:800;color:#fff;font-family:'Sora',sans-serif;">8:00 AM</div><div style="font-size:9px;color:rgba(255,255,255,.75);margin-top:2px;">Available</div></div>
+      <div style="padding:11px 8px;border-radius:13px;background:#F5F5F5;border:1.5px solid #E0E0E0;text-align:center;cursor:not-allowed;opacity:.5;"><div style="font-size:12px;font-weight:700;color:#9A9A9A;font-family:'Sora',sans-serif;">10:00 AM</div><div style="font-size:9px;color:#B0B0B0;margin-top:2px;">Booked</div></div>
+      <div style="padding:11px 8px;border-radius:13px;background:#fff;border:1.5px solid var(--border);text-align:center;cursor:pointer;"><div style="font-size:12px;font-weight:700;color:var(--navy);font-family:'Sora',sans-serif;">2:00 PM</div><div style="font-size:9px;color:var(--text3);margin-top:2px;">Available</div></div>
+      <div style="padding:11px 8px;border-radius:13px;background:#fff;border:1.5px solid var(--border);text-align:center;cursor:pointer;"><div style="font-size:12px;font-weight:700;color:var(--navy);font-family:'Sora',sans-serif;">4:00 PM</div><div style="font-size:9px;color:var(--text3);margin-top:2px;">Available</div></div>
+      <div style="padding:11px 8px;border-radius:13px;background:#fff;border:1.5px solid var(--border);text-align:center;cursor:pointer;"><div style="font-size:12px;font-weight:700;color:var(--navy);font-family:'Sora',sans-serif;">6:00 PM</div><div style="font-size:9px;color:var(--text3);margin-top:2px;">Available</div></div>
+      <div style="padding:11px 8px;border-radius:13px;background:#fff;border:1.5px solid var(--border);text-align:center;cursor:pointer;"><div style="font-size:12px;font-weight:700;color:var(--navy);font-family:'Sora',sans-serif;">8:00 PM</div><div style="font-size:9px;color:var(--text3);margin-top:2px;">Available</div></div>
+    </div>
+
+    <!-- Price breakdown -->
+    <div class="card" style="padding:14px;margin-bottom:14px;">
+      <div style="font-size:12px;font-weight:800;color:var(--text2);letter-spacing:.4px;margin-bottom:10px;">PRICE SUMMARY</div>
+      <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);"><span style="font-size:13px;color:var(--navy);">14 visits × AED 120</span><span style="font-size:13px;font-weight:700;color:var(--navy);">AED 1,680</span></div>
+      <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);"><span style="font-size:13px;color:var(--green);">Plan discount (10%)</span><span style="font-size:13px;font-weight:700;color:var(--green);">−AED 168</span></div>
+      <div style="display:flex;justify-content:space-between;padding:7px 0;"><span style="font-size:15px;font-weight:900;color:var(--navy);">Total</span><span style="font-family:'Sora',sans-serif;font-size:18px;font-weight:900;color:var(--teal);">AED 1,512</span></div>
+    </div>
+
+    <!-- Payment methods -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">
+      <div style="background:linear-gradient(135deg,#0891B2,#06B6D4);border-radius:14px;padding:11px 12px;cursor:pointer;"><div style="font-size:16px;margin-bottom:4px;">💳</div><div style="font-size:11px;font-weight:800;color:#fff;">Card / Apple Pay</div></div>
+      <div style="background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:11px 12px;cursor:pointer;"><div style="font-size:16px;margin-bottom:4px;">🏦</div><div style="font-size:11px;font-weight:800;color:var(--text2);">Insurance / Corporate</div></div>
+    </div>
+    <button class="btn-t">Confirm & Pay AED 1,512 →</button>
+  </div>
+  <div class="bnav">
+    <div class="bn on"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0891B2" stroke-width="2.2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><span class="bnl" style="color:var(--teal);">Home</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A8C8D4" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/></svg></div><span class="bnl">Bookings</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A8C8D4" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div><span class="bnl">Journey</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A8C8D4" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><span class="bnl">Chat</span></div>
+  </div>
+</div>
+<div class="sl"><div class="sn">👩‍⚕️ 04</div><div class="st">Schedule + Payment</div></div>
+</div>
+
+<!-- ══ S5: NURSE DISPATCH + LIVE TRACKING ══ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="phone" style="min-height:740px;">
+  <div class="sb" style="background:linear-gradient(135deg,#04414E,#06768A);"><span class="sbt">7:45 AM</span><div class="sbi"><svg width="15" height="11" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/></svg></div></div>
+  <div style="background:linear-gradient(155deg,#04414E,#06768A,#0891B2);padding:16px 18px 22px;flex-shrink:0;position:relative;overflow:hidden;">
+    <div style="position:absolute;top:-40px;right:-40px;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,.05);"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1;">
+      <div><div style="font-size:10px;color:rgba(255,255,255,.65);font-weight:700;letter-spacing:1px;margin-bottom:3px;">VISIT 1 OF 14</div><div style="font-family:'Sora',sans-serif;font-size:18px;font-weight:800;color:#fff;">Nurse Dispatched</div></div>
+      <div style="background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.25);border-radius:99px;padding:5px 12px;display:flex;align-items:center;gap:5px;"><div style="width:6px;height:6px;border-radius:50%;background:var(--tealL);animation:blink 1.5s infinite;"></div><span style="font-size:10px;font-weight:800;color:#fff;">En Route</span></div>
+    </div>
+  </div>
+
+  <div class="scr" style="background:var(--surf);">
+    <!-- Nurse profile card -->
+    <div class="card" style="padding:16px;margin-bottom:14px;border:2px solid var(--teal);box-shadow:0 6px 20px rgba(8,145,178,.15);">
+      <div style="display:flex;gap:13px;align-items:center;margin-bottom:14px;">
+        <div style="position:relative;flex-shrink:0;">
+          <div style="width:58px;height:58px;border-radius:18px;background:linear-gradient(135deg,#0891B2,#06B6D4);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:#fff;font-family:'Sora',sans-serif;box-shadow:0 4px 14px rgba(8,145,178,.3);">AK</div>
+          <div style="position:absolute;bottom:-2px;right:-2px;width:16px;height:16px;background:#22C55E;border-radius:50%;border:2.5px solid #fff;display:flex;align-items:center;justify-content:center;"><div style="width:6px;height:6px;border-radius:50%;background:#fff;"></div></div>
+        </div>
+        <div style="flex:1;">
+          <div style="font-family:'Sora',sans-serif;font-size:15px;font-weight:800;color:var(--navy);">Nurse Aisha Khan</div>
+          <div style="font-size:11px;color:var(--text2);margin-top:2px;">RN · Wound Care Specialist · DHA #12045</div>
+          <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;">
+            <div style="display:flex;align-items:center;gap:3px;font-size:11px;font-weight:700;color:#D97706;">⭐ 4.9 <span style="color:var(--text3);font-weight:400;">(284 visits)</span></div>
+            <div style="background:#DCFCE7;color:#16A34A;font-size:9px;font-weight:800;padding:2px 8px;border-radius:99px;">● Available</div>
+          </div>
+        </div>
+      </div>
+      <!-- ETA + distance -->
+      <div style="background:#E0F8FC;border-radius:13px;padding:12px 14px;display:flex;gap:12px;align-items:center;">
+        <div style="font-size:22px;flex-shrink:0;animation:rideMove 2s ease-in-out infinite;">🏍</div>
+        <div style="flex:1;">
+          <div style="font-size:12px;font-weight:800;color:var(--teal);">On the way · 2.8 km away</div>
+          <div style="height:5px;background:rgba(8,145,178,.15);border-radius:99px;margin-top:6px;overflow:hidden;"><div style="width:60%;height:100%;background:var(--teal2);border-radius:99px;"></div></div>
+          <div style="font-size:10px;color:var(--text2);margin-top:4px;">ETA: 8:02 AM · ~17 minutes</div>
+        </div>
+        <div style="text-align:right;"><div style="font-family:'Sora',sans-serif;font-size:22px;font-weight:900;color:var(--teal);">~17<span style="font-size:12px;">m</span></div></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:12px;">
+        <button style="flex:1;background:var(--teal);border:none;border-radius:11px;padding:10px;font-size:12px;font-weight:800;color:#fff;font-family:'Nunito',sans-serif;cursor:pointer;">📞 Call Nurse</button>
+        <button style="flex:1;background:#fff;border:1.5px solid var(--border);border-radius:11px;padding:10px;font-size:12px;font-weight:800;color:var(--text2);font-family:'Nunito',sans-serif;cursor:pointer;">💬 Chat</button>
+      </div>
+    </div>
+
+    <!-- Map -->
+    <div style="height:160px;background:linear-gradient(135deg,#E0F8FC,var(--surf));border-radius:18px;margin-bottom:14px;position:relative;overflow:hidden;border:1.5px solid var(--border);">
+      <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 22px,rgba(8,145,178,.06) 22px,rgba(8,145,178,.06) 23px),repeating-linear-gradient(90deg,transparent,transparent 22px,rgba(8,145,178,.04) 22px,rgba(8,145,178,.04) 23px);"></div>
+      <svg width="100%" height="100%" viewBox="0 0 356 160" style="position:absolute;inset:0;">
+        <path d="M 60 130 Q 130 70 200 90 Q 260 105 290 55" fill="none" stroke="#0891B2" stroke-width="3" stroke-dasharray="8 5" opacity=".7" stroke-linecap="round"/>
+        <circle cx="210" cy="86" r="12" fill="#0891B2" opacity=".15"/>
+        <circle cx="210" cy="86" r="7" fill="#0891B2"/>
+        <text x="210" y="68" text-anchor="middle" style="font-size:14px;">🏍</text>
+        <circle cx="290" cy="55" r="10" fill="#22C55E" opacity=".15"/>
+        <circle cx="290" cy="55" r="6" fill="#22C55E"/>
+        <text x="290" y="38" text-anchor="middle" style="font-size:13px;">🏠</text>
+        <circle cx="60" cy="130" r="6" fill="#0891B2"/>
+        <text x="60" y="112" text-anchor="middle" style="font-size:11px;">🏥</text>
+      </svg>
+      <div style="position:absolute;top:10px;left:12px;background:rgba(255,255,255,.9);border-radius:9px;padding:5px 10px;font-size:10px;font-weight:700;color:var(--teal);">🏍 Nurse en route</div>
+    </div>
+
+    <!-- OTP -->
+    <div style="background:linear-gradient(135deg,#04414E,#0891B2);border-radius:16px;padding:14px 16px;display:flex;gap:12px;align-items:center;">
+      <div style="font-size:22px;flex-shrink:0;">🔐</div>
+      <div style="flex:1;"><div style="font-size:12px;font-weight:800;color:#fff;">Arrival OTP Ready</div><div style="font-size:10px;color:rgba(255,255,255,.7);margin-top:2px;">Share 4-digit OTP with nurse to verify visit start</div></div>
+      <div style="font-family:'Sora',sans-serif;font-size:22px;font-weight:900;color:var(--tealL);flex-shrink:0;">••••</div>
+    </div>
+  </div>
+  <div class="bnav">
+    <div class="bn on"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0891B2" stroke-width="2.2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><span class="bnl" style="color:var(--teal);">Home</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A8C8D4" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/></svg></div><span class="bnl">Bookings</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A8C8D4" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div><span class="bnl">Journey</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A8C8D4" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><span class="bnl">Chat</span></div>
+  </div>
+</div>
+<div class="sl"><div class="sn">👩‍⚕️ 05</div><div class="st">Nurse Dispatch + Live Tracking</div></div>
+</div>
+
+<!-- ══ S6: ACTIVE VISIT — CLINICAL DOCUMENTATION ══ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="phone" style="min-height:740px;">
+  <div class="sb" style="background:linear-gradient(135deg,#04414E,#06768A);"><span class="sbt">8:12 AM</span><div class="sbi"><svg width="15" height="11" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/></svg></div></div>
+  <div style="background:linear-gradient(135deg,#16A34A,#22C55E);padding:14px 18px 16px;flex-shrink:0;display:flex;justify-content:space-between;align-items:center;">
+    <div><div style="font-size:10px;color:rgba(255,255,255,.75);font-weight:700;letter-spacing:1px;">VISIT IN PROGRESS</div><div style="font-family:'Sora',sans-serif;font-size:17px;font-weight:800;color:#fff;">Nurse Aisha · Active</div></div>
+    <div style="background:rgba(255,255,255,.2);border-radius:99px;padding:5px 12px;display:flex;gap:5px;align-items:center;"><div style="width:7px;height:7px;border-radius:50%;background:#fff;animation:blink 1.2s infinite;"></div><span style="font-size:11px;font-weight:800;color:#fff;">08:12</span></div>
+  </div>
+
+  <div class="scr" style="background:var(--surf);">
+    <!-- Visit checklist -->
+    <div class="card" style="padding:15px;margin-bottom:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div style="font-size:13px;font-weight:800;color:var(--navy);">Visit Checklist</div>
+        <span style="font-size:11px;font-weight:700;color:var(--teal);">3/7 done</span>
+      </div>
+      <div style="height:5px;background:var(--border);border-radius:99px;margin-bottom:12px;overflow:hidden;"><div style="width:43%;height:100%;background:var(--teal2);border-radius:99px;"></div></div>
+      <div style="display:flex;flex-direction:column;gap:7px;">
+        <div style="display:flex;gap:11px;align-items:center;padding:9px 11px;background:#DCFCE7;border-radius:11px;border:1px solid #6EE7B7;"><div style="width:20px;height:20px;border-radius:5px;background:#16A34A;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></div><span style="font-size:12px;font-weight:600;color:#15803D;text-decoration:line-through;">Patient identity verified (OTP)</span></div>
+        <div style="display:flex;gap:11px;align-items:center;padding:9px 11px;background:#DCFCE7;border-radius:11px;border:1px solid #6EE7B7;"><div style="width:20px;height:20px;border-radius:5px;background:#16A34A;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></div><span style="font-size:12px;font-weight:600;color:#15803D;text-decoration:line-through;">Vital signs recorded (BP, HR, SpO₂)</span></div>
+        <div style="display:flex;gap:11px;align-items:center;padding:9px 11px;background:#DCFCE7;border-radius:11px;border:1px solid #6EE7B7;"><div style="width:20px;height:20px;border-radius:5px;background:#16A34A;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></div><span style="font-size:12px;font-weight:600;color:#15803D;text-decoration:line-through;">Wound assessment completed</span></div>
+        <div style="display:flex;gap:11px;align-items:center;padding:9px 11px;background:linear-gradient(135deg,#E0F8FC,#BAF0FF);border-radius:11px;border:2px solid var(--teal);"><div style="width:20px;height:20px;border-radius:5px;background:var(--teal);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><div style="width:8px;height:8px;border-radius:50%;background:#fff;animation:pulse 1.2s infinite;"></div></div><span style="font-size:12px;font-weight:700;color:var(--teal);">📷 Wound photo captured (WMS)</span><span style="font-size:9px;font-weight:800;background:var(--teal);color:#fff;padding:1px 7px;border-radius:99px;margin-left:auto;">Active</span></div>
+        <div style="display:flex;gap:11px;align-items:center;padding:9px 11px;background:#fff;border-radius:11px;border:1.5px solid var(--border);opacity:.6;"><div style="width:20px;height:20px;border-radius:5px;border:2px solid var(--border);flex-shrink:0;"></div><span style="font-size:12px;font-weight:600;color:var(--text2);">Apply sterile dressing</span></div>
+        <div style="display:flex;gap:11px;align-items:center;padding:9px 11px;background:#fff;border-radius:11px;border:1.5px solid var(--border);opacity:.6;"><div style="width:20px;height:20px;border-radius:5px;border:2px solid var(--border);flex-shrink:0;"></div><span style="font-size:12px;font-weight:600;color:var(--text2);">Administer Amlodipine 10mg (MAAS)</span></div>
+        <div style="display:flex;gap:11px;align-items:center;padding:9px 11px;background:#fff;border-radius:11px;border:1.5px solid var(--border);opacity:.6;"><div style="width:20px;height:20px;border-radius:5px;border:2px solid var(--border);flex-shrink:0;"></div><span style="font-size:12px;font-weight:600;color:var(--text2);">Complete clinical notes + patient signature</span></div>
+      </div>
+    </div>
+
+    <!-- Live vitals captured -->
+    <div class="card" style="padding:14px;margin-bottom:14px;">
+      <div style="font-size:12px;font-weight:800;color:var(--text2);letter-spacing:.4px;margin-bottom:10px;">VITALS RECORDED BY NURSE</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:7px;">
+        <div style="text-align:center;background:#E0F8FC;border-radius:11px;padding:10px 5px;border:1.5px solid var(--border2);">
+          <div style="font-family:'Sora',sans-serif;font-size:14px;font-weight:900;color:var(--teal);">118/76</div><div style="font-size:8px;font-weight:700;color:var(--text2);margin-top:2px;">BP mmHg</div>
+        </div>
+        <div style="text-align:center;background:#E0F8FC;border-radius:11px;padding:10px 5px;border:1.5px solid var(--border2);">
+          <div style="font-family:'Sora',sans-serif;font-size:14px;font-weight:900;color:var(--teal);">98%</div><div style="font-size:8px;font-weight:700;color:var(--text2);margin-top:2px;">SpO₂</div>
+        </div>
+        <div style="text-align:center;background:#E0F8FC;border-radius:11px;padding:10px 5px;border:1.5px solid var(--border2);">
+          <div style="font-family:'Sora',sans-serif;font-size:14px;font-weight:900;color:var(--teal);">72</div><div style="font-size:8px;font-weight:700;color:var(--text2);margin-top:2px;">HR bpm</div>
+        </div>
+        <div style="text-align:center;background:#E0F8FC;border-radius:11px;padding:10px 5px;border:1.5px solid var(--border2);">
+          <div style="font-family:'Sora',sans-serif;font-size:14px;font-weight:900;color:var(--teal);">98.4</div><div style="font-size:8px;font-weight:700;color:var(--text2);margin-top:2px;">Temp °F</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick actions for patient -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
+      <button style="background:#FEF2F2;border:1.5px solid #FECACA;border-radius:13px;padding:11px;font-size:12px;font-weight:800;color:#DC2626;font-family:'Nunito',sans-serif;cursor:pointer;">🚨 Escalate to Doctor</button>
+      <button style="background:#EBF1FF;border:1.5px solid #BFDBFE;border-radius:13px;padding:11px;font-size:12px;font-weight:800;color:#1148A4;font-family:'Nunito',sans-serif;cursor:pointer;">📞 Call Dr. Bilal</button>
+    </div>
+  </div>
+  <div class="bnav">
+    <div class="bn on"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0891B2" stroke-width="2.2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><span class="bnl" style="color:var(--teal);">Home</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A8C8D4" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/></svg></div><span class="bnl">Bookings</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A8C8D4" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div><span class="bnl">Journey</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A8C8D4" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><span class="bnl">Chat</span></div>
+  </div>
+</div>
+<div class="sl"><div class="sn">👩‍⚕️ 06</div><div class="st">Active Visit + Documentation</div></div>
+</div>
+
+<!-- ══ S7: WMS (WOUND MONITORING) + MAAS ══ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="phone" style="min-height:740px;">
+  <div class="sb" style="background:linear-gradient(135deg,#04414E,#06768A);"><span class="sbt">8:30 AM</span><div class="sbi"><svg width="15" height="11" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/></svg></div></div>
+  <div class="tb"><div><div class="tt">WMS + MAAS Monitor</div><div class="ts">Wound tracking · Medication alerts</div></div><div style="background:#FEF3C7;border:1px solid #FCD34D;border-radius:99px;padding:4px 10px;font-size:10px;font-weight:700;color:#D97706;">1 alert</div></div>
+  <div class="scr" style="background:var(--surf);">
+    <!-- WMS — Wound Monitoring -->
+    <div style="font-size:13px;font-weight:800;color:var(--navy);margin-bottom:11px;">🩹 Wound Monitoring System (WMS)</div>
+    <div class="card" style="padding:16px;margin-bottom:14px;">
+      <!-- Photo progression strip -->
+      <div style="font-size:11px;font-weight:800;color:var(--text2);letter-spacing:.4px;margin-bottom:10px;">HEALING PROGRESS — 7 DAYS</div>
+      <div style="display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;">
+        <div style="flex-shrink:0;width:52px;text-align:center;">
+          <div style="height:52px;background:linear-gradient(135deg,#FEE2E2,#FECACA);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;border:1.5px solid #FECACA;">📷</div>
+          <div style="font-size:8px;color:var(--text3);margin-top:3px;">Day 1</div>
+          <div style="font-size:8px;font-weight:700;color:#DC2626;">Large</div>
+        </div>
+        <div style="flex-shrink:0;width:52px;text-align:center;">
+          <div style="height:52px;background:linear-gradient(135deg,#FEE2E2,#FECACA);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;border:1.5px solid #FECACA;">📷</div>
+          <div style="font-size:8px;color:var(--text3);margin-top:3px;">Day 3</div>
+          <div style="font-size:8px;font-weight:700;color:#D97706;">Same</div>
+        </div>
+        <div style="flex-shrink:0;width:52px;text-align:center;">
+          <div style="height:52px;background:linear-gradient(135deg,#FEF3C7,#FDE68A);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;border:1.5px solid #FCD34D;">📷</div>
+          <div style="font-size:8px;color:var(--text3);margin-top:3px;">Day 5</div>
+          <div style="font-size:8px;font-weight:700;color:#D97706;">↓ Better</div>
+        </div>
+        <div style="flex-shrink:0;width:52px;text-align:center;">
+          <div style="height:52px;background:linear-gradient(135deg,#DCFCE7,#BBF7D0);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;border:1.5px solid #6EE7B7;">📷</div>
+          <div style="font-size:8px;color:var(--text3);margin-top:3px;">Day 7</div>
+          <div style="font-size:8px;font-weight:700;color:#16A34A;">↓ Good</div>
+        </div>
+        <div style="flex-shrink:0;width:52px;text-align:center;">
+          <div style="height:52px;background:linear-gradient(135deg,#E0F8FC,#BAF0FF);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;border:2px solid var(--teal);">📷</div>
+          <div style="font-size:8px;color:var(--teal);margin-top:3px;font-weight:700;">Today</div>
+          <div style="font-size:8px;font-weight:700;color:var(--teal);">↓ 65%</div>
+        </div>
+      </div>
+      <!-- Healing gauge -->
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="flex:1;height:8px;background:var(--border);border-radius:99px;overflow:hidden;"><div style="width:65%;height:100%;background:linear-gradient(90deg,#DC2626,#D97706,#22C55E);border-radius:99px;"></div></div>
+        <span style="font-size:13px;font-weight:900;color:var(--green);white-space:nowrap;">65% healed</span>
+      </div>
+      <!-- AI wound insight -->
+      <div style="background:#E0F8FC;border-radius:12px;padding:10px 12px;margin-top:10px;">
+        <div style="font-size:11px;font-weight:800;color:var(--teal);margin-bottom:4px;">🤖 AI Wound Analysis</div>
+        <div style="font-size:10px;color:var(--text2);line-height:1.6;">Wound reducing at expected rate. No signs of infection. Granulation tissue visible. Continue daily dressing. Est. full healing in 7–9 more visits.</div>
+      </div>
+    </div>
+
+    <!-- MAAS — Medication alert -->
+    <div style="font-size:13px;font-weight:800;color:var(--navy);margin-bottom:11px;">💊 MAAS — Medication Administration</div>
+    <div style="background:#FEF3C7;border:2px solid #F59E0B;border-radius:16px;padding:14px;margin-bottom:12px;">
+      <div style="display:flex;gap:10px;align-items:flex-start;">
+        <div style="width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#D97706,#F59E0B);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px;">⚠️</div>
+        <div><div style="font-size:12px;font-weight:800;color:#92400E;">Missed Dose — Metformin 500mg</div><div style="font-size:10px;color:#A16207;margin-top:2px;line-height:1.5;">Morning dose not administered. Nurse asked to verify. Caregiver Sara has been notified automatically.</div><div style="display:flex;gap:7px;margin-top:8px;"><button style="background:#D97706;border:none;border-radius:9px;padding:5px 12px;font-size:10px;font-weight:800;color:#fff;font-family:'Nunito',sans-serif;cursor:pointer;">Mark Given</button><button style="background:#FEF3C7;border:1px solid #F59E0B;border-radius:9px;padding:5px 12px;font-size:10px;font-weight:700;color:#92400E;font-family:'Nunito',sans-serif;cursor:pointer;">Defer</button></div></div>
+      </div>
+    </div>
+    <div class="card" style="padding:13px 14px;margin-bottom:14px;display:flex;gap:11px;align-items:center;">
+      <div style="width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#DCFCE7,#BBF7D0);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;">💊</div>
+      <div style="flex:1;"><div style="font-size:13px;font-weight:700;color:var(--navy);">Amlodipine 10mg</div><div style="font-size:10px;color:var(--text2);">Administered by Nurse Aisha · 8:15 AM ✓</div></div>
+      <div style="background:#DCFCE7;color:#16A34A;font-size:10px;font-weight:800;padding:4px 10px;border-radius:99px;">Done ✓</div>
+    </div>
+    <!-- EMR sync note -->
+    <div style="background:#EBF1FF;border:1.5px solid #BFDBFE;border-radius:14px;padding:12px 14px;display:flex;gap:10px;align-items:center;">
+      <div style="font-size:18px;flex-shrink:0;">🔄</div>
+      <div style="font-size:11px;color:#1148A4;line-height:1.5;"><b>EMR Sync Active</b> — All vitals, wound photos, and medication records syncing to Central EMR and patient's longitudinal health record in real-time.</div>
+    </div>
+  </div>
+  <div class="bnav">
+    <div class="bn on"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0891B2" stroke-width="2.2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><span class="bnl" style="color:var(--teal);">Home</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A8C8D4" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/></svg></div><span class="bnl">Bookings</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A8C8D4" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div><span class="bnl">Journey</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A8C8D4" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><span class="bnl">Chat</span></div>
+  </div>
+</div>
+<div class="sl"><div class="sn">👩‍⚕️ 07</div><div class="st">WMS Wound Tracking + MAAS</div></div>
+</div>
+
+</div><!-- end row 2 -->
+
+<!-- DIVIDER -->
+<div class="sdiv"><div class="sdl"></div><div class="sdt">SCREENS 08 – 10</div><div class="sdl"></div></div>
+
+<!-- ══════════════ ROW 3 — Screens 8, 9, 10 ══════════════ -->
+<div class="pgrid">
+
+<!-- ══ S8: POST-VISIT SUMMARY + CARE INSTRUCTIONS ══ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="phone" style="min-height:740px;">
+  <div class="sb" style="background:linear-gradient(135deg,#04414E,#06768A);"><span class="sbt">8:52 AM</span><div class="sbi"><svg width="15" height="11" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/></svg></div></div>
+  <div class="tb"><div><div class="tt">Visit Complete ✅</div><div class="ts">Visit 1 of 14 · Post-visit summary</div></div></div>
+  <div class="scr" style="background:var(--surf);">
+    <!-- Hero -->
+    <div style="background:linear-gradient(135deg,#04414E,#0891B2);border-radius:20px;padding:20px;margin-bottom:16px;text-align:center;box-shadow:0 8px 28px rgba(8,145,178,.3);">
+      <div style="width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,.18);border:2.5px solid rgba(255,255,255,.35);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:28px;">✅</div>
+      <div style="font-family:'Sora',sans-serif;font-size:18px;font-weight:800;color:#fff;">Visit Completed</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.7);margin-top:4px;">8:08 AM – 8:50 AM · 42 minutes · Nurse Aisha</div>
+      <div style="display:flex;justify-content:center;gap:8px;margin-top:12px;"><span style="background:rgba(255,255,255,.18);color:#fff;font-size:10px;font-weight:700;padding:4px 12px;border-radius:99px;">Wound Dressing ✓</span><span style="background:rgba(255,255,255,.18);color:#fff;font-size:10px;font-weight:700;padding:4px 12px;border-radius:99px;">Visit 1/14</span></div>
+    </div>
+    <!-- Nurse notes summary -->
+    <div class="card" style="padding:15px;margin-bottom:14px;">
+      <div style="font-size:12px;font-weight:800;color:var(--text2);letter-spacing:.4px;margin-bottom:10px;">📋 NURSE'S CLINICAL NOTES</div>
+      <div style="font-size:12px;color:var(--navy);line-height:1.7;background:#EEF9FC;border-radius:11px;padding:11px 13px;border-left:3px solid var(--teal);">Wound (right leg, 4×2cm) assessed — clean, no infection signs, moderate exudate. Sterile dressing applied (10×10cm foam). Patient BP stable at 118/76. Amlodipine administered. Metformin morning dose deferred — flagged in MAAS.</div>
+    </div>
+    <!-- Post-visit care instructions -->
+    <div style="font-size:12px;font-weight:800;color:var(--text2);letter-spacing:.4px;margin-bottom:10px;">📖 YOUR CARE INSTRUCTIONS</div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;">
+      <div style="background:#E0F8FC;border-left:4px solid var(--teal);border-radius:0 13px 13px 0;padding:11px 13px;display:flex;gap:9px;align-items:center;"><div style="width:22px;height:22px;border-radius:99px;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#fff;flex-shrink:0;">1</div><div style="font-size:12px;font-weight:600;color:var(--navy);">Keep wound area dry for 6 hours post-dressing</div></div>
+      <div style="background:#E0F8FC;border-left:4px solid var(--teal);border-radius:0 13px 13px 0;padding:11px 13px;display:flex;gap:9px;align-items:center;"><div style="width:22px;height:22px;border-radius:99px;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#fff;flex-shrink:0;">2</div><div style="font-size:12px;font-weight:600;color:var(--navy);">Take Metformin 500mg with lunch (missed morning dose)</div></div>
+      <div style="background:#E0F8FC;border-left:4px solid var(--teal);border-radius:0 13px 13px 0;padding:11px 13px;display:flex;gap:9px;align-items:center;"><div style="width:22px;height:22px;border-radius:99px;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#fff;flex-shrink:0;">3</div><div style="font-size:12px;font-weight:600;color:var(--navy);">Alert if: redness, swelling, fever &gt;100°F, or increased pain</div></div>
+    </div>
+    <!-- Post-visit actions -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px;">
+      <div style="background:linear-gradient(135deg,#04414E,#0891B2);border-radius:16px;padding:14px 12px;cursor:pointer;box-shadow:0 5px 14px rgba(8,145,178,.22);">
+        <div style="font-size:22px;margin-bottom:6px;">📅</div><div style="font-size:12px;font-weight:800;color:#fff;">Book Follow-up</div><div style="font-size:10px;color:rgba(255,255,255,.7);margin-top:2px;">Visit 2 · Tomorrow 8AM</div>
+        <div style="margin-top:7px;font-size:9px;font-weight:800;background:rgba(255,255,255,.2);color:#fff;padding:2px 8px;border-radius:99px;display:inline-block;">Auto-scheduled</div>
+      </div>
+      <div style="background:linear-gradient(135deg,#0EA5E9,#3B82F6);border-radius:16px;padding:14px 12px;cursor:pointer;box-shadow:0 5px 14px rgba(14,165,233,.2);">
+        <div style="font-size:22px;margin-bottom:6px;">📞</div><div style="font-size:12px;font-weight:800;color:#fff;">Consult Doctor</div><div style="font-size:10px;color:rgba(255,255,255,.7);margin-top:2px;">Tele with Dr. Bilal</div>
+      </div>
+    </div>
+    <button class="btn-t" style="margin-bottom:8px;">⭐ Rate Nurse Aisha</button>
+    <button class="btn-out">📥 Download Visit Report</button>
+  </div>
+  <div class="bnav">
+    <div class="bn on"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0891B2" stroke-width="2.2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><span class="bnl" style="color:var(--teal);">Home</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A8C8D4" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/></svg></div><span class="bnl">Bookings</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A8C8D4" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div><span class="bnl">Journey</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A8C8D4" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><span class="bnl">Chat</span></div>
+  </div>
+</div>
+<div class="sl"><div class="sn">👩‍⚕️ 08</div><div class="st">Post-Visit Summary + Care Instructions</div></div>
+</div>
+
+<!-- ══ S9: ONGOING CARE PLAN DASHBOARD ══ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="phone" style="min-height:740px;">
+  <div class="sb" style="background:linear-gradient(135deg,#04414E,#06768A);"><span class="sbt">9:00 AM</span><div class="sbi"><svg width="15" height="11" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/></svg></div></div>
+  <div class="tb"><div><div class="tt">My Care Plan</div><div class="ts">Wound Dressing Plan · 14 visits · Active</div></div><div style="background:#E0F8FC;border:1px solid var(--border2);border-radius:99px;padding:4px 10px;font-size:10px;font-weight:800;color:var(--teal);">● Active</div></div>
+  <div class="scr" style="background:var(--surf);">
+    <!-- Plan hero card -->
+    <div style="background:linear-gradient(135deg,#04414E,#0891B2);border-radius:20px;padding:18px;margin-bottom:14px;box-shadow:0 8px 26px rgba(8,145,178,.28);">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;">
+        <div><div style="font-size:10px;color:rgba(255,255,255,.65);font-weight:700;letter-spacing:1px;">WOUND CARE PLAN A</div><div style="font-family:'Sora',sans-serif;font-size:18px;font-weight:800;color:#fff;margin-top:3px;">Daily Wound Dressing</div><div style="font-size:11px;color:rgba(255,255,255,.7);margin-top:2px;">Nurse Aisha · Specialized RN</div></div>
+        <div style="text-align:center;"><div style="font-family:'Sora',sans-serif;font-size:28px;font-weight:900;color:var(--tealL);">7</div><div style="font-size:9px;color:rgba(255,255,255,.6);">/ 14 done</div></div>
+      </div>
+      <!-- Progress -->
+      <div style="height:8px;background:rgba(255,255,255,.2);border-radius:99px;overflow:hidden;margin-bottom:8px;"><div style="width:50%;height:100%;background:var(--tealL);border-radius:99px;"></div></div>
+      <div style="font-size:10px;color:rgba(255,255,255,.65);">50% complete · 7 visits remaining · Est. end: Apr 13</div>
+    </div>
+
+    <!-- Visit calendar -->
+    <div class="card" style="padding:15px;margin-bottom:14px;">
+      <div style="font-size:12px;font-weight:800;color:var(--text2);letter-spacing:.4px;margin-bottom:12px;">VISIT SCHEDULE — MARCH / APRIL</div>
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;margin-bottom:8px;">
+        {['M','T','W','T','F','S','S'].forEach ? '' : ''}
+        <div style="font-size:8px;font-weight:700;color:var(--text3);">M</div><div style="font-size:8px;font-weight:700;color:var(--text3);">T</div><div style="font-size:8px;font-weight:700;color:var(--text3);">W</div><div style="font-size:8px;font-weight:700;color:var(--text3);">T</div><div style="font-size:8px;font-weight:700;color:var(--text3);">F</div><div style="font-size:8px;font-weight:700;color:var(--text3);">S</div><div style="font-size:8px;font-weight:700;color:var(--text3);">S</div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;">
+        <!-- Completed visits -->
+        <div style="padding:6px 2px;border-radius:8px;background:var(--teal);"><div style="font-size:10px;font-weight:800;color:#fff;">24</div><div style="font-size:7px;color:rgba(255,255,255,.7);">✓</div></div>
+        <div style="padding:6px 2px;border-radius:8px;background:var(--teal);"><div style="font-size:10px;font-weight:800;color:#fff;">25</div><div style="font-size:7px;color:rgba(255,255,255,.7);">✓</div></div>
+        <div style="padding:6px 2px;border-radius:8px;background:var(--teal);"><div style="font-size:10px;font-weight:800;color:#fff;">26</div><div style="font-size:7px;color:rgba(255,255,255,.7);">✓</div></div>
+        <div style="padding:6px 2px;border-radius:8px;background:var(--teal);"><div style="font-size:10px;font-weight:800;color:#fff;">27</div><div style="font-size:7px;color:rgba(255,255,255,.7);">✓</div></div>
+        <div style="padding:6px 2px;border-radius:8px;background:var(--teal);"><div style="font-size:10px;font-weight:800;color:#fff;">28</div><div style="font-size:7px;color:rgba(255,255,255,.7);">✓</div></div>
+        <div style="padding:6px 2px;border-radius:8px;background:var(--teal);"><div style="font-size:10px;font-weight:800;color:#fff;">29</div><div style="font-size:7px;color:rgba(255,255,255,.7);">✓</div></div>
+        <div style="padding:6px 2px;border-radius:8px;background:var(--teal);"><div style="font-size:10px;font-weight:800;color:#fff;">30</div><div style="font-size:7px;color:rgba(255,255,255,.7);">✓</div></div>
+        <!-- Today -->
+        <div style="padding:6px 2px;border-radius:8px;background:var(--teal);box-shadow:0 0 0 2px var(--teal2);"><div style="font-size:10px;font-weight:900;color:#fff;">31</div><div style="font-size:7px;color:rgba(255,255,255,.9);">Now</div></div>
+        <!-- Upcoming -->
+        <div style="padding:6px 2px;border-radius:8px;background:#E0F8FC;border:1px solid var(--border2);"><div style="font-size:10px;color:var(--teal);">1</div></div>
+        <div style="padding:6px 2px;border-radius:8px;background:#E0F8FC;border:1px solid var(--border2);"><div style="font-size:10px;color:var(--teal);">2</div></div>
+        <div style="padding:6px 2px;border-radius:8px;background:#E0F8FC;border:1px solid var(--border2);"><div style="font-size:10px;color:var(--teal);">3</div></div>
+        <div style="padding:6px 2px;border-radius:8px;background:#E0F8FC;border:1px solid var(--border2);"><div style="font-size:10px;color:var(--teal);">4</div></div>
+        <div style="padding:6px 2px;border-radius:8px;background:#E0F8FC;border:1px solid var(--border2);"><div style="font-size:10px;color:var(--teal);">5</div></div>
+        <div style="padding:6px 2px;border-radius:8px;background:#E0F8FC;border:1px solid var(--border2);"><div style="font-size:10px;color:var(--teal);">6</div></div>
+        <div style="padding:6px 2px;border-radius:8px;background:#E0F8FC;border:1px solid var(--border2);"><div style="font-size:10px;color:var(--teal);">7</div></div>
+      </div>
+    </div>
+
+    <!-- Deterioration alert -->
+    <div style="background:#FEF2F2;border:2px solid #FECACA;border-radius:16px;padding:14px 15px;margin-bottom:14px;display:flex;gap:11px;align-items:flex-start;">
+      <div style="font-size:20px;flex-shrink:0;">🚨</div>
+      <div style="flex:1;"><div style="font-size:12px;font-weight:800;color:#DC2626;">Escalation Trigger Active</div><div style="font-size:10px;color:#7F1010;margin-top:2px;line-height:1.5;">BP elevated at 158/96 on 3 consecutive visits. Dr. Bilal notified. Review scheduled for today 5PM. If no improvement → Home Admission upgrade.</div></div>
+    </div>
+
+    <!-- Smart integrations active -->
+    <div class="card" style="padding:14px;margin-bottom:14px;">
+      <div style="font-size:12px;font-weight:800;color:var(--text2);letter-spacing:.4px;margin-bottom:10px;">🔗 ACTIVE INTEGRATIONS</div>
+      <div style="display:flex;flex-direction:column;gap:7px;">
+        <div style="display:flex;gap:9px;align-items:center;"><div style="width:7px;height:7px;border-radius:50%;background:var(--teal);flex-shrink:0;"></div><span style="font-size:11px;color:var(--navy);">💊 Pharmacy → Pre-ordered dressing kit for tomorrow's visit</span></div>
+        <div style="display:flex;gap:9px;align-items:center;"><div style="width:7px;height:7px;border-radius:50%;background:var(--teal);flex-shrink:0;"></div><span style="font-size:11px;color:var(--navy);">🔬 Lab → Blood sample collected during visit 5, CBC results ready</span></div>
+        <div style="display:flex;gap:9px;align-items:center;"><div style="width:7px;height:7px;border-radius:50%;background:var(--teal);flex-shrink:0;"></div><span style="font-size:11px;color:var(--navy);">🤖 AI route optimization active for Nurse Aisha's daily schedule</span></div>
+      </div>
+    </div>
+    <button class="btn-t">Manage Care Plan</button>
+  </div>
+  <div class="bnav">
+    <div class="bn on"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0891B2" stroke-width="2.2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><span class="bnl" style="color:var(--teal);">Home</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A8C8D4" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/></svg></div><span class="bnl">Bookings</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A8C8D4" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div><span class="bnl">Journey</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A8C8D4" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><span class="bnl">Chat</span></div>
+  </div>
+</div>
+<div class="sl"><div class="sn">👩‍⚕️ 09</div><div class="st">Ongoing Care Plan Dashboard</div></div>
+</div>
+
+<!-- ══ S10: FEEDBACK + ESCALATION + CASE CLOSURE ══ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="phone" style="min-height:740px;">
+  <div class="sb" style="background:linear-gradient(135deg,#04414E,#06768A);"><span class="sbt">5:00 PM</span><div class="sbi"><svg width="15" height="11" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/></svg></div></div>
+  <div class="tb"><div><div class="tt">Feedback & Case Status</div><div class="ts">Rate service · Escalation options</div></div></div>
+  <div class="scr" style="background:var(--surf);">
+    <!-- Feedback -->
+    <div class="card" style="padding:18px;margin-bottom:14px;text-align:center;">
+      <div style="font-size:30px;margin-bottom:10px;">👩‍⚕️</div>
+      <div style="font-family:'Sora',sans-serif;font-size:16px;font-weight:800;color:var(--navy);margin-bottom:4px;">How was Nurse Aisha's visit?</div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:14px;">Your feedback improves our nursing service</div>
+      <div style="display:flex;justify-content:center;gap:7px;font-size:30px;margin-bottom:14px;cursor:pointer;">⭐⭐⭐⭐⭐</div>
+      <div style="display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin-bottom:12px;">
+        <span class="chip-t" style="font-size:10px;padding:4px 11px;">✓ Professional</span>
+        <span class="chip-t" style="font-size:10px;padding:4px 11px;">✓ On time</span>
+        <span class="chip-off" style="font-size:10px;padding:4px 11px;">Gentle touch</span>
+        <span class="chip-off" style="font-size:10px;padding:4px 11px;">Clear instructions</span>
+      </div>
+      <input class="inp" placeholder="Additional comments..." style="margin-bottom:12px;"/>
+      <button class="btn-t">Submit Feedback</button>
+    </div>
+
+    <!-- Escalation panel -->
+    <div style="font-size:13px;font-weight:800;color:var(--navy);margin-bottom:11px;">⚠️ Escalation Options</div>
+    <div style="display:flex;flex-direction:column;gap:9px;margin-bottom:14px;">
+      <div class="card" style="padding:13px 14px;display:flex;gap:12px;align-items:center;cursor:pointer;">
+        <div style="width:40px;height:40px;border-radius:13px;background:linear-gradient(135deg,#EBF1FF,#BFDBFE);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">📞</div>
+        <div style="flex:1;"><div style="font-size:13px;font-weight:700;color:var(--navy);">Tele-Consult Dr. Bilal</div><div style="font-size:10px;color:var(--text2);">Discuss today's BP readings · Available now</div></div>
+        <div style="background:#EBF1FF;color:#1148A4;font-size:9px;font-weight:800;padding:4px 10px;border-radius:99px;">● Online</div>
+      </div>
+      <div class="card" style="padding:13px 14px;display:flex;gap:12px;align-items:center;cursor:pointer;">
+        <div style="width:40px;height:40px;border-radius:13px;background:linear-gradient(135deg,#FEF3C7,#FDE68A);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🏥</div>
+        <div style="flex:1;"><div style="font-size:13px;font-weight:700;color:var(--navy);">Upgrade to Home Admission</div><div style="font-size:10px;color:var(--text2);">If BP remains elevated — 24/7 monitoring plan</div></div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#CBD5E0" stroke-width="2.2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+      <div class="card" style="padding:13px 14px;display:flex;gap:12px;align-items:center;cursor:pointer;">
+        <div style="width:40px;height:40px;border-radius:13px;background:linear-gradient(135deg,#FEF2F2,#FECACA);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🚑</div>
+        <div style="flex:1;"><div style="font-size:13px;font-weight:700;color:var(--navy);">Emergency / Hospital Referral</div><div style="font-size:10px;color:var(--text2);">If condition worsens — ER referral with summary</div></div>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#CBD5E0" stroke-width="2.2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+    </div>
+
+    <!-- Case status toggle -->
+    <div class="card" style="padding:15px;margin-bottom:14px;">
+      <div style="font-size:12px;font-weight:800;color:var(--text2);letter-spacing:.4px;margin-bottom:11px;">CASE STATUS</div>
+      <div style="display:flex;gap:8px;">
+        <div style="flex:1;background:linear-gradient(135deg,#E0F8FC,#BAF0FF);border:2px solid var(--teal);border-radius:13px;padding:12px 10px;text-align:center;cursor:pointer;">
+          <div style="font-size:16px;margin-bottom:5px;">🔄</div>
+          <div style="font-size:11px;font-weight:800;color:var(--teal);">Continue Plan</div>
+          <div style="font-size:9px;color:var(--text2);margin-top:2px;">7 visits remaining</div>
+        </div>
+        <div style="flex:1;background:#fff;border:1.5px solid var(--border);border-radius:13px;padding:12px 10px;text-align:center;cursor:pointer;">
+          <div style="font-size:16px;margin-bottom:5px;">⏸</div>
+          <div style="font-size:11px;font-weight:700;color:var(--text2);">Pause Plan</div>
+          <div style="font-size:9px;color:var(--text3);margin-top:2px;">Travel / unavailable</div>
+        </div>
+        <div style="flex:1;background:#fff;border:1.5px solid var(--border);border-radius:13px;padding:12px 10px;text-align:center;cursor:pointer;">
+          <div style="font-size:16px;margin-bottom:5px;">✅</div>
+          <div style="font-size:11px;font-weight:700;color:var(--text2);">Close Case</div>
+          <div style="font-size:9px;color:var(--text3);margin-top:2px;">Fully recovered</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Visit history -->
+    <div style="background:linear-gradient(135deg,#04414E,#0891B2);border-radius:16px;padding:14px 15px;">
+      <div style="font-size:11px;font-weight:800;color:rgba(255,255,255,.7);margin-bottom:10px;">📊 CARE PLAN SUMMARY</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;text-align:center;">
+        <div><div style="font-family:'Sora',sans-serif;font-size:20px;font-weight:900;color:var(--tealL);">7</div><div style="font-size:10px;color:rgba(255,255,255,.6);">Visits done</div></div>
+        <div><div style="font-family:'Sora',sans-serif;font-size:20px;font-weight:900;color:var(--tealL);">65%</div><div style="font-size:10px;color:rgba(255,255,255,.6);">Wound healed</div></div>
+        <div><div style="font-family:'Sora',sans-serif;font-size:20px;font-weight:900;color:var(--tealL);">4.9⭐</div><div style="font-size:10px;color:rgba(255,255,255,.6);">Nurse rating</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="bnav">
+    <div class="bn on"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0891B2" stroke-width="2.2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><span class="bnl" style="color:var(--teal);">Home</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A8C8D4" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/></svg></div><span class="bnl">Bookings</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A8C8D4" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div><span class="bnl">Journey</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A8C8D4" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><span class="bnl">Chat</span></div>
+  </div>
+</div>
+<div class="sl"><div class="sn">👩‍⚕️ 10</div><div class="st">Feedback + Escalation + Closure</div></div>
+</div>
+
+</div><!-- end row 3 -->
+
+</body>
+</html>

@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Home Healthcare — Pharmacy Services Flow</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Sora:wght@400;600;700;800&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+
+/* ─── COLOUR PALETTE ─────────────────────────────────────────────────
+   Aesthetic: "Warm Apothecary" — deep amber/saffron primary,
+   warm cream surfaces, midnight background.
+   Distinct from: Blue (Tele), Red (Fauri), Green (Lab)
+──────────────────────────────────────────────────────────────────── */
+:root{
+  --amber:   #E8850A;
+  --amber2:  #F59E0B;
+  --amberL:  #FCD34D;
+  --orange:  #EA580C;
+  --cream:   #FFFBF0;
+  --cream2:  #FEF3C7;
+  --surf:    #FFF8EE;
+  --card:    #FFFFFF;
+  --border:  #F5E4CC;
+  --border2: #EDD5A8;
+  --navy:    #1A2744;
+  --text2:   #7A6A4A;
+  --text3:   #B8A88A;
+  --green:   #16A34A;
+  --blue:    #1148A4;
+  --red:     #DC2626;
+  --purple:  #7C3AED;
+  --teal:    #0EA5E9;
+  --white:   #FFFFFF;
+}
+
+body{
+  background:linear-gradient(150deg,#1A0C00 0%,#2D1500 35%,#1A100A 70%,#0A0D18 100%);
+  min-height:100vh;font-family:'Nunito',sans-serif;padding:36px 20px 64px;
+}
+
+/* ─── PAGE HEADER ────────────────────────────────────────────────── */
+.ph{text-align:center;margin-bottom:44px;}
+.ph-brand{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(232,133,10,.15);border:1px solid rgba(232,133,10,.4);
+  border-radius:99px;padding:7px 20px;margin-bottom:18px;
+}
+.ph-dot{width:8px;height:8px;border-radius:50%;background:var(--amber);animation:blink 1.5s infinite;}
+.ph-name{font-size:11px;font-weight:800;color:var(--amber);letter-spacing:1.5px;}
+.ph-title{font-family:'Sora',sans-serif;font-size:38px;font-weight:800;color:#fff;line-height:1.1;margin-bottom:10px;}
+.ph-title span{background:linear-gradient(135deg,#F59E0B,#EA580C);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.ph-sub{font-size:14px;color:rgba(255,255,255,.42);max-width:580px;margin:0 auto;}
+
+/* ─── FLOW STEPS ─────────────────────────────────────────────────── */
+.fbar{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:5px;margin-bottom:44px;}
+.fs{padding:7px 13px;border-radius:99px;font-size:11px;font-weight:800;white-space:nowrap;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.3);}
+.fs.on{background:rgba(232,133,10,.22);border-color:rgba(232,133,10,.5);color:#FCD34D;}
+.fa{font-size:11px;color:rgba(255,255,255,.15);margin:0 1px;}
+
+/* ─── PHONES GRID ────────────────────────────────────────────────── */
+.pgrid{display:flex;align-items:flex-start;justify-content:center;gap:22px;flex-wrap:wrap;margin-bottom:52px;}
+
+/* ─── PHONE SHELL ────────────────────────────────────────────────── */
+.phone{
+  width:356px;background:var(--cream);
+  border-radius:48px;overflow:hidden;
+  box-shadow:0 50px 110px rgba(0,0,0,.45),0 0 0 1.5px #D4BEA0,inset 0 0 0 1px #fff;
+  display:flex;flex-direction:column;flex-shrink:0;
+}
+
+/* SCREEN LABEL */
+.sl{text-align:center;margin-top:12px;}
+.sn{display:inline-flex;align-items:center;gap:5px;background:rgba(232,133,10,.18);border:1px solid rgba(232,133,10,.35);border-radius:99px;padding:5px 14px;font-size:11px;font-weight:800;color:#FCD34D;}
+.st{font-size:12px;font-weight:600;color:rgba(255,255,255,.32);margin-top:5px;}
+
+/* ─── STATUS BAR ─────────────────────────────────────────────────── */
+.sb{height:46px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 24px 9px;flex-shrink:0;}
+.sbt{font-family:'Sora',sans-serif;font-size:13px;font-weight:700;color:#fff;}
+.sbi{display:flex;gap:5px;align-items:center;}
+
+/* ─── TOP BAR ────────────────────────────────────────────────────── */
+.tb{background:#fff;padding:13px 17px;display:flex;align-items:center;gap:11px;border-bottom:1px solid #F5EDD5;flex-shrink:0;box-shadow:0 2px 8px rgba(180,100,0,.06);}
+.bk{width:36px;height:36px;border-radius:12px;background:#FEF3C7;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
+.tt{font-family:'Sora',sans-serif;font-size:15px;font-weight:800;color:var(--navy);flex:1;line-height:1.2;}
+.ts{font-size:10px;color:var(--text2);margin-top:1px;}
+
+/* ─── SCROLL ─────────────────────────────────────────────────────── */
+.scr{overflow-y:auto;flex:1;padding:18px 18px 24px;}
+.scr::-webkit-scrollbar{display:none;}
+
+/* ─── PROGRESS BAR ───────────────────────────────────────────────── */
+.pb{height:3px;background:#F5EDD5;flex-shrink:0;}
+.pbf{height:100%;background:linear-gradient(90deg,#E8850A,#F59E0B);border-radius:99px;}
+
+/* ─── BOTTOM NAV ─────────────────────────────────────────────────── */
+.bnav{background:#fff;border-top:1px solid #F5EDD5;display:flex;justify-content:space-around;padding:10px 0 18px;flex-shrink:0;box-shadow:0 -4px 20px rgba(180,100,0,.06);}
+.bn{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;flex:1;}
+.bni{width:40px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;}
+.bn.on .bni{background:#FEF3C7;}
+.bnl{font-size:9px;font-weight:700;color:#C8B898;}
+.bn.on .bnl{color:var(--amber);}
+
+/* ─── SHARED PRIMITIVES ──────────────────────────────────────────── */
+.btn-a{background:linear-gradient(135deg,#E8850A,#F59E0B);color:#fff;border:none;border-radius:14px;padding:14px 20px;font-size:14px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;width:100%;text-align:center;box-shadow:0 6px 20px rgba(232,133,10,.35);}
+.btn-out{background:transparent;color:var(--amber);border:2px solid var(--amber);border-radius:14px;padding:13px 20px;font-size:13px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;width:100%;text-align:center;}
+.btn-blue{background:linear-gradient(135deg,#1148A4,#2273E8);color:#fff;border:none;border-radius:14px;padding:14px 20px;font-size:13px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;width:100%;text-align:center;box-shadow:0 6px 20px rgba(17,72,164,.25);}
+.card{background:#fff;border-radius:18px;border:1.5px solid var(--border);box-shadow:0 2px 10px rgba(180,100,0,.06);}
+.inp{background:#FEF9EE;border:1.5px solid #F5E4CC;border-radius:12px;padding:12px 14px;font-size:13px;color:var(--navy);font-family:'Nunito',sans-serif;width:100%;}
+.inp::placeholder{color:var(--text3);}
+.tag{display:inline-flex;align-items:center;gap:3px;padding:3px 9px;border-radius:99px;font-size:10px;font-weight:800;white-space:nowrap;}
+.chip-a{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;border-radius:99px;font-size:11px;font-weight:700;background:var(--cream2);color:var(--amber);border:1.5px solid #FCD34D;cursor:pointer;}
+.chip-off{display:inline-flex;align-items:center;gap:4px;padding:5px 12px;border-radius:99px;font-size:11px;font-weight:700;background:#FEF9EE;color:var(--text2);border:1.5px solid var(--border);cursor:pointer;}
+.divl{height:1px;background:var(--border);margin:6px 0;}
+
+/* ─── ANIMATIONS ─────────────────────────────────────────────────── */
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes rideMove{0%,100%{transform:translateX(0)}50%{transform:translateX(8px)}}
+.fu{animation:fadeUp .38s ease both;}
+
+/* ─── SECTION DIVIDER ────────────────────────────────────────────── */
+.sdiv{display:flex;align-items:center;gap:14px;margin:44px auto 32px;max-width:1500px;}
+.sdl{flex:1;height:1px;background:rgba(232,133,10,.1);}
+.sdt{font-size:10px;font-weight:800;color:rgba(232,133,10,.3);letter-spacing:2px;white-space:nowrap;}
+
+
+
+
+
+.home-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: inline-block;
+    padding: 12px 28px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 15px;
+    border-radius: 30px;
+    background: linear-gradient(155deg,#7C3500,#B85000,#E8850A);
+    overflow: hidden;
+    transition: all 0.4s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* Shine animation */
+.home-btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(155deg,#7C3500,#B85000,#E8850A);
+    transition: 0.5s;
+}
+
+.home-btn:hover::before {
+    left: 100%;
+}
+
+/* Hover effect */
+.home-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+/* Click effect */
+.home-btn:active {
+    transform: scale(0.95);
+}
+</style>
+</head>
+<body>
+    <div>
+    <a href="./Patient_App_Home.html" class="home-btn">← Back to Home</a>
+  </div>
+<!-- ═══ PAGE HEADER ═══════════════════════════════════════════════ -->
+<div class="ph">
+  <div class="ph-brand"><div class="ph-dot"></div><span class="ph-name">PHARMACY SERVICES — HOME HEALTHCARE</span><div class="ph-dot"></div></div>
+  <div class="ph-title">Home Pharmacy<br/><span>Delivery Flow</span></div>
+  <div class="ph-sub">Complete 10-screen journey — from uploading a prescription to medication reminders, MAAS integration, cold-chain tracking, and adherence monitoring.</div>
+</div>
+
+<!-- ═══ FLOW STEPS ════════════════════════════════════════════════ -->
+<div class="fbar">
+  <div class="fs on">01 · Entry</div><div class="fa">→</div>
+  <div class="fs">02 · Rx Upload</div><div class="fa">→</div>
+  <div class="fs">03 · Search & Refill</div><div class="fa">→</div>
+  <div class="fs">04 · Cart & Validation</div><div class="fa">→</div>
+  <div class="fs">05 · Delivery + Payment</div><div class="fa">→</div>
+  <div class="fs">06 · Order Fulfillment</div><div class="fa">→</div>
+  <div class="fs">07 · Live Tracking</div><div class="fa">→</div>
+  <div class="fs">08 · Delivery + Guidance</div><div class="fa">→</div>
+  <div class="fs">09 · MAAS Reminders</div><div class="fa">→</div>
+  <div class="fs">10 · Adherence + Follow-up</div>
+</div>
+
+<!-- ══════════════════ ROW 1 — Screens 1, 2, 3 ══════════════════ -->
+<div class="pgrid">
+
+<!-- ══ S1: ENTRY / DIGITAL FRONT DOOR ══ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="phone" style="min-height:740px;">
+  <div class="sb" style="background:linear-gradient(135deg,#7C3500,#B85000);">
+    <span class="sbt">11:20</span>
+    <div class="sbi"><svg width="15" height="11" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/></svg><svg width="22" height="11" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".6"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg></div>
+  </div>
+  <!-- Hero header -->
+  <div style="background:linear-gradient(155deg,#7C3500,#B85000,#E8850A);padding:18px 20px 30px;position:relative;overflow:hidden;flex-shrink:0;">
+    <div style="position:absolute;top:-60px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.06);"></div>
+    <div style="position:absolute;bottom:-40px;left:20px;width:110px;height:110px;border-radius:50%;background:rgba(255,255,255,.04);"></div>
+    <div style="display:flex;align-items:center;gap:13px;position:relative;z-index:1;">
+      <div style="width:54px;height:54px;border-radius:18px;background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;">💊</div>
+      <div>
+        <div style="font-size:10px;color:rgba(255,255,255,.65);font-weight:700;letter-spacing:1px;text-transform:uppercase;">Home Pharmacy</div>
+        <div style="font-family:'Sora',sans-serif;font-size:21px;font-weight:800;color:#fff;line-height:1.1;margin-top:2px;">Order Medicines</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.65);margin-top:3px;">Delivered in 2–4 hours · MAAS included</div>
+      </div>
+    </div>
+    <!-- Quick stats -->
+    <div style="display:flex;gap:8px;margin-top:16px;position:relative;z-index:1;">
+      <div style="flex:1;background:rgba(255,255,255,.13);border-radius:12px;padding:9px 10px;text-align:center;border:1px solid rgba(255,255,255,.15);">
+        <div style="font-family:'Sora',sans-serif;font-size:16px;font-weight:800;color:#fff;">10K+</div>
+        <div style="font-size:9px;color:rgba(255,255,255,.65);font-weight:600;margin-top:1px;">Medicines</div>
+      </div>
+      <div style="flex:1;background:rgba(255,255,255,.13);border-radius:12px;padding:9px 10px;text-align:center;border:1px solid rgba(255,255,255,.15);">
+        <div style="font-family:'Sora',sans-serif;font-size:16px;font-weight:800;color:#fff;">2–4h</div>
+        <div style="font-size:9px;color:rgba(255,255,255,.65);font-weight:600;margin-top:1px;">Delivery</div>
+      </div>
+      <div style="flex:1;background:rgba(255,255,255,.13);border-radius:12px;padding:9px 10px;text-align:center;border:1px solid rgba(255,255,255,.15);">
+        <div style="font-family:'Sora',sans-serif;font-size:16px;font-weight:800;color:#FCD34D;">❄️</div>
+        <div style="font-size:9px;color:rgba(255,255,255,.65);font-weight:600;margin-top:1px;">Cold-chain</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scr" style="background:var(--surf);">
+    <!-- Who is this for -->
+    <div class="card" style="padding:14px 15px;margin-bottom:14px;">
+      <div style="font-size:11px;font-weight:800;color:var(--text2);letter-spacing:.5px;margin-bottom:10px;">ORDER FOR</div>
+      <div style="display:flex;gap:8px;">
+        <div style="flex:1;background:linear-gradient(135deg,#FEF3C7,#FDE68A);border:2px solid var(--amber);border-radius:14px;padding:12px 10px;text-align:center;cursor:pointer;box-shadow:0 4px 12px rgba(232,133,10,.18);">
+          <div style="font-size:20px;margin-bottom:5px;">👤</div>
+          <div style="font-size:12px;font-weight:800;color:var(--amber);">Myself</div>
+          <div style="font-size:9px;color:#A07020;margin-top:2px;">MA · MRN 226589</div>
+        </div>
+        <div style="flex:1;background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:12px 10px;text-align:center;cursor:pointer;">
+          <div style="font-size:20px;margin-bottom:5px;">👨‍👩‍👧</div>
+          <div style="font-size:12px;font-weight:800;color:var(--text2);">Family Member</div>
+          <div style="font-size:9px;color:var(--text3);margin-top:2px;">Add / select</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Two clear paths -->
+    <div style="font-size:12px;font-weight:800;color:var(--text2);letter-spacing:.5px;margin-bottom:11px;">HOW WOULD YOU LIKE TO ORDER?</div>
+
+    <!-- Path A: Upload Prescription -->
+    <div class="card" style="margin-bottom:11px;border:2px solid var(--amber);box-shadow:0 6px 20px rgba(232,133,10,.15);cursor:pointer;overflow:hidden;">
+      <div style="height:3px;background:linear-gradient(90deg,#E8850A,#F59E0B);"></div>
+      <div style="padding:16px 17px;display:flex;gap:14px;align-items:flex-start;">
+        <div style="width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,#E8850A,#F59E0B);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;box-shadow:0 4px 14px rgba(232,133,10,.35);">📋</div>
+        <div style="flex:1;">
+          <div style="font-family:'Sora',sans-serif;font-size:15px;font-weight:800;color:var(--amber);">Upload Prescription</div>
+          <div style="font-size:11px;color:#A07020;margin-top:3px;line-height:1.5;">Doctor prescribed medicines? Upload — AI extracts all medicine names, dosage &amp; duration instantly</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:9px;">
+            <span class="chip-a" style="font-size:10px;padding:3px 10px;">🤖 AI Extract</span>
+            <span class="chip-a" style="font-size:10px;padding:3px 10px;">✅ Pharmacist Verified</span>
+          </div>
+        </div>
+        <div style="width:26px;height:26px;border-radius:99px;background:var(--amber);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Path B: Search / Refill -->
+    <div class="card" style="margin-bottom:16px;cursor:pointer;">
+      <div style="height:3px;background:linear-gradient(90deg,#1148A4,#2273E8);"></div>
+      <div style="padding:16px 17px;display:flex;gap:14px;align-items:flex-start;">
+        <div style="width:52px;height:52px;border-radius:16px;background:linear-gradient(135deg,#1148A4,#2273E8);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;box-shadow:0 4px 14px rgba(17,72,164,.25);">🔍</div>
+        <div style="flex:1;">
+          <div style="font-family:'Sora',sans-serif;font-size:15px;font-weight:800;color:var(--blue);">Refill / Search Medicines</div>
+          <div style="font-size:11px;color:#5A7A9A;margin-top:3px;line-height:1.5;">Reorder from previous prescriptions, chronic medication list, or search by medicine name</div>
+          <div style="display:flex;gap:6px;margin-top:9px;">
+            <span style="background:#EBF1FF;color:var(--blue);font-size:10px;font-weight:700;padding:3px 10px;border-radius:99px;">🔁 Chronic Meds</span>
+            <span style="background:#EBF1FF;color:var(--blue);font-size:10px;font-weight:700;padding:3px 10px;border-radius:99px;">📦 Bundles</span>
+          </div>
+        </div>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#CBD5E0" stroke-width="2.2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+    </div>
+
+    <!-- Chronic meds quick refill -->
+    <div style="font-size:12px;font-weight:800;color:var(--text2);letter-spacing:.5px;margin-bottom:10px;">⚡ QUICK REFILL — YOUR CHRONIC MEDS</div>
+    <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;">
+      <div style="flex-shrink:0;background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:11px 13px;min-width:140px;">
+        <div style="font-size:13px;font-weight:800;color:var(--navy);">Amlodipine 10mg</div>
+        <div style="font-size:10px;color:var(--text2);">BP · 30 tablets left</div>
+        <div style="font-size:10px;font-weight:700;color:var(--amber);margin-top:5px;cursor:pointer;">+ Add to cart →</div>
+      </div>
+      <div style="flex-shrink:0;background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:11px 13px;min-width:140px;">
+        <div style="font-size:13px;font-weight:800;color:var(--navy);">Metformin 500mg</div>
+        <div style="font-size:10px;color:var(--text2);">Diabetes · 5 tablets left</div>
+        <div style="font-size:10px;font-weight:700;color:var(--red);margin-top:5px;">⚠ Running low →</div>
+      </div>
+      <div style="flex-shrink:0;background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:11px 13px;min-width:140px;">
+        <div style="font-size:13px;font-weight:800;color:var(--navy);">Aspirin 75mg</div>
+        <div style="font-size:10px;color:var(--text2);">Cardiac · 22 tablets left</div>
+        <div style="font-size:10px;font-weight:700;color:var(--amber);margin-top:5px;cursor:pointer;">+ Add to cart →</div>
+      </div>
+    </div>
+  </div>
+  <div class="bnav">
+    <div class="bn on"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8850A" stroke-width="2.2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><span class="bnl" style="color:var(--amber);">Home</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8B898" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/></svg></div><span class="bnl">Bookings</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8B898" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/></svg></div><span class="bnl">Journey</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8B898" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><span class="bnl">Chat</span></div>
+  </div>
+</div>
+<div class="sl"><div class="sn">💊 01</div><div class="st">Entry / Digital Front Door</div></div>
+</div>
+
+<!-- ══ S2: PRESCRIPTION UPLOAD + AI EXTRACT ══ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="phone" style="min-height:740px;">
+  <div class="sb" style="background:linear-gradient(135deg,#7C3500,#B85000);"><span class="sbt">11:22</span><div class="sbi"><svg width="15" height="11" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/></svg></div></div>
+  <div class="tb"><div class="bk"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8850A" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></div><div><div class="tt">Upload Prescription</div><div class="ts">AI extracts medicines · Pharmacist verifies</div></div><div style="background:var(--cream2);border:1px solid #FCD34D;border-radius:99px;padding:4px 10px;font-size:10px;font-weight:700;color:var(--amber);">2 of 10</div></div>
+  <div class="pb"><div class="pbf" style="width:20%;"></div></div>
+  <div class="scr" style="background:var(--surf);">
+    <!-- Upload area -->
+    <div style="border:2px dashed #FCD34D;border-radius:20px;padding:26px 20px;text-align:center;background:linear-gradient(135deg,#FFFBF0,#FEF9E4);margin-bottom:14px;cursor:pointer;">
+      <div style="width:64px;height:64px;border-radius:20px;background:linear-gradient(135deg,#E8850A,#F59E0B);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:28px;box-shadow:0 6px 18px rgba(232,133,10,.3);">📋</div>
+      <div style="font-family:'Sora',sans-serif;font-size:15px;font-weight:800;color:#A07020;margin-bottom:5px;">Upload Prescription</div>
+      <div style="font-size:12px;color:var(--text2);">Photo · PDF · WhatsApp forward</div>
+      <div style="display:flex;gap:8px;justify-content:center;margin-top:14px;">
+        <button style="background:var(--amber);border:none;border-radius:12px;padding:10px 18px;font-size:12px;font-weight:800;color:#fff;font-family:'Nunito',sans-serif;cursor:pointer;">📷 Camera</button>
+        <button style="background:#fff;border:1.5px solid #FCD34D;border-radius:12px;padding:10px 18px;font-size:12px;font-weight:800;color:var(--amber);font-family:'Nunito',sans-serif;cursor:pointer;">📁 Gallery</button>
+      </div>
+    </div>
+    <!-- Uploaded file preview -->
+    <div class="card" style="margin-bottom:14px;overflow:hidden;">
+      <div style="padding:12px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);">
+        <div style="font-size:22px;">📄</div>
+        <div style="flex:1;"><div style="font-size:13px;font-weight:800;color:var(--navy);">Prescription_DrBilal_Mar29.pdf</div><div style="font-size:10px;color:var(--text2);">310 KB · Uploaded ✓</div></div>
+        <div style="background:#DCFCE7;color:#16A34A;font-size:9px;font-weight:800;padding:3px 9px;border-radius:99px;">Uploaded ✓</div>
+      </div>
+      <div style="height:90px;background:linear-gradient(135deg,#FFFBF0,#FEF3C7);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;">
+        <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 18px,rgba(232,133,10,.06) 18px,rgba(232,133,10,.06) 19px);"></div>
+        <div style="font-size:11px;color:var(--text3);font-style:italic;position:relative;">Prescription preview</div>
+      </div>
+    </div>
+    <!-- AI extraction -->
+    <div style="background:linear-gradient(135deg,#FEF3C7,#FFFBF0);border:1.5px solid #FCD34D;border-radius:18px;padding:16px;margin-bottom:14px;">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:12px;">
+        <div style="width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,#E8850A,#F59E0B);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;">🤖</div>
+        <div><div style="font-size:13px;font-weight:800;color:#A07020;">AI Extracted 3 Medicines</div><div style="font-size:10px;color:#C09040;margin-top:1px;">Tap ✕ to remove · Add more manually</div></div>
+        <div style="margin-left:auto;background:var(--amber);color:#fff;font-size:9px;font-weight:800;padding:3px 9px;border-radius:99px;">97% confidence</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:7px;">
+        <div style="background:#fff;border-radius:12px;padding:11px 13px;display:flex;align-items:center;gap:11px;border:1.5px solid #FCD34D;">
+          <div style="width:28px;height:28px;border-radius:99px;background:var(--amber);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+          <div style="flex:1;">
+            <div style="font-size:13px;font-weight:700;color:var(--navy);">Amlodipine 10mg</div>
+            <div style="font-size:10px;color:var(--text2);">Once daily · 30 days · AED 28</div>
+            <div style="display:flex;gap:5px;margin-top:4px;"><span style="background:#DCFCE7;color:#16A34A;font-size:9px;font-weight:700;padding:1px 7px;border-radius:99px;">In Stock</span><span style="background:#FEF3C7;color:var(--amber);font-size:9px;font-weight:700;padding:1px 7px;border-radius:99px;">Generic: AED 12</span></div>
+          </div>
+          <div style="color:var(--red);font-size:16px;cursor:pointer;">✕</div>
+        </div>
+        <div style="background:#fff;border-radius:12px;padding:11px 13px;display:flex;align-items:center;gap:11px;border:1.5px solid #FCD34D;">
+          <div style="width:28px;height:28px;border-radius:99px;background:var(--amber);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+          <div style="flex:1;">
+            <div style="font-size:13px;font-weight:700;color:var(--navy);">Metformin 500mg</div>
+            <div style="font-size:10px;color:var(--text2);">Twice daily · 30 days · AED 35</div>
+            <div style="display:flex;gap:5px;margin-top:4px;"><span style="background:#DCFCE7;color:#16A34A;font-size:9px;font-weight:700;padding:1px 7px;border-radius:99px;">In Stock</span></div>
+          </div>
+          <div style="color:var(--red);font-size:16px;cursor:pointer;">✕</div>
+        </div>
+        <div style="background:#FEF9EE;border-radius:12px;padding:11px 13px;display:flex;align-items:center;gap:11px;border:1.5px solid #FCD34D;">
+          <div style="width:28px;height:28px;border-radius:99px;background:#D97706;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;font-weight:800;color:#fff;">?</div>
+          <div style="flex:1;">
+            <div style="font-size:13px;font-weight:700;color:#A07020;">Vitamin D 5000IU</div>
+            <div style="font-size:10px;color:var(--text2);">Once weekly · 8 weeks — please verify</div>
+          </div>
+          <div style="color:var(--red);font-size:16px;cursor:pointer;">✕</div>
+        </div>
+      </div>
+    </div>
+    <!-- Pharmacist verification banner -->
+    <div style="background:#EBF1FF;border:1.5px solid #BFDBFE;border-radius:14px;padding:12px 14px;margin-bottom:16px;display:flex;gap:10px;align-items:center;">
+      <div style="font-size:20px;flex-shrink:0;">👨‍⚕️</div>
+      <div style="flex:1;font-size:11px;color:#1148A4;line-height:1.5;"><b>Pharmacist Validation Pending</b> — A licensed pharmacist will verify this prescription before dispatch. Required for controlled drugs.</div>
+    </div>
+    <button class="btn-a">Confirm & Add to Cart →</button>
+  </div>
+  <div class="bnav">
+    <div class="bn on"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8850A" stroke-width="2.2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><span class="bnl" style="color:var(--amber);">Home</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8B898" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/></svg></div><span class="bnl">Bookings</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8B898" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div><span class="bnl">Journey</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8B898" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><span class="bnl">Chat</span></div>
+  </div>
+</div>
+<div class="sl"><div class="sn">💊 02</div><div class="st">Rx Upload + AI Extract</div></div>
+</div>
+
+<!-- ══ S3: SEARCH / REFILL + CART VALIDATION ══ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="phone" style="min-height:740px;">
+  <div class="sb" style="background:linear-gradient(135deg,#7C3500,#B85000);"><span class="sbt">11:25</span><div class="sbi"><svg width="15" height="11" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/></svg></div></div>
+  <div class="tb"><div class="bk"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8850A" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></div><div><div class="tt">Search & Refill</div><div class="ts">Browse medicines · Generic alternatives</div></div><div style="background:var(--cream2);border:1px solid #FCD34D;border-radius:99px;padding:4px 10px;font-size:10px;font-weight:700;color:var(--amber);">Alt: 3 of 10</div></div>
+  <div class="pb"><div class="pbf" style="width:30%;"></div></div>
+  <div class="scr" style="background:var(--surf);">
+    <!-- Search -->
+    <div style="position:relative;margin-bottom:14px;">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#C8A870" stroke-width="2" stroke-linecap="round" style="position:absolute;left:13px;top:50%;transform:translateY(-50%);"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input class="inp" style="padding-left:36px;" placeholder="Search medicine name, brand, or generic..." type="text"/>
+    </div>
+    <!-- Filter chips -->
+    <div style="display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:3px;">
+      <div class="chip-a" style="font-size:10px;padding:4px 11px;white-space:nowrap;">All</div>
+      <div class="chip-off" style="font-size:10px;padding:4px 11px;white-space:nowrap;">Chronic Meds</div>
+      <div class="chip-off" style="font-size:10px;padding:4px 11px;white-space:nowrap;">Previous Orders</div>
+      <div class="chip-off" style="font-size:10px;padding:4px 11px;white-space:nowrap;">Generics</div>
+    </div>
+    <!-- AI interaction alert -->
+    <div style="background:linear-gradient(135deg,#FEF9EE,#FEF3C7);border:2px solid #F59E0B;border-radius:16px;padding:13px 15px;margin-bottom:14px;">
+      <div style="display:flex;gap:10px;align-items:flex-start;">
+        <div style="width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,#D97706,#F59E0B);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;">⚠️</div>
+        <div>
+          <div style="font-size:12px;font-weight:800;color:#92400E;">AI Drug Interaction Alert</div>
+          <div style="font-size:10px;color:#A16207;margin-top:2px;line-height:1.5;"><b>Aspirin + Warfarin</b> — potential bleeding risk (Grade 2). Pharmacist notified. Doctor approval required before dispensing.</div>
+          <div style="display:flex;gap:7px;margin-top:8px;">
+            <div style="background:#D97706;color:#fff;font-size:9px;font-weight:800;padding:3px 9px;border-radius:99px;cursor:pointer;">Review</div>
+            <div style="background:#FEF3C7;color:#A16207;font-size:9px;font-weight:700;padding:3px 9px;border-radius:99px;cursor:pointer;">Alternatives</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Medicine results -->
+    <div style="font-size:12px;font-weight:800;color:var(--text2);letter-spacing:.5px;margin-bottom:10px;">SEARCH RESULTS</div>
+    <div style="display:flex;flex-direction:column;gap:9px;margin-bottom:14px;">
+      <!-- Brand + Generic pair -->
+      <div class="card" style="padding:13px 14px;border:2px solid var(--amber);">
+        <div style="display:flex;gap:11px;align-items:center;">
+          <div style="width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,#FEF3C7,#FDE68A);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">💊</div>
+          <div style="flex:1;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+              <div style="font-size:14px;font-weight:800;color:var(--navy);">Amlodipine 10mg</div>
+              <div style="font-family:'Sora',sans-serif;font-size:14px;font-weight:900;color:var(--navy);">AED 28</div>
+            </div>
+            <div style="font-size:10px;color:var(--text2);">Brand: Norvasc · Pfizer · 30 tabs</div>
+            <div style="display:flex;gap:5px;margin-top:5px;"><span style="background:#DCFCE7;color:#16A34A;font-size:9px;font-weight:700;padding:1px 7px;border-radius:99px;">In Stock</span><span style="background:var(--cream2);color:var(--amber);font-size:9px;font-weight:800;padding:1px 7px;border-radius:99px;">✓ Selected</span></div>
+          </div>
+          <div style="width:28px;height:28px;border-radius:99px;background:var(--amber);display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+        </div>
+        <!-- Generic suggestion -->
+        <div style="background:var(--cream2);border-radius:10px;padding:8px 11px;margin-top:9px;display:flex;justify-content:space-between;align-items:center;">
+          <div><div style="font-size:11px;font-weight:700;color:#A07020;">💡 Generic alternative available</div><div style="font-size:10px;color:var(--text2);margin-top:1px;">Amlodipine 10mg (Generic) · AED 12 — save AED 16</div></div>
+          <div style="background:var(--amber);color:#fff;font-size:9px;font-weight:800;padding:3px 9px;border-radius:99px;cursor:pointer;flex-shrink:0;">Switch</div>
+        </div>
+      </div>
+      <div class="card" style="padding:13px 14px;">
+        <div style="display:flex;gap:11px;align-items:center;">
+          <div style="width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,#FEE2E2,#FECACA);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">❄️</div>
+          <div style="flex:1;">
+            <div style="display:flex;justify-content:space-between;">
+              <div style="font-size:14px;font-weight:800;color:var(--navy);">Insulin Glargine 100U</div>
+              <div style="font-family:'Sora',sans-serif;font-size:14px;font-weight:900;color:var(--navy);">AED 180</div>
+            </div>
+            <div style="font-size:10px;color:var(--text2);">Lantus · Sanofi · 3ml pen</div>
+            <div style="display:flex;gap:5px;margin-top:5px;"><span style="background:#DCFCE7;color:#16A34A;font-size:9px;font-weight:700;padding:1px 7px;border-radius:99px;">In Stock</span><span style="background:#EBF1FF;color:#1148A4;font-size:9px;font-weight:800;padding:1px 7px;border-radius:99px;">❄️ Cold-chain</span><span style="background:#FEE2E2;color:var(--red);font-size:9px;font-weight:800;padding:1px 7px;border-radius:99px;">Rx Required</span></div>
+          </div>
+          <div style="width:28px;height:28px;border-radius:99px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;font-size:14px;color:var(--amber);">+</div>
+        </div>
+      </div>
+    </div>
+    <!-- Chronic disease bundle -->
+    <div style="background:linear-gradient(135deg,#7C3500,#E8850A);border-radius:18px;padding:15px 16px;margin-bottom:16px;box-shadow:0 6px 20px rgba(232,133,10,.25);">
+      <div style="font-size:12px;font-weight:800;color:rgba(255,255,255,.75);margin-bottom:8px;">📦 CHRONIC DISEASE BUNDLE</div>
+      <div style="font-family:'Sora',sans-serif;font-size:15px;font-weight:800;color:#fff;">Diabetes Monthly Pack</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.7);margin-top:3px;">Metformin · HbA1c strip · Insulin syringe · Vit B12</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;">
+        <div style="font-family:'Sora',sans-serif;font-size:18px;font-weight:900;color:#fff;">AED 220 <span style="font-size:12px;text-decoration:line-through;opacity:.6;">AED 310</span></div>
+        <button style="background:#fff;border:none;border-radius:11px;padding:8px 16px;font-size:11px;font-weight:800;color:var(--amber);font-family:'Nunito',sans-serif;cursor:pointer;">Add Bundle</button>
+      </div>
+    </div>
+    <!-- Cart summary bar -->
+    <div style="background:linear-gradient(135deg,#7C3500,#B85000);border-radius:16px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 6px 18px rgba(180,80,0,.3);">
+      <div><div style="font-size:11px;color:rgba(255,255,255,.7);font-weight:600;">2 items in cart</div><div style="font-family:'Sora',sans-serif;font-size:18px;font-weight:900;color:#fff;">AED 63</div></div>
+      <button style="background:#fff;color:var(--amber);border:none;border-radius:12px;padding:10px 18px;font-size:13px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;">Review Cart →</button>
+    </div>
+  </div>
+  <div class="bnav">
+    <div class="bn on"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8850A" stroke-width="2.2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><span class="bnl" style="color:var(--amber);">Home</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8B898" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/></svg></div><span class="bnl">Bookings</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8B898" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div><span class="bnl">Journey</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8B898" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><span class="bnl">Chat</span></div>
+  </div>
+</div>
+<div class="sl"><div class="sn">💊 03</div><div class="st">Search, Refill & Validation</div></div>
+</div>
+
+</div><!-- end row 1 -->
+
+<!-- DIVIDER -->
+<div class="sdiv"><div class="sdl"></div><div class="sdt">SCREENS 04 – 07</div><div class="sdl"></div></div>
+
+<!-- ══════════════════ ROW 2 — Screens 4, 5, 6, 7 ══════════════════ -->
+<div class="pgrid">
+
+<!-- ══ S4: CART REVIEW + DELIVERY + PAYMENT ══ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="phone" style="min-height:740px;">
+  <div class="sb" style="background:linear-gradient(135deg,#7C3500,#B85000);"><span class="sbt">11:28</span><div class="sbi"><svg width="15" height="11" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/></svg></div></div>
+  <div class="tb"><div class="bk"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#E8850A" stroke-width="2.5" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></div><div><div class="tt">Cart & Delivery</div><div class="ts">Review order · Choose delivery · Pay</div></div><div style="background:var(--cream2);border:1px solid #FCD34D;border-radius:99px;padding:4px 10px;font-size:10px;font-weight:700;color:var(--amber);">4 of 10</div></div>
+  <div class="pb"><div class="pbf" style="width:40%;"></div></div>
+  <div class="scr" style="background:var(--surf);">
+    <!-- Cart items -->
+    <div class="card" style="padding:15px;margin-bottom:14px;">
+      <div style="font-size:12px;font-weight:800;color:var(--text2);letter-spacing:.5px;margin-bottom:11px;">YOUR ORDER (3 ITEMS)</div>
+      <div style="display:flex;flex-direction:column;gap:9px;">
+        <div style="display:flex;gap:10px;align-items:center;"><div style="width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#FEF3C7,#FDE68A);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;">💊</div><div style="flex:1;"><div style="font-size:13px;font-weight:700;color:var(--navy);">Amlodipine 10mg</div><div style="font-size:10px;color:var(--text2);">30 tabs · Once daily</div></div><div style="font-family:'Sora',sans-serif;font-size:14px;font-weight:900;color:var(--navy);">AED 28</div></div>
+        <div class="divl"></div>
+        <div style="display:flex;gap:10px;align-items:center;"><div style="width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#DCFCE7,#BBF7D0);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;">💊</div><div style="flex:1;"><div style="font-size:13px;font-weight:700;color:var(--navy);">Metformin 500mg</div><div style="font-size:10px;color:var(--text2);">60 tabs · Twice daily</div></div><div style="font-family:'Sora',sans-serif;font-size:14px;font-weight:900;color:var(--navy);">AED 35</div></div>
+        <div class="divl"></div>
+        <div style="display:flex;gap:10px;align-items:center;"><div style="width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,#EBF1FF,#BFDBFE);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;">❄️</div><div style="flex:1;"><div style="font-size:13px;font-weight:700;color:var(--navy);">Vitamin D 5000IU</div><div style="font-size:10px;color:var(--text2);">8 caps · Once weekly</div></div><div style="font-family:'Sora',sans-serif;font-size:14px;font-weight:900;color:var(--navy);">AED 40</div></div>
+        <div class="divl"></div>
+        <div style="display:flex;justify-content:space-between;"><span style="font-size:12px;color:var(--text2);">Delivery Fee</span><span style="font-size:12px;font-weight:700;color:var(--navy);">AED 15</span></div>
+        <div style="display:flex;justify-content:space-between;"><span style="font-size:12px;color:var(--green);">Subscription Discount</span><span style="font-size:12px;font-weight:700;color:var(--green);">−AED 10</span></div>
+        <div class="divl"></div>
+        <div style="display:flex;justify-content:space-between;"><span style="font-size:15px;font-weight:900;color:var(--navy);">Total</span><span style="font-family:'Sora',sans-serif;font-size:18px;font-weight:900;color:var(--amber);">AED 108</span></div>
+      </div>
+    </div>
+    <!-- Delivery type -->
+    <div style="font-size:12px;font-weight:800;color:var(--text2);letter-spacing:.5px;margin-bottom:10px;">DELIVERY OPTIONS</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px;">
+      <div style="background:linear-gradient(135deg,#FEF3C7,#FFFBF0);border:2px solid var(--amber);border-radius:16px;padding:13px 12px;text-align:center;cursor:pointer;box-shadow:0 4px 12px rgba(232,133,10,.15);">
+        <div style="font-size:24px;margin-bottom:6px;">⚡</div>
+        <div style="font-size:12px;font-weight:800;color:var(--amber);">Express</div>
+        <div style="font-size:10px;color:#A07020;margin-top:2px;">In 2 hours · AED 25</div>
+        <div style="margin-top:6px;background:var(--amber);color:#fff;font-size:9px;font-weight:800;padding:2px 8px;border-radius:99px;display:inline-block;">Selected</div>
+      </div>
+      <div style="background:#fff;border:1.5px solid var(--border);border-radius:16px;padding:13px 12px;text-align:center;cursor:pointer;">
+        <div style="font-size:24px;margin-bottom:6px;">📦</div>
+        <div style="font-size:12px;font-weight:800;color:var(--text2);">Standard</div>
+        <div style="font-size:10px;color:var(--text3);margin-top:2px;">3–4 hours · AED 15</div>
+      </div>
+    </div>
+    <!-- Schedule delivery -->
+    <div class="card" style="padding:13px 14px;margin-bottom:14px;display:flex;gap:10px;align-items:center;">
+      <div style="font-size:18px;flex-shrink:0;">🕐</div>
+      <div style="flex:1;"><div style="font-size:13px;font-weight:700;color:var(--navy);">Schedule Delivery Time</div><div style="font-size:10px;color:var(--text2);">Today · Anytime between 1:00 PM – 6:00 PM</div></div>
+      <div style="font-size:11px;font-weight:700;color:var(--amber);cursor:pointer;">Change</div>
+    </div>
+    <!-- Payment methods -->
+    <div style="font-size:12px;font-weight:800;color:var(--text2);letter-spacing:.5px;margin-bottom:10px;">PAYMENT METHOD</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;">
+      <div style="background:linear-gradient(135deg,#E8850A,#F59E0B);border-radius:14px;padding:11px 12px;cursor:pointer;"><div style="font-size:16px;margin-bottom:4px;">💳</div><div style="font-size:11px;font-weight:800;color:#fff;">Card / Apple Pay</div></div>
+      <div style="background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:11px 12px;cursor:pointer;"><div style="font-size:16px;margin-bottom:4px;">💰</div><div style="font-size:11px;font-weight:800;color:var(--text2);">COD</div></div>
+      <div style="background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:11px 12px;cursor:pointer;"><div style="font-size:16px;margin-bottom:4px;">🏦</div><div style="font-size:11px;font-weight:800;color:var(--text2);">Insurance</div></div>
+      <div style="background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:11px 12px;cursor:pointer;"><div style="font-size:16px;margin-bottom:4px;">🔁</div><div style="font-size:11px;font-weight:800;color:var(--text2);">Subscription</div></div>
+    </div>
+    <button class="btn-a">Pay AED 108 → Place Order</button>
+  </div>
+  <div class="bnav">
+    <div class="bn on"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8850A" stroke-width="2.2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><span class="bnl" style="color:var(--amber);">Home</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8B898" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/></svg></div><span class="bnl">Bookings</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8B898" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div><span class="bnl">Journey</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8B898" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><span class="bnl">Chat</span></div>
+  </div>
+</div>
+<div class="sl"><div class="sn">💊 04</div><div class="st">Cart, Delivery & Payment</div></div>
+</div>
+
+<!-- ══ S5: ORDER FULFILLMENT STATUS ══ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="phone" style="min-height:740px;">
+  <div class="sb" style="background:linear-gradient(135deg,#7C3500,#B85000);"><span class="sbt">12:05 PM</span><div class="sbi"><svg width="15" height="11" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/></svg></div></div>
+  <div style="background:linear-gradient(155deg,#7C3500,#B85000,#E8850A);padding:16px 18px 22px;flex-shrink:0;position:relative;overflow:hidden;">
+    <div style="position:absolute;top:-40px;right:-40px;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,.05);"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;position:relative;z-index:1;">
+      <div><div style="font-size:10px;color:rgba(255,255,255,.65);font-weight:700;letter-spacing:1px;margin-bottom:3px;">ORDER PHR-8812</div><div style="font-family:'Sora',sans-serif;font-size:18px;font-weight:800;color:#fff;">Order Fulfillment</div></div>
+      <div style="background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.25);border-radius:99px;padding:5px 12px;display:flex;align-items:center;gap:5px;"><div style="width:6px;height:6px;border-radius:50%;background:#FCD34D;animation:blink 1.5s infinite;"></div><span style="font-size:10px;font-weight:800;color:#fff;">Packing</span></div>
+    </div>
+  </div>
+  <div class="scr" style="background:var(--surf);">
+    <!-- Order confirmed hero -->
+    <div class="card" style="padding:18px;margin-bottom:14px;text-align:center;">
+      <div style="width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#FEF3C7,#FDE68A);border:2.5px solid #FCD34D;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:26px;">✅</div>
+      <div style="font-family:'Sora',sans-serif;font-size:17px;font-weight:800;color:var(--navy);">Order Confirmed!</div>
+      <div style="font-size:12px;color:var(--text2);margin-top:4px;">PHR-8812 · Estimated arrival: 1:45 PM</div>
+      <div style="background:var(--cream2);border-radius:12px;padding:9px 16px;margin-top:12px;display:inline-block;">
+        <div style="font-size:10px;color:var(--text2);font-weight:700;">ORDER ID</div>
+        <div style="font-family:'Sora',sans-serif;font-size:18px;font-weight:900;color:var(--amber);letter-spacing:2px;">PHR-8812</div>
+      </div>
+    </div>
+    <!-- Fulfillment timeline -->
+    <div class="card" style="padding:16px;margin-bottom:14px;">
+      <div style="font-size:12px;font-weight:800;color:var(--text2);letter-spacing:.5px;margin-bottom:14px;">FULFILLMENT PROGRESS</div>
+      <!-- steps -->
+      <div style="display:flex;flex-direction:column;gap:0;">
+        <div style="display:flex;gap:13px;align-items:flex-start;padding-bottom:14px;">
+          <div style="display:flex;flex-direction:column;align-items:center;width:30px;flex-shrink:0;"><div style="width:30px;height:30px;border-radius:99px;background:var(--green);display:flex;align-items:center;justify-content:center;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></div><div style="width:2px;flex:1;background:#D1FAE5;margin-top:4px;min-height:16px;"></div></div>
+          <div style="padding-top:5px;"><div style="font-size:13px;font-weight:700;color:var(--navy);">Order Received & Verified</div><div style="font-size:10px;color:var(--text2);margin-top:1px;">12:00 PM · Pharmacist approved prescription</div></div>
+        </div>
+        <div style="display:flex;gap:13px;align-items:flex-start;padding-bottom:14px;">
+          <div style="display:flex;flex-direction:column;align-items:center;width:30px;flex-shrink:0;"><div style="width:30px;height:30px;border-radius:99px;background:var(--green);display:flex;align-items:center;justify-content:center;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></div><div style="width:2px;flex:1;background:#D1FAE5;margin-top:4px;min-height:16px;"></div></div>
+          <div style="padding-top:5px;"><div style="font-size:13px;font-weight:700;color:var(--navy);">Picking</div><div style="font-size:10px;color:var(--text2);margin-top:1px;">12:04 PM · 3 medicines pulled from stock</div></div>
+        </div>
+        <!-- Active -->
+        <div style="display:flex;gap:13px;align-items:flex-start;padding-bottom:14px;">
+          <div style="display:flex;flex-direction:column;align-items:center;width:30px;flex-shrink:0;"><div style="width:30px;height:30px;border-radius:99px;background:linear-gradient(135deg,var(--amber),#F59E0B);display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 6px rgba(232,133,10,.12);"><div style="width:10px;height:10px;border-radius:50%;background:#fff;animation:pulse 1.2s infinite;"></div></div><div style="width:2px;flex:1;background:#E8E8E8;margin-top:4px;min-height:16px;"></div></div>
+          <div style="padding-top:5px;">
+            <div style="display:flex;gap:6px;align-items:center;"><div style="font-size:13px;font-weight:800;color:var(--amber);">Packing</div><div style="background:var(--cream2);color:var(--amber);font-size:9px;font-weight:800;padding:2px 8px;border-radius:99px;animation:blink 1.5s infinite;">● ACTIVE</div></div>
+            <div style="font-size:10px;color:var(--text2);margin-top:1px;">12:05 PM · Cold-chain bag for Insulin ❄️</div>
+          </div>
+        </div>
+        <!-- Pending -->
+        <div style="display:flex;gap:13px;align-items:flex-start;padding-bottom:14px;opacity:.4;">
+          <div style="display:flex;flex-direction:column;align-items:center;width:30px;flex-shrink:0;"><div style="width:30px;height:30px;border-radius:99px;border:2px solid #E8E8E8;display:flex;align-items:center;justify-content:center;"><div style="width:10px;height:10px;border-radius:50%;background:#E8E8E8;"></div></div><div style="width:2px;flex:1;background:#E8E8E8;margin-top:4px;min-height:16px;"></div></div>
+          <div style="padding-top:5px;"><div style="font-size:13px;font-weight:600;color:#9A9A9A;">Quality Check</div><div style="font-size:10px;color:#B0B0B0;">Expected ~12:20 PM</div></div>
+        </div>
+        <div style="display:flex;gap:13px;align-items:flex-start;opacity:.4;">
+          <div style="width:30px;height:30px;border-radius:99px;border:2px solid #E8E8E8;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><div style="width:10px;height:10px;border-radius:50%;background:#E8E8E8;"></div></div>
+          <div style="padding-top:5px;"><div style="font-size:13px;font-weight:600;color:#9A9A9A;">Dispatched for Delivery</div><div style="font-size:10px;color:#B0B0B0;">Expected ~12:30 PM</div></div>
+        </div>
+      </div>
+    </div>
+    <!-- Cold chain note -->
+    <div style="background:#EBF1FF;border:1.5px solid #BFDBFE;border-radius:14px;padding:12px 14px;margin-bottom:16px;display:flex;gap:10px;align-items:center;">
+      <div style="font-size:20px;flex-shrink:0;">❄️</div>
+      <div style="font-size:11px;color:#1148A4;line-height:1.5;"><b>Cold-Chain Active</b> — Insulin is being packed in a temperature-controlled bag. Maintained at 2–8°C throughout delivery. Sensor attached.</div>
+    </div>
+    <button class="btn-out">📞 Call Pharmacy</button>
+  </div>
+  <div class="bnav">
+    <div class="bn on"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8850A" stroke-width="2.2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><span class="bnl" style="color:var(--amber);">Home</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8B898" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/></svg></div><span class="bnl">Bookings</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8B898" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div><span class="bnl">Journey</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8B898" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><span class="bnl">Chat</span></div>
+  </div>
+</div>
+<div class="sl"><div class="sn">💊 05</div><div class="st">Order Fulfillment</div></div>
+</div>
+
+<!-- ══ S6: LIVE DELIVERY TRACKING ══ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="phone" style="min-height:740px;">
+  <div class="sb" style="background:linear-gradient(135deg,#7C3500,#B85000);"><span class="sbt">12:35 PM</span><div class="sbi"><svg width="15" height="11" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/></svg></div></div>
+  <div class="tb"><div><div class="tt">Live Delivery Tracking</div><div class="ts">PHR-8812 · Rider on the way</div></div><div style="display:flex;align-items:center;gap:4px;background:#DCFCE7;border:1px solid #6EE7B7;border-radius:99px;padding:4px 10px;"><div style="width:6px;height:6px;border-radius:50%;background:#16A34A;animation:blink 1.5s infinite;"></div><span style="font-size:10px;font-weight:700;color:#16A34A;">Live</span></div></div>
+  <div class="scr" style="background:var(--surf);">
+    <!-- Map placeholder -->
+    <div style="height:200px;background:linear-gradient(135deg,#FEF3C7,#FFF8EE);border-radius:20px;margin-bottom:14px;position:relative;overflow:hidden;border:1.5px solid var(--border);">
+      <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 26px,rgba(232,133,10,.06) 26px,rgba(232,133,10,.06) 27px),repeating-linear-gradient(90deg,transparent,transparent 26px,rgba(232,133,10,.04) 26px,rgba(232,133,10,.04) 27px);"></div>
+      <!-- Route line -->
+      <svg width="100%" height="100%" style="position:absolute;inset:0;" viewBox="0 0 356 200">
+        <path d="M 50 160 Q 130 80 200 100 Q 260 115 300 60" fill="none" stroke="#E8850A" stroke-width="3" stroke-dasharray="8 5" opacity=".6" stroke-linecap="round"/>
+        <!-- Rider dot -->
+        <circle cx="220" cy="95" r="10" fill="#E8850A" opacity=".15"/>
+        <circle cx="220" cy="95" r="6" fill="#E8850A"/>
+        <text x="220" y="78" text-anchor="middle" style="font-size:14px;">🏍</text>
+        <!-- Destination -->
+        <circle cx="300" cy="60" r="8" fill="#16A34A" opacity=".15"/>
+        <circle cx="300" cy="60" r="5" fill="#16A34A"/>
+        <text x="300" y="44" text-anchor="middle" style="font-size:13px;">🏠</text>
+        <!-- Pharmacy origin -->
+        <circle cx="50" cy="160" r="6" fill="#1148A4"/>
+        <text x="50" y="143" text-anchor="middle" style="font-size:12px;">🏥</text>
+      </svg>
+      <div style="position:absolute;top:10px;left:12px;background:rgba(255,255,255,.85);border-radius:9px;padding:6px 10px;font-size:10px;font-weight:700;color:var(--amber);">🏍 On the way</div>
+    </div>
+    <!-- Rider card -->
+    <div class="card" style="padding:15px;margin-bottom:14px;">
+      <div style="display:flex;gap:13px;align-items:center;margin-bottom:12px;">
+        <div style="width:50px;height:50px;border-radius:16px;background:linear-gradient(135deg,#E8850A,#F59E0B);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;font-family:'Sora',sans-serif;flex-shrink:0;">ZH</div>
+        <div style="flex:1;">
+          <div style="font-size:14px;font-weight:800;color:var(--navy);">Zaid Hameed</div>
+          <div style="font-size:11px;color:var(--text2);">Delivery Rider · ⭐ 4.8 · 3 km away</div>
+          <div style="display:flex;gap:5px;margin-top:5px;"><div style="background:#FEF3C7;color:var(--amber);font-size:9px;font-weight:800;padding:2px 8px;border-radius:99px;">🏍 On the way</div><div style="background:#DCFCE7;color:var(--green);font-size:9px;font-weight:800;padding:2px 8px;border-radius:99px;">❄️ Cold-bag secured</div></div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-family:'Sora',sans-serif;font-size:24px;font-weight:900;color:var(--amber);">~18<span style="font-size:12px;">m</span></div>
+          <div style="font-size:9px;color:var(--text3);">ETA 12:53 PM</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button style="flex:1;background:var(--amber);border:none;border-radius:11px;padding:10px;font-size:12px;font-weight:800;color:#fff;font-family:'Nunito',sans-serif;cursor:pointer;">📞 Call Rider</button>
+        <button style="flex:1;background:#fff;border:1.5px solid var(--border);border-radius:11px;padding:10px;font-size:12px;font-weight:800;color:var(--text2);font-family:'Nunito',sans-serif;cursor:pointer;">💬 Chat</button>
+      </div>
+    </div>
+    <!-- Progress -->
+    <div class="card" style="padding:14px;margin-bottom:14px;">
+      <div style="font-size:12px;font-weight:800;color:var(--text2);letter-spacing:.5px;margin-bottom:12px;">DELIVERY STAGES</div>
+      <div style="display:flex;align-items:center;gap:0;">
+        <div style="display:flex;flex-direction:column;align-items:center;flex:1;">
+          <div style="width:32px;height:32px;border-radius:99px;background:var(--green);display:flex;align-items:center;justify-content:center;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><path d="M20 6L9 17l-5-5"/></svg></div>
+          <div style="font-size:9px;color:var(--green);font-weight:700;margin-top:5px;text-align:center;">Dispatched</div>
+        </div>
+        <div style="flex:1;height:2px;background:linear-gradient(90deg,var(--green),var(--amber));margin-bottom:14px;"></div>
+        <div style="display:flex;flex-direction:column;align-items:center;flex:1;">
+          <div style="width:32px;height:32px;border-radius:99px;background:var(--amber);display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 7px rgba(232,133,10,.15);"><div style="font-size:14px;animation:rideMove 1.5s ease-in-out infinite;">🏍</div></div>
+          <div style="font-size:9px;color:var(--amber);font-weight:800;margin-top:5px;text-align:center;animation:blink 1.5s infinite;">● En Route</div>
+        </div>
+        <div style="flex:1;height:2px;background:#E8E8E8;margin-bottom:14px;"></div>
+        <div style="display:flex;flex-direction:column;align-items:center;flex:1;opacity:.4;">
+          <div style="width:32px;height:32px;border-radius:99px;border:2px solid #E8E8E8;display:flex;align-items:center;justify-content:center;font-size:14px;">🏠</div>
+          <div style="font-size:9px;color:#9A9A9A;font-weight:600;margin-top:5px;text-align:center;">Delivered</div>
+        </div>
+      </div>
+    </div>
+    <!-- OTP preview -->
+    <div style="background:linear-gradient(135deg,#1A0C00,#E8850A);border-radius:16px;padding:14px 16px;display:flex;gap:12px;align-items:center;">
+      <div style="font-size:22px;flex-shrink:0;">🔐</div>
+      <div>
+        <div style="font-size:12px;font-weight:800;color:#fff;">Delivery OTP Ready</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.7);margin-top:2px;">Share 4-digit OTP with rider upon arrival to confirm delivery</div>
+      </div>
+      <div style="margin-left:auto;font-family:'Sora',sans-serif;font-size:22px;font-weight:900;color:#FCD34D;flex-shrink:0;">••••</div>
+    </div>
+  </div>
+  <div class="bnav">
+    <div class="bn on"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8850A" stroke-width="2.2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><span class="bnl" style="color:var(--amber);">Home</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8B898" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/></svg></div><span class="bnl">Bookings</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8B898" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div><span class="bnl">Journey</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8B898" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><span class="bnl">Chat</span></div>
+  </div>
+</div>
+<div class="sl"><div class="sn">💊 06</div><div class="st">Live Delivery Tracking</div></div>
+</div>
+
+<!-- ══ S7: DELIVERY CONFIRMATION + MEDICATION GUIDANCE ══ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="phone" style="min-height:740px;">
+  <div class="sb" style="background:linear-gradient(135deg,#7C3500,#B85000);"><span class="sbt">12:55 PM</span><div class="sbi"><svg width="15" height="11" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/></svg></div></div>
+  <div class="tb"><div><div class="tt">Delivered! 🎉</div><div class="ts">Medication guidance + MAAS activation</div></div></div>
+  <div class="scr" style="background:var(--surf);">
+    <!-- Delivered hero -->
+    <div style="background:linear-gradient(135deg,#7C3500,#E8850A);border-radius:20px;padding:20px;margin-bottom:16px;text-align:center;box-shadow:0 8px 28px rgba(232,133,10,.3);">
+      <div style="width:60px;height:60px;border-radius:50%;background:rgba(255,255,255,.18);border:2.5px solid rgba(255,255,255,.35);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:28px;">✅</div>
+      <div style="font-family:'Sora',sans-serif;font-size:18px;font-weight:800;color:#fff;">Medicines Delivered</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.7);margin-top:4px;">12:53 PM · OTP confirmed · PHR-8812</div>
+      <div style="display:flex;justify-content:center;gap:8px;margin-top:12px;">
+        <span style="background:rgba(255,255,255,.18);color:#fff;font-size:10px;font-weight:700;padding:4px 12px;border-radius:99px;">3 medicines</span>
+        <span style="background:rgba(255,255,255,.18);color:#fff;font-size:10px;font-weight:700;padding:4px 12px;border-radius:99px;">❄️ Cold-chain OK</span>
+      </div>
+    </div>
+    <!-- Medication guidance per medicine -->
+    <div style="font-size:13px;font-weight:800;color:var(--navy);margin-bottom:11px;">📖 Medication Guidance</div>
+    <div style="display:flex;flex-direction:column;gap:9px;margin-bottom:14px;">
+      <div class="card" style="padding:13px 14px;">
+        <div style="display:flex;gap:11px;align-items:flex-start;">
+          <div style="width:40px;height:40px;border-radius:13px;background:linear-gradient(135deg,#FEF3C7,#FDE68A);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;">💊</div>
+          <div style="flex:1;">
+            <div style="font-size:13px;font-weight:800;color:var(--navy);">Amlodipine 10mg</div>
+            <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:5px;margin-bottom:7px;">
+              <span style="background:#FEF3C7;color:var(--amber);font-size:9px;font-weight:800;padding:2px 8px;border-radius:99px;">🕗 8:00 AM daily</span>
+              <span style="background:#DCFCE7;color:var(--green);font-size:9px;font-weight:700;padding:2px 8px;border-radius:99px;">With or without food</span>
+            </div>
+            <div style="font-size:11px;color:var(--text2);line-height:1.6;">Do not stop suddenly. If you miss a dose, take it as soon as you remember unless it is almost time for your next dose.</div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="padding:13px 14px;">
+        <div style="display:flex;gap:11px;align-items:flex-start;">
+          <div style="width:40px;height:40px;border-radius:13px;background:linear-gradient(135deg,#DCFCE7,#BBF7D0);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;">💊</div>
+          <div style="flex:1;">
+            <div style="font-size:13px;font-weight:800;color:var(--navy);">Metformin 500mg</div>
+            <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:5px;margin-bottom:7px;">
+              <span style="background:#FEF3C7;color:var(--amber);font-size:9px;font-weight:800;padding:2px 8px;border-radius:99px;">🕗 8AM & 8PM</span>
+              <span style="background:#FEE2E2;color:var(--red);font-size:9px;font-weight:700;padding:2px 8px;border-radius:99px;">⚠ With food only</span>
+            </div>
+            <div style="font-size:11px;color:var(--text2);line-height:1.6;">Always take with a meal to prevent stomach upset. Monitor blood sugar regularly.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Voice guidance -->
+    <div style="background:linear-gradient(135deg,#1148A4,#2273E8);border-radius:16px;padding:14px 15px;margin-bottom:14px;display:flex;gap:12px;align-items:center;">
+      <div style="font-size:22px;flex-shrink:0;">🎙</div>
+      <div style="flex:1;"><div style="font-size:13px;font-weight:800;color:#fff;">Voice Instructions Available</div><div style="font-size:10px;color:rgba(255,255,255,.7);margin-top:2px;">Listen in Arabic, English, Urdu — tap to hear dosage guidance</div></div>
+      <button style="background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.25);border-radius:11px;padding:8px 12px;font-size:11px;font-weight:800;color:#fff;font-family:'Nunito',sans-serif;cursor:pointer;flex-shrink:0;">▶ Play</button>
+    </div>
+    <button class="btn-a" style="margin-bottom:8px;">✅ Activate Medication Reminders</button>
+    <button class="btn-out">📥 Download Invoice</button>
+  </div>
+  <div class="bnav">
+    <div class="bn on"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8850A" stroke-width="2.2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><span class="bnl" style="color:var(--amber);">Home</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8B898" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/></svg></div><span class="bnl">Bookings</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8B898" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div><span class="bnl">Journey</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8B898" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><span class="bnl">Chat</span></div>
+  </div>
+</div>
+<div class="sl"><div class="sn">💊 07</div><div class="st">Delivery + Medication Guidance</div></div>
+</div>
+
+</div><!-- end row 2 -->
+
+<!-- DIVIDER -->
+<div class="sdiv"><div class="sdl"></div><div class="sdt">SCREENS 08 – 10</div><div class="sdl"></div></div>
+
+<!-- ══════════════════ ROW 3 — Screens 8, 9, 10 ══════════════════ -->
+<div class="pgrid">
+
+<!-- ══ S8: MAAS — MEDICATION REMINDERS & TRACKING ══ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="phone" style="min-height:740px;">
+  <div class="sb" style="background:linear-gradient(135deg,#7C3500,#B85000);"><span class="sbt">8:02 AM</span><div class="sbi"><svg width="15" height="11" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/></svg></div></div>
+  <div class="tb"><div><div class="tt">MAAS — Medication Alerts</div><div class="ts">Medication Administration Alert System</div></div><div style="background:var(--cream2);border:1px solid #FCD34D;border-radius:99px;padding:4px 10px;font-size:10px;font-weight:800;color:var(--amber);">ACTIVE</div></div>
+  <div class="scr" style="background:var(--surf);">
+    <!-- MAAS hero -->
+    <div style="background:linear-gradient(135deg,#7C3500,#B85000,#E8850A);border-radius:20px;padding:18px;margin-bottom:16px;box-shadow:0 8px 26px rgba(180,80,0,.28);">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px;">
+        <div>
+          <div style="font-size:10px;color:rgba(255,255,255,.65);font-weight:700;letter-spacing:1px;margin-bottom:4px;">MEDICATION ADMINISTRATION</div>
+          <div style="font-family:'Sora',sans-serif;font-size:18px;font-weight:800;color:#fff;">Today's Schedule</div>
+        </div>
+        <div style="background:rgba(255,255,255,.18);border-radius:12px;padding:8px 12px;text-align:center;">
+          <div style="font-family:'Sora',sans-serif;font-size:22px;font-weight:900;color:#FCD34D;">1/4</div>
+          <div style="font-size:9px;color:rgba(255,255,255,.65);font-weight:600;margin-top:1px;">Done</div>
+        </div>
+      </div>
+      <!-- Progress bar -->
+      <div style="height:6px;background:rgba(255,255,255,.2);border-radius:99px;overflow:hidden;margin-bottom:8px;">
+        <div style="width:25%;height:100%;background:#FCD34D;border-radius:99px;"></div>
+      </div>
+      <div style="font-size:10px;color:rgba(255,255,255,.6);">1 of 4 doses taken today · 78% weekly adherence</div>
+    </div>
+    <!-- Today's dose list -->
+    <div style="font-size:12px;font-weight:800;color:var(--text2);letter-spacing:.5px;margin-bottom:11px;">TODAY'S DOSES</div>
+    <div style="display:flex;flex-direction:column;gap:9px;margin-bottom:16px;">
+      <!-- Taken -->
+      <div style="background:#fff;border:1.5px solid #D1FAE5;border-radius:16px;padding:13px 14px;display:flex;align-items:center;gap:12px;">
+        <div style="width:40px;height:40px;border-radius:13px;background:linear-gradient(135deg,#DCFCE7,#BBF7D0);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">💊</div>
+        <div style="flex:1;"><div style="font-size:13px;font-weight:700;color:var(--navy);">Amlodipine 10mg</div><div style="font-size:10px;color:var(--text2);">8:00 AM · Taken on time ✓</div></div>
+        <div style="background:#DCFCE7;color:var(--green);font-size:10px;font-weight:800;padding:4px 10px;border-radius:99px;">✓ Taken</div>
+      </div>
+      <!-- Due now - alert -->
+      <div style="background:linear-gradient(135deg,#FEF3C7,#FFFBF0);border:2px solid var(--amber);border-radius:16px;padding:13px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 14px rgba(232,133,10,.18);">
+        <div style="width:40px;height:40px;border-radius:13px;background:linear-gradient(135deg,#FEF3C7,#FDE68A);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;animation:pulse 1.5s infinite;">💊</div>
+        <div style="flex:1;"><div style="font-size:13px;font-weight:800;color:var(--amber);">Metformin 500mg</div><div style="font-size:10px;color:#A07020;">Due NOW with breakfast · 2 min ago</div></div>
+        <button style="background:var(--amber);border:none;border-radius:11px;padding:8px 14px;font-size:11px;font-weight:800;color:#fff;font-family:'Nunito',sans-serif;cursor:pointer;flex-shrink:0;">Mark Taken</button>
+      </div>
+      <!-- Upcoming -->
+      <div style="background:#fff;border:1.5px solid var(--border);border-radius:16px;padding:13px 14px;display:flex;align-items:center;gap:12px;opacity:.75;">
+        <div style="width:40px;height:40px;border-radius:13px;background:linear-gradient(135deg,#EBF1FF,#BFDBFE);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">💊</div>
+        <div style="flex:1;"><div style="font-size:13px;font-weight:600;color:var(--navy);">Vitamin D 5000IU</div><div style="font-size:10px;color:var(--text2);">Weekly · Sunday 9:00 AM</div></div>
+        <div style="background:#EBF1FF;color:var(--blue);font-size:10px;font-weight:700;padding:4px 10px;border-radius:99px;">In 4 days</div>
+      </div>
+      <!-- Evening -->
+      <div style="background:#fff;border:1.5px solid var(--border);border-radius:16px;padding:13px 14px;display:flex;align-items:center;gap:12px;opacity:.75;">
+        <div style="width:40px;height:40px;border-radius:13px;background:linear-gradient(135deg,#DCFCE7,#BBF7D0);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">💊</div>
+        <div style="flex:1;"><div style="font-size:13px;font-weight:600;color:var(--navy);">Metformin 500mg (Evening)</div><div style="font-size:10px;color:var(--text2);">8:00 PM · With dinner</div></div>
+        <div style="background:var(--cream2);color:var(--amber);font-size:10px;font-weight:700;padding:4px 10px;border-radius:99px;">8:00 PM</div>
+      </div>
+    </div>
+    <!-- Caregiver alert -->
+    <div style="background:#F5F0FF;border:1.5px solid #DDD0FF;border-radius:14px;padding:12px 14px;margin-bottom:14px;display:flex;gap:10px;align-items:center;">
+      <div style="font-size:18px;flex-shrink:0;">👨‍👩‍👧</div>
+      <div style="flex:1;"><div style="font-size:12px;font-weight:800;color:#5B21B6;">Caregiver Alerts Active</div><div style="font-size:10px;color:#7C3AED;margin-top:1px;">Sara will be notified if a dose is missed by more than 2 hours</div></div>
+      <div style="font-size:11px;font-weight:700;color:#7C3AED;background:#EDE9FE;padding:4px 9px;border-radius:99px;cursor:pointer;">Edit</div>
+    </div>
+    <!-- Missed dose alert example -->
+    <div style="background:#FEF2F2;border:1.5px solid #FECACA;border-radius:14px;padding:12px 14px;margin-bottom:16px;display:flex;gap:10px;align-items:center;">
+      <div style="font-size:18px;flex-shrink:0;">⚠️</div>
+      <div style="flex:1;font-size:11px;color:#7F1010;line-height:1.5;"><b>Missed Dose Alert</b> — Metformin was not marked taken at 8:00 AM. Dr. Bilal has been notified. Compliance report updated.</div>
+    </div>
+    <button class="btn-a">📊 View Full Compliance Report</button>
+  </div>
+  <div class="bnav">
+    <div class="bn on"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8850A" stroke-width="2.2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><span class="bnl" style="color:var(--amber);">Home</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8B898" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/></svg></div><span class="bnl">Bookings</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8B898" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div><span class="bnl">Journey</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8B898" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><span class="bnl">Chat</span></div>
+  </div>
+</div>
+<div class="sl"><div class="sn">💊 08</div><div class="st">MAAS — Medication Alert System</div></div>
+</div>
+
+<!-- ══ S9: ADHERENCE + POST-DELIVERY ACTIONS ══ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="phone" style="min-height:740px;">
+  <div class="sb" style="background:linear-gradient(135deg,#7C3500,#B85000);"><span class="sbt">6:00 PM</span><div class="sbi"><svg width="15" height="11" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/></svg></div></div>
+  <div class="tb"><div><div class="tt">Medication Adherence</div><div class="ts">Weekly compliance · Smart actions</div></div></div>
+  <div class="scr" style="background:var(--surf);">
+    <!-- Adherence ring -->
+    <div class="card" style="padding:20px;margin-bottom:14px;">
+      <div style="display:flex;gap:20px;align-items:center;">
+        <svg width="90" height="90" viewBox="0 0 90 90">
+          <circle cx="45" cy="45" r="36" fill="none" stroke="#F5EDD5" stroke-width="10"/>
+          <circle cx="45" cy="45" r="36" fill="none" stroke="#E8850A" stroke-width="10"
+            stroke-dasharray="226" stroke-dashoffset="56" stroke-linecap="round" transform="rotate(-90 45 45)"/>
+          <text x="45" y="48" text-anchor="middle" style="font-family:'Sora',sans-serif;font-size:18px;font-weight:800;fill:#E8850A;">75%</text>
+          <text x="45" y="60" text-anchor="middle" style="font-family:'Nunito',sans-serif;font-size:9px;fill:#B8A88A;">7-day</text>
+        </svg>
+        <div style="flex:1;">
+          <div style="font-family:'Sora',sans-serif;font-size:17px;font-weight:700;color:var(--navy);">Good Adherence</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:4px;">6 of 8 doses taken this week</div>
+          <div style="display:flex;gap:5px;margin-top:10px;">
+            {['M','T','W','T','F','S','S'].map ? '' : ''}
+            <div style="display:flex;gap:4px;">
+              <div style="width:26px;height:26px;border-radius:7px;background:var(--amber);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff;">M</div>
+              <div style="width:26px;height:26px;border-radius:7px;background:var(--amber);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff;">T</div>
+              <div style="width:26px;height:26px;border-radius:7px;background:var(--amber);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff;">W</div>
+              <div style="width:26px;height:26px;border-radius:7px;background:#F5EDD5;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:var(--text3);">T</div>
+              <div style="width:26px;height:26px;border-radius:7px;background:var(--amber);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff;">F</div>
+              <div style="width:26px;height:26px;border-radius:7px;background:var(--amber);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff;">S</div>
+              <div style="width:26px;height:26px;border-radius:7px;background:#F5EDD5;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:var(--text3);">S</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- AI nudge -->
+    <div style="background:linear-gradient(135deg,#FEF9EE,#FEF3C7);border:1.5px solid #FCD34D;border-radius:16px;padding:13px 15px;margin-bottom:14px;">
+      <div style="display:flex;gap:9px;align-items:flex-start;">
+        <div style="font-size:18px;flex-shrink:0;">🤖</div>
+        <div><div style="font-size:12px;font-weight:800;color:#A07020;">AI Adherence Insight</div><div style="font-size:11px;color:#92400E;margin-top:3px;line-height:1.6;">You missed 2 Thursday doses. Your HbA1c may be affected. <b>Consistent Metformin intake is critical for diabetes control.</b></div><div style="font-size:10px;font-weight:700;color:var(--amber);margin-top:6px;cursor:pointer;">→ Consult Dr. Bilal about this</div></div>
+      </div>
+    </div>
+    <!-- Post-delivery action tiles -->
+    <div style="font-size:12px;font-weight:800;color:var(--text2);letter-spacing:.5px;margin-bottom:11px;">WHAT WOULD YOU LIKE TO DO?</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+      <div style="background:linear-gradient(135deg,#7C3500,#E8850A);border-radius:18px;padding:15px 13px;cursor:pointer;box-shadow:0 5px 16px rgba(180,80,0,.25);">
+        <div style="font-size:24px;margin-bottom:7px;">📞</div>
+        <div style="font-size:12px;font-weight:800;color:#fff;">Consult Doctor</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.7);margin-top:2px;">Discuss adherence + labs</div>
+      </div>
+      <div style="background:linear-gradient(135deg,#E8850A,#F59E0B);border-radius:18px;padding:15px 13px;cursor:pointer;box-shadow:0 5px 16px rgba(232,133,10,.2);">
+        <div style="font-size:24px;margin-bottom:7px;">🔁</div>
+        <div style="font-size:12px;font-weight:800;color:#fff;">Reorder Medicines</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.7);margin-top:2px;">One-tap refill</div>
+        <div style="margin-top:7px;font-size:9px;font-weight:800;background:rgba(255,255,255,.2);color:#fff;padding:2px 8px;border-radius:99px;display:inline-block;">5 days remaining</div>
+      </div>
+      <div style="background:linear-gradient(135deg,#1148A4,#2273E8);border-radius:18px;padding:15px 13px;cursor:pointer;box-shadow:0 5px 16px rgba(17,72,164,.2);">
+        <div style="font-size:24px;margin-bottom:7px;">🏠</div>
+        <div style="font-size:12px;font-weight:800;color:#fff;">Request Nurse</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.7);margin-top:2px;">Injection admin / IV</div>
+      </div>
+      <div style="background:linear-gradient(135deg,#7C3AED,#A78BFA);border-radius:18px;padding:15px 13px;cursor:pointer;box-shadow:0 5px 16px rgba(124,58,237,.2);">
+        <div style="font-size:24px;margin-bottom:7px;">📊</div>
+        <div style="font-size:12px;font-weight:800;color:#fff;">View Lab Results</div>
+        <div style="font-size:10px;color:rgba(255,255,255,.7);margin-top:2px;">Check HbA1c trend</div>
+      </div>
+    </div>
+    <!-- Refill reminder -->
+    <div style="background:linear-gradient(135deg,#FEF3C7,#FFF8EE);border:1.5px solid #FCD34D;border-radius:16px;padding:13px 15px;display:flex;gap:11px;align-items:center;">
+      <div style="font-size:20px;flex-shrink:0;">⏰</div>
+      <div style="flex:1;"><div style="font-size:12px;font-weight:800;color:#A07020;">Refill Reminder Set</div><div style="font-size:10px;color:var(--text2);margin-top:2px;">Metformin — running low. Auto-refill scheduled for Apr 4. AED 35.</div></div>
+      <div style="font-size:11px;font-weight:700;color:var(--amber);cursor:pointer;">Edit</div>
+    </div>
+  </div>
+  <div class="bnav">
+    <div class="bn on"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8850A" stroke-width="2.2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><span class="bnl" style="color:var(--amber);">Home</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8B898" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/></svg></div><span class="bnl">Bookings</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8B898" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div><span class="bnl">Journey</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8B898" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><span class="bnl">Chat</span></div>
+  </div>
+</div>
+<div class="sl"><div class="sn">💊 09</div><div class="st">Adherence + Post-Delivery Actions</div></div>
+</div>
+
+<!-- ══ S10: FEEDBACK + ORDER HISTORY + CONTINUITY ══ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="phone" style="min-height:740px;">
+  <div class="sb" style="background:linear-gradient(135deg,#7C3500,#B85000);"><span class="sbt">7:00 PM</span><div class="sbi"><svg width="15" height="11" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/></svg></div></div>
+  <div class="tb"><div><div class="tt">Order History & Continuity</div><div class="ts">Feedback · Refills · Chronic care tracking</div></div></div>
+  <div class="scr" style="background:var(--surf);">
+    <!-- Feedback -->
+    <div class="card" style="padding:18px;margin-bottom:14px;text-align:center;">
+      <div style="font-size:30px;margin-bottom:10px;">⭐</div>
+      <div style="font-family:'Sora',sans-serif;font-size:16px;font-weight:800;color:var(--navy);margin-bottom:4px;">Rate Your Experience</div>
+      <div style="font-size:12px;color:var(--text2);margin-bottom:14px;">Help us improve our pharmacy service</div>
+      <div style="display:flex;justify-content:center;gap:7px;font-size:30px;margin-bottom:14px;cursor:pointer;">⭐⭐⭐⭐⭐</div>
+      <div style="display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin-bottom:12px;">
+        <span class="chip-a" style="font-size:10px;padding:4px 11px;">✓ Fast delivery</span>
+        <span class="chip-a" style="font-size:10px;padding:4px 11px;">✓ Correct medicines</span>
+        <span class="chip-off" style="font-size:10px;padding:4px 11px;">Good packaging</span>
+        <span class="chip-off" style="font-size:10px;padding:4px 11px;">Helpful rider</span>
+      </div>
+      <input class="inp" placeholder="Any comments? (optional)" style="margin-bottom:12px;"/>
+      <button class="btn-a">Submit Feedback</button>
+    </div>
+    <!-- Order history -->
+    <div style="font-size:12px;font-weight:800;color:var(--text2);letter-spacing:.5px;margin-bottom:11px;">ORDER HISTORY</div>
+    <div style="display:flex;flex-direction:column;gap:9px;margin-bottom:14px;">
+      <div class="card" style="padding:13px 14px;border:2px solid var(--amber);">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
+          <div style="font-size:13px;font-weight:800;color:var(--navy);">Amlodipine · Metformin · Vit D</div>
+          <div style="background:var(--cream2);color:var(--amber);font-size:9px;font-weight:800;padding:2px 8px;border-radius:99px;">Today</div>
+        </div>
+        <div style="font-size:10px;color:var(--text2);">Mar 30 · PHR-8812 · AED 108 · Express</div>
+        <div style="display:flex;gap:7px;margin-top:9px;">
+          <div style="background:var(--cream2);border:1px solid #FCD34D;border-radius:9px;padding:6px 10px;font-size:11px;font-weight:700;color:var(--amber);cursor:pointer;">🔁 Reorder</div>
+          <div style="background:#EBF1FF;border:1px solid #BFDBFE;border-radius:9px;padding:6px 10px;font-size:11px;font-weight:700;color:var(--blue);cursor:pointer;">📄 Invoice</div>
+          <div style="background:#F0FDF4;border:1px solid #D1FAE5;border-radius:9px;padding:6px 10px;font-size:11px;font-weight:700;color:var(--green);cursor:pointer;">📊 Compliance</div>
+        </div>
+      </div>
+      <div class="card" style="padding:13px 14px;opacity:.75;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
+          <div style="font-size:13px;font-weight:700;color:var(--navy);">Metformin · Amlodipine</div>
+          <div style="background:#DCFCE7;color:var(--green);font-size:9px;font-weight:800;padding:2px 8px;border-radius:99px;">Delivered</div>
+        </div>
+        <div style="font-size:10px;color:var(--text2);">Mar 1 · PHR-7934 · AED 63 · Standard</div>
+      </div>
+    </div>
+    <!-- Subscription / continuity -->
+    <div style="background:linear-gradient(135deg,#7C3500,#E8850A);border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:0 6px 20px rgba(180,80,0,.25);">
+      <div style="font-size:12px;font-weight:800;color:rgba(255,255,255,.75);margin-bottom:8px;">♻️ MONTHLY MEDICATION SUBSCRIPTION</div>
+      <div style="font-family:'Sora',sans-serif;font-size:15px;font-weight:800;color:#fff;">Diabetes Care Bundle</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.7);margin-top:3px;">Auto-delivery every 30 days · Same medicines · Priority delivery</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;">
+        <div><div style="font-family:'Sora',sans-serif;font-size:16px;font-weight:900;color:#FCD34D;">AED 95/mo</div><div style="font-size:10px;color:rgba(255,255,255,.6);">Save AED 13 vs single order</div></div>
+        <button style="background:#FCD34D;border:none;border-radius:12px;padding:9px 16px;font-size:11px;font-weight:800;color:#7C3500;font-family:'Nunito',sans-serif;cursor:pointer;">Subscribe</button>
+      </div>
+    </div>
+    <!-- Integration with lab -->
+    <div class="card" style="padding:13px 14px;">
+      <div style="font-size:12px;font-weight:800;color:var(--text2);letter-spacing:.5px;margin-bottom:9px;">🔗 SMART INTEGRATIONS</div>
+      <div style="display:flex;flex-direction:column;gap:7px;">
+        <div style="display:flex;gap:9px;align-items:center;font-size:11px;color:var(--text2);">
+          <div style="width:7px;height:7px;border-radius:50%;background:var(--amber);flex-shrink:0;"></div>Lab results → Auto-suggest medicines when HbA1c spikes
+        </div>
+        <div style="display:flex;gap:9px;align-items:center;font-size:11px;color:var(--text2);">
+          <div style="width:7px;height:7px;border-radius:50%;background:var(--amber);flex-shrink:0;"></div>Doctor teleconsult → Direct pharmacy order in one tap
+        </div>
+        <div style="display:flex;gap:9px;align-items:center;font-size:11px;color:var(--text2);">
+          <div style="width:7px;height:7px;border-radius:50%;background:var(--amber);flex-shrink:0;"></div>MAAS compliance → Shared with care team &amp; caregiver
+        </div>
+        <div style="display:flex;gap:9px;align-items:center;font-size:11px;color:var(--text2);">
+          <div style="width:7px;height:7px;border-radius:50%;background:var(--amber);flex-shrink:0;"></div>Critical value alert → Auto-trigger tele-consultation
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bnav">
+    <div class="bn on"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E8850A" stroke-width="2.2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><span class="bnl" style="color:var(--amber);">Home</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8B898" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/></svg></div><span class="bnl">Bookings</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8B898" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg></div><span class="bnl">Journey</span></div>
+    <div class="bn"><div class="bni"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C8B898" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><span class="bnl">Chat</span></div>
+  </div>
+</div>
+<div class="sl"><div class="sn">💊 10</div><div class="st">Feedback + Continuity</div></div>
+</div>
+
+</div><!-- end row 3 -->
+
+</body>
+</html>
