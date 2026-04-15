@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Vital Signs — Health Passport</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Sora:wght@400;600;700;800&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0;}
+body{
+  background:linear-gradient(135deg,#C8D8F0 0%,#DCE8F8 50%,#C8D0EC 100%);
+  display:flex;align-items:center;justify-content:center;
+  min-height:100vh;font-family:'Nunito',sans-serif;padding:28px 16px;
+}
+
+/* PHONE SHELL */
+.phone{
+  width:390px;min-height:848px;background:#EEF3FB;
+  border-radius:52px;overflow:hidden;
+  box-shadow:0 70px 140px rgba(0,0,0,.28),0 0 0 1.5px #B8C8E0,inset 0 0 0 1px #fff;
+  position:relative;display:flex;flex-direction:column;
+}
+
+/* STATUS BAR */
+.statusbar{
+  height:48px;background:#1148A4;
+  display:flex;align-items:flex-end;justify-content:space-between;
+  padding:0 26px 10px;flex-shrink:0;
+}
+.statusbar .time{font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:#fff;}
+.statusbar .icons{display:flex;gap:6px;align-items:center;}
+
+/* HEADER */
+.header{
+  background:linear-gradient(155deg,#0D3D9C 0%,#1554C0 45%,#1E6BE0 100%);
+  padding:14px 22px 34px;position:relative;overflow:hidden;flex-shrink:0;
+}
+.header::before{content:'';position:absolute;top:-80px;right:-50px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.06);}
+.header::after{content:'';position:absolute;bottom:-50px;left:30px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.04);}
+
+.top-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;position:relative;z-index:1;}
+.back-btn{
+  width:38px;height:38px;border-radius:50%;
+  background:rgba(255,255,255,.14);backdrop-filter:blur(8px);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;border:1px solid rgba(255,255,255,.18);
+  font-size:18px;color:#fff;font-weight:900;
+}
+.header-title{
+  font-size:17px;font-weight:900;color:#fff;
+  font-family:'Sora',sans-serif;letter-spacing:-.2px;
+}
+.header-action{
+  width:38px;height:38px;border-radius:50%;
+  background:rgba(255,255,255,.14);backdrop-filter:blur(8px);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;border:1px solid rgba(255,255,255,.18);
+  font-size:16px;color:#fff;
+}
+
+/* SCROLL */
+.scroll{flex:1;overflow-y:auto;padding:20px 18px 28px;}
+.scroll::-webkit-scrollbar{display:none;}
+
+/* SECTION HEADERS */
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px;}
+.sec-title{font-size:17px;font-weight:900;color:#1A2744;font-family:'Sora',sans-serif;letter-spacing:-.2px;}
+
+/* INFO CARD */
+.info-card{
+  background:#fff;border-radius:20px;padding:18px;
+  margin-bottom:14px;box-shadow:0 3px 14px rgba(17,72,164,.08);
+  border:1.5px solid rgba(17,72,164,.05);
+}
+
+/* VITAL INPUT CARD */
+.vital-input-card{
+  background:#fff;border-radius:20px;padding:18px;
+  margin-bottom:14px;box-shadow:0 3px 14px rgba(17,72,164,.08);
+  border:1.5px solid rgba(17,72,164,.05);
+}
+.vital-header{
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:14px;
+}
+.vital-icon{
+  width:48px;height:48px;
+  border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-size:24px;flex-shrink:0;
+}
+.vital-title{
+  font-size:15px;font-weight:900;color:#1A2744;
+  font-family:'Sora',sans-serif;
+}
+
+/* INPUT GROUP */
+.input-group{
+  margin-bottom:16px;
+}
+.input-label{
+  font-size:12px;font-weight:800;color:#1A2744;
+  margin-bottom:8px;display:block;
+}
+.input-row{
+  display:flex;gap:10px;align-items:center;
+}
+.input-field{
+  flex:1;padding:12px 14px;
+  border:2px solid #E2E8F0;border-radius:12px;
+  font-size:20px;font-weight:900;color:#1A2744;
+  font-family:'Sora',sans-serif;text-align:center;
+  transition:all .2s;
+}
+.input-field:focus{
+  outline:none;border-color:#1148A4;
+  background:rgba(17,72,164,.02);
+}
+.input-field.small{
+  font-size:18px;padding:10px 12px;
+}
+.input-unit{
+  font-size:14px;font-weight:700;color:#64748B;
+  white-space:nowrap;
+}
+
+/* RANGE INDICATOR */
+.range-indicator{
+  display:flex;justify-content:space-between;
+  padding:10px 14px;background:#F8FAFC;
+  border-radius:10px;margin-top:8px;
+}
+.range-label{
+  font-size:11px;color:#64748B;
+}
+.range-status{
+  font-size:11px;font-weight:800;
+}
+
+/* DATE TIME PICKER */
+.datetime-group{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:10px;margin-bottom:16px;
+}
+.datetime-input{
+  padding:12px 14px;
+  border:2px solid #E2E8F0;border-radius:12px;
+  font-size:13px;font-weight:700;color:#1A2744;
+  font-family:'Nunito',sans-serif;
+  transition:all .2s;
+}
+.datetime-input:focus{
+  outline:none;border-color:#1148A4;
+}
+
+/* BUTTONS */
+.btn-primary{
+  width:100%;background:linear-gradient(135deg,#1148A4,#2273E8);
+  color:#fff;border:none;border-radius:12px;
+  padding:14px;font-size:14px;font-weight:800;
+  cursor:pointer;margin-bottom:10px;
+  box-shadow:0 6px 24px rgba(17,72,164,.3);
+  transition:all .2s;font-family:'Nunito',sans-serif;
+}
+.btn-primary:hover{
+  transform:translateY(-2px);
+  box-shadow:0 8px 32px rgba(17,72,164,.4);
+}
+
+.btn-secondary{
+  width:100%;background:#fff;color:#1148A4;
+  border:2px solid #1148A4;border-radius:12px;
+  padding:12px;font-size:14px;font-weight:800;
+  cursor:pointer;margin-bottom:10px;
+  font-family:'Nunito',sans-serif;
+}
+
+.btn-text{
+  width:100%;background:transparent;color:#64748B;
+  border:none;padding:10px;font-size:13px;
+  font-weight:700;cursor:pointer;
+  font-family:'Nunito',sans-serif;
+}
+
+/* HISTORY CARD */
+.history-card{
+  background:#fff;border-radius:16px;padding:16px;
+  margin-bottom:10px;box-shadow:0 3px 14px rgba(17,72,164,.08);
+  border:1.5px solid rgba(17,72,164,.05);
+}
+.history-header{
+  display:flex;justify-content:space-between;
+  align-items:center;margin-bottom:12px;
+}
+.history-date{
+  font-size:13px;font-weight:900;color:#1A2744;
+  font-family:'Sora',sans-serif;
+}
+.history-time{
+  font-size:11px;color:#64748B;
+}
+
+.vitals-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+.vital-reading{
+  background:#F8FAFC;border-radius:10px;
+  padding:12px;
+}
+.reading-label{
+  font-size:10px;color:#64748B;
+  font-weight:700;margin-bottom:4px;
+}
+.reading-value{
+  font-size:18px;font-weight:900;
+  font-family:'Sora',sans-serif;line-height:1;
+}
+
+/* CHART CONTAINER */
+.chart-container{
+  background:#fff;border-radius:20px;padding:18px;
+  margin-bottom:14px;box-shadow:0 3px 14px rgba(17,72,164,.08);
+  border:1.5px solid rgba(17,72,164,.05);
+}
+.chart-header{
+  display:flex;justify-content:space-between;
+  align-items:center;margin-bottom:16px;
+}
+.chart-title{
+  font-size:15px;font-weight:900;color:#1A2744;
+  font-family:'Sora',sans-serif;
+}
+
+/* CHART TABS */
+.chart-tabs{
+  display:flex;gap:8px;margin-bottom:18px;
+  overflow-x:auto;padding-bottom:4px;
+}
+.chart-tabs::-webkit-scrollbar{display:none;}
+.chart-tab{
+  padding:8px 16px;background:#F8FAFC;
+  border:2px solid #E2E8F0;border-radius:99px;
+  font-size:11px;font-weight:800;color:#64748B;
+  white-space:nowrap;cursor:pointer;
+  transition:all .2s;flex-shrink:0;
+}
+.chart-tab.active{
+  background:linear-gradient(135deg,#EBF1FF,#D4E4FF);
+  border-color:#1148A4;color:#1148A4;
+}
+
+/* SIMPLE LINE CHART */
+.line-chart{
+  position:relative;height:180px;
+  margin:20px 0;
+}
+.chart-grid{
+  position:absolute;width:100%;height:100%;
+  display:flex;flex-direction:column;
+  justify-content:space-between;
+}
+.grid-line{
+  width:100%;height:1px;
+  background:#F1F5F9;position:relative;
+}
+.grid-label{
+  position:absolute;left:-40px;top:-8px;
+  font-size:10px;color:#94A3B8;font-weight:600;
+}
+.chart-line{
+  position:absolute;width:100%;height:100%;
+}
+.chart-path{
+  fill:none;stroke:#1148A4;stroke-width:3;
+  stroke-linecap:round;stroke-linejoin:round;
+}
+.chart-dots{
+  position:absolute;width:100%;height:100%;
+}
+.chart-dot{
+  width:10px;height:10px;background:#1148A4;
+  border:3px solid #fff;border-radius:50%;
+  position:absolute;cursor:pointer;
+  box-shadow:0 2px 8px rgba(17,72,164,.3);
+}
+.chart-labels{
+  display:flex;justify-content:space-between;
+  margin-top:12px;
+}
+.chart-x-label{
+  font-size:10px;color:#64748B;
+  font-weight:700;text-align:center;
+}
+
+/* STATS SUMMARY */
+.stats-summary{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:10px;margin-top:16px;
+  padding-top:16px;border-top:1px solid #F1F5F9;
+}
+.stat-box{
+  text-align:center;
+}
+.stat-label{
+  font-size:10px;color:#64748B;
+  font-weight:700;margin-bottom:4px;
+}
+.stat-value{
+  font-size:16px;font-weight:900;
+  font-family:'Sora',sans-serif;
+}
+
+/* SUCCESS MESSAGE */
+.success-message{
+  background:linear-gradient(135deg,#DCFCE7,#BBF7D0);
+  border:2px solid #10B981;border-radius:16px;
+  padding:16px;margin-bottom:14px;
+  text-align:center;
+}
+.success-icon{
+  font-size:48px;margin-bottom:10px;
+}
+.success-title{
+  font-size:16px;font-weight:900;color:#047857;
+  font-family:'Sora',sans-serif;margin-bottom:6px;
+}
+.success-text{
+  font-size:12px;color:#065F46;
+  line-height:1.5;
+}
+
+/* NOTES */
+.notes-box{
+  background:#F8FAFC;border-radius:10px;
+  padding:12px;margin-top:12px;
+}
+.notes-label{
+  font-size:11px;color:#64748B;
+  font-weight:700;margin-bottom:6px;
+}
+.notes-text{
+  font-size:12px;color:#475569;
+  line-height:1.5;
+}
+
+/* TEXTAREA */
+.textarea-field{
+  width:100%;padding:12px 14px;
+  border:2px solid #E2E8F0;border-radius:12px;
+  font-size:13px;font-weight:600;color:#1A2744;
+  font-family:'Nunito',sans-serif;
+  min-height:80px;resize:vertical;
+  transition:all .2s;
+}
+.textarea-field:focus{
+  outline:none;border-color:#1148A4;
+  background:rgba(17,72,164,.02);
+}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+
+<div class="phone">
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 1: ADD VITAL READING (MAIN FORM)
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="screen-1" style="display:flex;flex-direction:column;flex:1;">
+    
+    <!-- STATUS BAR -->
+    <div class="statusbar">
+      <span class="time">11:40</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+        <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+      </div>
+    </div>
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="top-row">
+        <div class="back-btn" onclick="redirect('./Patient_Health_Passport.html')">←</div>
+        <div class="header-title">Add Vital Reading</div>
+        <div style="width:38px;"></div>
+      </div>
+    </div>
+
+    <!-- SCROLL -->
+    <div class="scroll">
+
+      <div style="text-align:center;margin-bottom:20px;">
+        <div style="font-size:15px;font-weight:900;color:#1A2744;font-family:'Sora',sans-serif;margin-bottom:6px;">
+          Record Your Vitals
+        </div>
+        <div style="font-size:12px;color:#64748B;line-height:1.5;">
+          Enter your current vital sign measurements
+        </div>
+      </div>
+
+      <!-- Blood Pressure -->
+      <div class="vital-input-card">
+        <div class="vital-header">
+          <div class="vital-icon" style="background:linear-gradient(135deg,rgba(17,72,164,.1),rgba(34,115,232,.1));">
+            💙
+          </div>
+          <div class="vital-title">Blood Pressure</div>
+        </div>
+        
+        <div class="input-group">
+          <label class="input-label">Systolic / Diastolic</label>
+          <div class="input-row">
+            <input type="number" class="input-field" placeholder="120" id="bp-sys" oninput="checkBP()">
+            <span style="font-size:20px;font-weight:900;color:#CBD5E1;">/</span>
+            <input type="number" class="input-field" placeholder="80" id="bp-dia" oninput="checkBP()">
+            <span class="input-unit">mmHg</span>
+          </div>
+          <div class="range-indicator" id="bp-range" style="display:none;">
+            <span class="range-label">Normal: 90-120 / 60-80</span>
+            <span class="range-status" id="bp-status">● Normal</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Oxygen Saturation -->
+      <div class="vital-input-card">
+        <div class="vital-header">
+          <div class="vital-icon" style="background:linear-gradient(135deg,rgba(14,165,233,.1),rgba(56,189,248,.1));">
+            💨
+          </div>
+          <div class="vital-title">Oxygen Saturation (SpO₂)</div>
+        </div>
+        
+        <div class="input-group">
+          <label class="input-label">SpO₂ Level</label>
+          <div class="input-row">
+            <input type="number" class="input-field" placeholder="98" id="spo2" oninput="checkSpO2()" max="100">
+            <span class="input-unit">%</span>
+          </div>
+          <div class="range-indicator" id="spo2-range" style="display:none;">
+            <span class="range-label">Normal: 95-100%</span>
+            <span class="range-status" id="spo2-status">● Normal</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Blood Glucose -->
+      <div class="vital-input-card">
+        <div class="vital-header">
+          <div class="vital-icon" style="background:linear-gradient(135deg,rgba(217,119,6,.1),rgba(245,158,11,.1));">
+            🍬
+          </div>
+          <div class="vital-title">Blood Glucose</div>
+        </div>
+        
+        <div class="input-group">
+          <label class="input-label">Glucose Level</label>
+          <div class="input-row">
+            <input type="number" class="input-field" placeholder="102" id="glucose" oninput="checkGlucose()">
+            <span class="input-unit">mg/dL</span>
+          </div>
+          <div class="range-indicator" id="glucose-range" style="display:none;">
+            <span class="range-label">Fasting: 70-100 mg/dL</span>
+            <span class="range-status" id="glucose-status">● Normal</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Heart Rate -->
+      <div class="vital-input-card">
+        <div class="vital-header">
+          <div class="vital-icon" style="background:linear-gradient(135deg,rgba(219,39,119,.1),rgba(236,72,153,.1));">
+            ❤️
+          </div>
+          <div class="vital-title">Heart Rate</div>
+        </div>
+        
+        <div class="input-group">
+          <label class="input-label">Pulse Rate</label>
+          <div class="input-row">
+            <input type="number" class="input-field" placeholder="72" id="heart-rate" oninput="checkHeartRate()">
+            <span class="input-unit">bpm</span>
+          </div>
+          <div class="range-indicator" id="hr-range" style="display:none;">
+            <span class="range-label">Normal: 60-100 bpm</span>
+            <span class="range-status" id="hr-status">● Normal</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Temperature (Optional) -->
+      <div class="vital-input-card">
+        <div class="vital-header">
+          <div class="vital-icon" style="background:linear-gradient(135deg,rgba(239,68,68,.1),rgba(248,113,113,.1));">
+            🌡️
+          </div>
+          <div class="vital-title">Body Temperature</div>
+        </div>
+        
+        <div class="input-group">
+          <label class="input-label">Temperature (Optional)</label>
+          <div class="input-row">
+            <input type="number" step="0.1" class="input-field" placeholder="98.6" id="temp">
+            <span class="input-unit">°F</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Date & Time -->
+      <div class="info-card">
+        <label class="input-label">Date & Time of Reading</label>
+        <div class="datetime-group">
+          <input type="date" class="datetime-input" id="reading-date">
+          <input type="time" class="datetime-input" id="reading-time">
+        </div>
+        <div style="font-size:11px;color:#64748B;">
+          Leave blank to use current date/time
+        </div>
+      </div>
+
+      <!-- Notes (Optional) -->
+      <div class="info-card">
+        <label class="input-label">Notes (Optional)</label>
+        <textarea 
+          class="textarea-field" 
+          placeholder="Any symptoms, activities, or conditions? (e.g., 'Taken before breakfast', 'After 30-min walk', 'Feeling dizzy')"
+          maxlength="200"
+          id="notes"></textarea>
+        <div style="text-align:right;font-size:10px;color:#94A3B8;margin-top:6px;">
+          <span id="note-count">0</span> / 200 characters
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="showScreen(2)">
+        💾 Save Vital Reading
+      </button>
+
+      <button class="btn-text" onclick="redirect('./Patient_Health_Passport.html')">
+        ← Cancel
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 2: READING SAVED SUCCESS
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="screen-2" style="display:none;flex-direction:column;flex:1;">
+    
+    <div class="statusbar">
+      <span class="time">11:42</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+        <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+      </div>
+    </div>
+
+    <div class="header">
+      <div class="top-row">
+        <div style="width:38px;"></div>
+        <div class="header-title">Reading Saved</div>
+        <div style="width:38px;"></div>
+      </div>
+    </div>
+
+    <div class="scroll">
+
+      <div class="success-message">
+        <div class="success-icon">✓</div>
+        <div class="success-title">Vital Signs Recorded!</div>
+        <div class="success-text">
+          Your vital readings have been saved to your Health Passport
+        </div>
+      </div>
+
+      <!-- Summary of Saved Reading -->
+      <div class="info-card">
+        <div style="font-size:15px;font-weight:900;color:#1A2744;font-family:'Sora',sans-serif;margin-bottom:14px;">
+          📊 Recorded Values
+        </div>
+        
+        <div class="vitals-grid">
+          <div class="vital-reading">
+            <div class="reading-label">Blood Pressure</div>
+            <div class="reading-value" style="color:#1148A4;">118/76</div>
+            <div style="font-size:10px;color:#10B981;font-weight:700;margin-top:4px;">↓ Normal</div>
+          </div>
+          
+          <div class="vital-reading">
+            <div class="reading-label">Oxygen Saturation</div>
+            <div class="reading-value" style="color:#0EA5E9;">98%</div>
+            <div style="font-size:10px;color:#10B981;font-weight:700;margin-top:4px;">✓ Normal</div>
+          </div>
+          
+          <div class="vital-reading">
+            <div class="reading-label">Blood Glucose</div>
+            <div class="reading-value" style="color:#D97706;">102</div>
+            <div style="font-size:10px;color:#F59E0B;font-weight:700;margin-top:4px;">↑ Watch</div>
+          </div>
+          
+          <div class="vital-reading">
+            <div class="reading-label">Heart Rate</div>
+            <div class="reading-value" style="color:#DB2777;">72</div>
+            <div style="font-size:10px;color:#10B981;font-weight:700;margin-top:4px;">✓ Normal</div>
+          </div>
+        </div>
+
+        <div style="margin-top:14px;padding-top:14px;border-top:1px solid #F1F5F9;">
+          <div style="font-size:11px;color:#64748B;margin-bottom:4px;">
+            Recorded on:
+          </div>
+          <div style="font-size:13px;font-weight:800;color:#1A2744;">
+            Today at 11:40 AM
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="info-card">
+        <div style="font-size:13px;font-weight:900;color:#1A2744;margin-bottom:12px;">
+          🎯 What's Next?
+        </div>
+        <div style="font-size:12px;color:#475569;line-height:1.7;">
+          • View trends in your vital history<br>
+          • Share this reading with your doctor<br>
+          • Set reminders for next reading<br>
+          • Add another reading
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="showScreen(3)">
+        📊 View Vital History & Trends
+      </button>
+
+      <button class="btn-secondary" onclick="showScreen(1)">
+        ➕ Add Another Reading
+      </button>
+
+      <button class="btn-text" onclick="alert('Back to Health Passport')">
+        ← Back to Health Passport
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 3: VITAL HISTORY & TRENDS
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="screen-3" style="display:none;flex-direction:column;flex:1;">
+    
+    <div class="statusbar">
+      <span class="time">11:43</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+        <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+      </div>
+    </div>
+
+    <div class="header">
+      <div class="top-row">
+        <div class="back-btn" onclick="alert('Back to Vital Signs')">←</div>
+        <div class="header-title">Vital History</div>
+        <div class="header-action" onclick="showScreen(1)">+</div>
+      </div>
+    </div>
+
+    <div class="scroll">
+
+      <!-- Period Selector -->
+      <div class="chart-tabs">
+        <div class="chart-tab" onclick="selectPeriod(this)">24 Hours</div>
+        <div class="chart-tab active" onclick="selectPeriod(this)">7 Days</div>
+        <div class="chart-tab" onclick="selectPeriod(this)">30 Days</div>
+        <div class="chart-tab" onclick="selectPeriod(this)">3 Months</div>
+        <div class="chart-tab" onclick="selectPeriod(this)">1 Year</div>
+      </div>
+
+      <!-- Blood Pressure Chart -->
+      <div class="chart-container">
+        <div class="chart-header">
+          <div class="chart-title">Blood Pressure Trend</div>
+          <div style="font-size:11px;color:#64748B;font-weight:700;">
+            Last 7 Days
+          </div>
+        </div>
+
+        <!-- Simple Line Chart Visualization -->
+        <div class="line-chart">
+          <!-- Grid lines -->
+          <div class="chart-grid">
+            <div class="grid-line"><span class="grid-label">140</span></div>
+            <div class="grid-line"><span class="grid-label">120</span></div>
+            <div class="grid-line"><span class="grid-label">100</span></div>
+            <div class="grid-line"><span class="grid-label">80</span></div>
+            <div class="grid-line"><span class="grid-label">60</span></div>
+          </div>
+
+          <!-- Chart line (simulated with SVG) -->
+          <svg class="chart-line" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <path class="chart-path" d="M 0,40 L 16,42 L 32,38 L 48,41 L 64,39 L 80,37 L 100,40" />
+          </svg>
+
+          <!-- Data points -->
+          <div class="chart-dots">
+            <div class="chart-dot" style="left:0%;bottom:40%;"></div>
+            <div class="chart-dot" style="left:16%;bottom:42%;"></div>
+            <div class="chart-dot" style="left:32%;bottom:38%;"></div>
+            <div class="chart-dot" style="left:48%;bottom:41%;"></div>
+            <div class="chart-dot" style="left:64%;bottom:39%;"></div>
+            <div class="chart-dot" style="left:80%;bottom:37%;"></div>
+            <div class="chart-dot" style="left:100%;bottom:40%;"></div>
+          </div>
+        </div>
+
+        <!-- X-axis labels -->
+        <div class="chart-labels">
+          <div class="chart-x-label">Mar 8</div>
+          <div class="chart-x-label">Mar 9</div>
+          <div class="chart-x-label">Mar 10</div>
+          <div class="chart-x-label">Mar 11</div>
+          <div class="chart-x-label">Mar 12</div>
+          <div class="chart-x-label">Mar 13</div>
+          <div class="chart-x-label">Today</div>
+        </div>
+
+        <!-- Stats Summary -->
+        <div class="stats-summary">
+          <div class="stat-box">
+            <div class="stat-label">Average</div>
+            <div class="stat-value" style="color:#1148A4;">120/78</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Highest</div>
+            <div class="stat-value" style="color:#DC2626;">128/82</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Lowest</div>
+            <div class="stat-value" style="color:#10B981;">115/74</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Blood Glucose Chart -->
+      <div class="chart-container">
+        <div class="chart-header">
+          <div class="chart-title">Blood Glucose Trend</div>
+          <div style="font-size:11px;color:#64748B;font-weight:700;">
+            Last 7 Days
+          </div>
+        </div>
+
+        <div class="line-chart">
+          <div class="chart-grid">
+            <div class="grid-line"><span class="grid-label">140</span></div>
+            <div class="grid-line"><span class="grid-label">120</span></div>
+            <div class="grid-line"><span class="grid-label">100</span></div>
+            <div class="grid-line"><span class="grid-label">80</span></div>
+            <div class="grid-line"><span class="grid-label">60</span></div>
+          </div>
+
+          <svg class="chart-line" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <path class="chart-path" d="M 0,35 L 16,38 L 32,42 L 48,40 L 64,44 L 80,41 L 100,39" style="stroke:#D97706;" />
+          </svg>
+
+          <div class="chart-dots">
+            <div class="chart-dot" style="left:0%;bottom:35%;background:#D97706;"></div>
+            <div class="chart-dot" style="left:16%;bottom:38%;background:#D97706;"></div>
+            <div class="chart-dot" style="left:32%;bottom:42%;background:#D97706;"></div>
+            <div class="chart-dot" style="left:48%;bottom:40%;background:#D97706;"></div>
+            <div class="chart-dot" style="left:64%;bottom:44%;background:#D97706;"></div>
+            <div class="chart-dot" style="left:80%;bottom:41%;background:#D97706;"></div>
+            <div class="chart-dot" style="left:100%;bottom:39%;background:#D97706;"></div>
+          </div>
+        </div>
+
+        <div class="chart-labels">
+          <div class="chart-x-label">Mar 8</div>
+          <div class="chart-x-label">Mar 9</div>
+          <div class="chart-x-label">Mar 10</div>
+          <div class="chart-x-label">Mar 11</div>
+          <div class="chart-x-label">Mar 12</div>
+          <div class="chart-x-label">Mar 13</div>
+          <div class="chart-x-label">Today</div>
+        </div>
+
+        <div class="stats-summary">
+          <div class="stat-box">
+            <div class="stat-label">Average</div>
+            <div class="stat-value" style="color:#D97706;">108</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Highest</div>
+            <div class="stat-value" style="color:#DC2626;">126</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-label">Lowest</div>
+            <div class="stat-value" style="color:#10B981;">95</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Switch to History List -->
+      <button class="btn-secondary" onclick="showScreen(4)">
+        📋 View All Readings (List)
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════
+       SCREEN 4: VITAL HISTORY LIST
+  ═══════════════════════════════════════════════════════════════════ -->
+  <div id="screen-4" style="display:none;flex-direction:column;flex:1;">
+    
+    <div class="statusbar">
+      <span class="time">11:44</span>
+      <div class="icons">
+        <svg width="17" height="12" viewBox="0 0 17 12" fill="white"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="4.7" y="5" width="3" height="7" rx=".8"/><rect x="9.3" y="2" width="3" height="10" rx=".8"/><rect x="14" y="0" width="3" height="12" rx=".8" opacity=".35"/></svg>
+        <svg width="16" height="12" viewBox="0 0 20 13" fill="none" stroke="white" stroke-linecap="round" stroke-width="1.7"><path d="M1 4C3.6 1.4 6.7 0 10 0s6.4 1.4 9 4" opacity=".35"/><path d="M3.5 7C5.5 5 7.6 4 10 4s4.5 1 6.5 3" opacity=".6"/><path d="M6.5 10.5C7.7 9.3 8.8 9 10 9s2.3.3 3.5 1.5"/><circle cx="10" cy="13" r="1.2" fill="white"/></svg>
+        <svg width="26" height="12" viewBox="0 0 26 12"><rect x="0" y="1" width="22" height="10" rx="2.8" fill="none" stroke="white" stroke-width="1.2" opacity=".65"/><rect x="23" y="4" width="3" height="4" rx="1" fill="white" opacity=".45"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.8" fill="white"/></svg>
+      </div>
+    </div>
+
+    <div class="header">
+      <div class="top-row">
+        <div class="back-btn" onclick="showScreen(3)">←</div>
+        <div class="header-title">All Readings</div>
+        <div class="header-action" onclick="showScreen(1)">+</div>
+      </div>
+    </div>
+
+    <div class="scroll">
+
+      <div class="sec-head">
+        <div class="sec-title">Recent Readings</div>
+        <div style="font-size:11px;color:#64748B;font-weight:700;">
+          Last 30 days
+        </div>
+      </div>
+
+      <!-- Reading 1 - Today -->
+      <div class="history-card">
+        <div class="history-header">
+          <div class="history-date">Today</div>
+          <div class="history-time">11:40 AM</div>
+        </div>
+        
+        <div class="vitals-grid">
+          <div class="vital-reading">
+            <div class="reading-label">Blood Pressure</div>
+            <div class="reading-value" style="color:#1148A4;">118/76</div>
+          </div>
+          <div class="vital-reading">
+            <div class="reading-label">SpO₂</div>
+            <div class="reading-value" style="color:#0EA5E9;">98%</div>
+          </div>
+          <div class="vital-reading">
+            <div class="reading-label">Glucose</div>
+            <div class="reading-value" style="color:#D97706;">102</div>
+          </div>
+          <div class="vital-reading">
+            <div class="reading-label">Heart Rate</div>
+            <div class="reading-value" style="color:#DB2777;">72</div>
+          </div>
+        </div>
+
+        <div class="notes-box">
+          <div class="notes-label">NOTES</div>
+          <div class="notes-text">Taken before breakfast. Feeling normal.</div>
+        </div>
+      </div>
+
+      <!-- Reading 2 - Yesterday -->
+      <div class="history-card">
+        <div class="history-header">
+          <div class="history-date">Yesterday</div>
+          <div class="history-time">8:30 AM</div>
+        </div>
+        
+        <div class="vitals-grid">
+          <div class="vital-reading">
+            <div class="reading-label">Blood Pressure</div>
+            <div class="reading-value" style="color:#1148A4;">120/78</div>
+          </div>
+          <div class="vital-reading">
+            <div class="reading-label">SpO₂</div>
+            <div class="reading-value" style="color:#0EA5E9;">97%</div>
+          </div>
+          <div class="vital-reading">
+            <div class="reading-label">Glucose</div>
+            <div class="reading-value" style="color:#D97706;">105</div>
+          </div>
+          <div class="vital-reading">
+            <div class="reading-label">Heart Rate</div>
+            <div class="reading-value" style="color:#DB2777;">74</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reading 3 - Mar 13 -->
+      <div class="history-card">
+        <div class="history-header">
+          <div class="history-date">Mar 13, 2026</div>
+          <div class="history-time">9:15 AM</div>
+        </div>
+        
+        <div class="vitals-grid">
+          <div class="vital-reading">
+            <div class="reading-label">Blood Pressure</div>
+            <div class="reading-value" style="color:#1148A4;">115/74</div>
+          </div>
+          <div class="vital-reading">
+            <div class="reading-label">SpO₂</div>
+            <div class="reading-value" style="color:#0EA5E9;">98%</div>
+          </div>
+          <div class="vital-reading">
+            <div class="reading-label">Glucose</div>
+            <div class="reading-value" style="color:#10B981;">98</div>
+          </div>
+          <div class="vital-reading">
+            <div class="reading-label">Heart Rate</div>
+            <div class="reading-value" style="color:#DB2777;">70</div>
+          </div>
+        </div>
+
+        <div class="notes-box">
+          <div class="notes-label">NOTES</div>
+          <div class="notes-text">After 30-minute morning walk. Feeling energetic.</div>
+        </div>
+      </div>
+
+      <!-- Reading 4 - Mar 12 -->
+      <div class="history-card">
+        <div class="history-header">
+          <div class="history-date">Mar 12, 2026</div>
+          <div class="history-time">10:00 AM</div>
+        </div>
+        
+        <div class="vitals-grid">
+          <div class="vital-reading">
+            <div class="reading-label">Blood Pressure</div>
+            <div class="reading-value" style="color:#1148A4;">122/80</div>
+          </div>
+          <div class="vital-reading">
+            <div class="reading-label">SpO₂</div>
+            <div class="reading-value" style="color:#0EA5E9;">97%</div>
+          </div>
+          <div class="vital-reading">
+            <div class="reading-label">Glucose</div>
+            <div class="reading-value" style="color:#D97706;">112</div>
+          </div>
+          <div class="vital-reading">
+            <div class="reading-label">Heart Rate</div>
+            <div class="reading-value" style="color:#DB2777;">76</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reading 5 - Mar 11 -->
+      <div class="history-card">
+        <div class="history-header">
+          <div class="history-date">Mar 11, 2026</div>
+          <div class="history-time">8:45 AM</div>
+        </div>
+        
+        <div class="vitals-grid">
+          <div class="vital-reading">
+            <div class="reading-label">Blood Pressure</div>
+            <div class="reading-value" style="color:#1148A4;">119/77</div>
+          </div>
+          <div class="vital-reading">
+            <div class="reading-label">SpO₂</div>
+            <div class="reading-value" style="color:#0EA5E9;">98%</div>
+          </div>
+          <div class="vital-reading">
+            <div class="reading-label">Glucose</div>
+            <div class="reading-value" style="color:#D97706;">107</div>
+          </div>
+          <div class="vital-reading">
+            <div class="reading-label">Heart Rate</div>
+            <div class="reading-value" style="color:#DB2777;">71</div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-text">Load More Readings</button>
+
+      <div style="text-align:center;padding:16px;background:#F8FAFC;border-radius:14px;margin-top:14px;">
+        <div style="font-size:11px;color:#64748B;margin-bottom:8px;">
+          Total Readings Recorded
+        </div>
+        <div style="font-size:24px;font-weight:900;color:#1148A4;font-family:'Sora',sans-serif;">
+          47
+        </div>
+        <div style="font-size:10px;color:#64748B;margin-top:4px;">
+          Since Jan 15, 2026
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+let currentScreen = 1;
+
+function showScreen(screenNum) {
+  for (let i = 1; i <= 4; i++) {
+    const screen = document.getElementById('screen-' + i);
+    if (screen) screen.style.display = 'none';
+  }
+  
+  const targetScreen = document.getElementById('screen-' + screenNum);
+  if (targetScreen) {
+    targetScreen.style.display = 'flex';
+    currentScreen = screenNum;
+  }
+}
+
+// Blood Pressure Validation
+function checkBP() {
+  const sys = parseInt(document.getElementById('bp-sys').value);
+  const dia = document.getElementById('bp-dia').value;
+  const range = document.getElementById('bp-range');
+  const status = document.getElementById('bp-status');
+  
+  if (sys && dia) {
+    range.style.display = 'flex';
+    
+    if (sys >= 90 && sys <= 120 && dia >= 60 && dia <= 80) {
+      status.textContent = '✓ Normal';
+      status.style.color = '#10B981';
+    } else if (sys > 120 || dia > 80) {
+      status.textContent = '↑ High';
+      status.style.color = '#DC2626';
+    } else {
+      status.textContent = '↓ Low';
+      status.style.color = '#F59E0B';
+    }
+  }
+}
+
+// SpO2 Validation
+function checkSpO2() {
+  const spo2 = parseInt(document.getElementById('spo2').value);
+  const range = document.getElementById('spo2-range');
+  const status = document.getElementById('spo2-status');
+  
+  if (spo2) {
+    range.style.display = 'flex';
+    
+    if (spo2 >= 95) {
+      status.textContent = '✓ Normal';
+      status.style.color = '#10B981';
+    } else if (spo2 >= 90) {
+      status.textContent = '⚠ Low';
+      status.style.color = '#F59E0B';
+    } else {
+      status.textContent = '⚠ Critical';
+      status.style.color = '#DC2626';
+    }
+  }
+}
+
+// Glucose Validation
+function checkGlucose() {
+  const glucose = parseInt(document.getElementById('glucose').value);
+  const range = document.getElementById('glucose-range');
+  const status = document.getElementById('glucose-status');
+  
+  if (glucose) {
+    range.style.display = 'flex';
+    
+    if (glucose >= 70 && glucose <= 100) {
+      status.textContent = '✓ Normal';
+      status.style.color = '#10B981';
+    } else if (glucose > 100 && glucose <= 125) {
+      status.textContent = '↑ Watch';
+      status.style.color = '#F59E0B';
+    } else if (glucose > 125) {
+      status.textContent = '↑ High';
+      status.style.color = '#DC2626';
+    } else {
+      status.textContent = '↓ Low';
+      status.style.color = '#F59E0B';
+    }
+  }
+}
+
+// Heart Rate Validation
+function checkHeartRate() {
+  const hr = parseInt(document.getElementById('heart-rate').value);
+  const range = document.getElementById('hr-range');
+  const status = document.getElementById('hr-status');
+  
+  if (hr) {
+    range.style.display = 'flex';
+    
+    if (hr >= 60 && hr <= 100) {
+      status.textContent = '✓ Normal';
+      status.style.color = '#10B981';
+    } else if (hr > 100) {
+      status.textContent = '↑ High';
+      status.style.color = '#DC2626';
+    } else {
+      status.textContent = '↓ Low';
+      status.style.color = '#F59E0B';
+    }
+  }
+}
+
+// Notes character count
+const notesField = document.getElementById('notes');
+const noteCount = document.getElementById('note-count');
+if (notesField && noteCount) {
+  notesField.addEventListener('input', function() {
+    noteCount.textContent = this.value.length;
+  });
+}
+
+// Period selector
+function selectPeriod(element) {
+  document.querySelectorAll('.chart-tab').forEach(tab => {
+    tab.classList.remove('active');
+  });
+  element.classList.add('active');
+}
+
+// Set current date/time on page load
+window.addEventListener('load', function() {
+  const dateInput = document.getElementById('reading-date');
+  const timeInput = document.getElementById('reading-time');
+  
+  if (dateInput && timeInput) {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    
+    dateInput.value = `${year}-${month}-${day}`;
+    timeInput.value = `${hours}:${minutes}`;
+  }
+});
+
+console.log('Vital Signs Add & History Loaded');
+
+  function redirect(url) {
+    window.location.href = url;
+  }
+</script>
+
+</body>
+</html>
