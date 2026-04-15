@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Home Healthcare — Doctor Web Portal · Clinical Screens</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+
+/* ─── COLOUR SYSTEM: Navy + Gold ─────────────────────
+   Primary:  Navy  #1B3A6B  (sidebar, headers)
+   Accent:   Gold  #C8995A  (active states, CTAs)
+   Surface:  Cream #F8F5EE  (main content bg)
+   Text:     Warm  #5A4A2A
+─────────────────────────────────────────────────── */
+:root{
+  --navy:   #1B3A6B;
+  --navy2:  #2A5A9B;
+  --gold:   #C8995A;
+  --gold2:  #E8C080;
+  --goldL:  #FCD34D;
+  --cream:  #F8F5EE;
+  --cream2: #EDE5D5;
+  --warm:   #5A4A2A;
+  --warm2:  #8A7A5A;
+  --warm3:  #C8C0B0;
+  --red:    #DC2626;
+  --green:  #059669;
+  --amb:    #D97706;
+  --teal:   #0891B2;
+  --v:      #7C3AED;
+  --side-w: 210px;
+}
+
+body{
+  background:linear-gradient(150deg,#080C18 0%,#0C1020 40%,#0A0E1A 100%);
+  min-height:100vh;font-family:'Nunito',sans-serif;padding:36px 24px 64px;
+}
+
+/* ─── PAGE HEADER ─────────────────────── */
+.ph{text-align:center;margin-bottom:44px;}
+.phb{display:inline-flex;align-items:center;gap:8px;background:rgba(200,153,90,.16);border:1px solid rgba(200,153,90,.4);border-radius:99px;padding:7px 20px;margin-bottom:18px;}
+.phd{width:7px;height:7px;border-radius:50%;background:var(--gold2);animation:blink 1.6s infinite;}
+.phn{font-size:11px;font-weight:800;color:var(--gold2);letter-spacing:1.4px;}
+.pht{font-family:'Sora',sans-serif;font-size:38px;font-weight:800;color:#fff;line-height:1.1;margin-bottom:10px;}
+.pht span{background:linear-gradient(135deg,#C8995A,#E8C080);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.phs{font-size:14px;color:rgba(255,255,255,.42);max-width:680px;margin:0 auto;}
+
+/* ─── FEATURE PILLS ───────────────────── */
+.fpills{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:20px;}
+.fp{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:99px;font-size:11px;font-weight:800;background:rgba(200,153,90,.14);border:1px solid rgba(200,153,90,.35);color:var(--gold2);}
+
+/* ─── SCREEN ROWS ─────────────────────── */
+.row{display:flex;align-items:flex-start;justify-content:center;gap:28px;flex-wrap:wrap;margin-bottom:52px;}
+
+/* ─── BROWSER SHELL ───────────────────── */
+.browser{
+  background:#1A1D26;border-radius:14px;overflow:hidden;
+  box-shadow:0 40px 80px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.06);
+  flex-shrink:0;
+}
+.browser.full{width:1100px;max-width:calc(100vw - 48px);}
+.browser.half{width:700px;max-width:calc(100vw - 48px);}
+
+/* ─── BROWSER CHROME BAR ──────────────── */
+.bbar{background:#242836;padding:10px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.06);}
+.bdots{display:flex;gap:5px;}
+.bdot{width:11px;height:11px;border-radius:50%;}
+.burl{flex:1;background:rgba(255,255,255,.06);border-radius:7px;padding:6px 12px;font-size:11px;color:rgba(255,255,255,.35);font-family:'Courier New',monospace;display:flex;align-items:center;gap:6px;}
+.bacts{display:flex;gap:6px;}
+.bact{width:26px;height:26px;border-radius:6px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;font-size:11px;cursor:pointer;}
+
+/* ─── PORTAL INNER LAYOUT ─────────────── */
+.inner{display:flex;}
+.inner.with-sidebar{min-height:640px;}
+
+/* ─── SIDEBAR ─────────────────────────── */
+.sidebar{width:var(--side-w);background:var(--navy);display:flex;flex-direction:column;flex-shrink:0;border-right:1px solid rgba(255,255,255,.06);}
+.sb-logo{padding:18px 16px 14px;border-bottom:1px solid rgba(255,255,255,.08);}
+.sb-logo-name{font-family:'Sora',sans-serif;font-size:13px;font-weight:800;color:var(--gold);}
+.sb-logo-sub{font-size:10px;color:rgba(255,255,255,.35);margin-top:3px;}
+.sb-profile{padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;gap:9px;align-items:center;}
+.sb-avatar{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:var(--navy);font-family:'Sora',sans-serif;flex-shrink:0;}
+.sb-name{font-size:12px;font-weight:700;color:#fff;}
+.sb-role{font-size:10px;color:rgba(255,255,255,.45);}
+.sb-status{display:flex;align-items:center;gap:4px;margin-top:2px;}
+.sb-nav{padding:8px 8px;flex:1;overflow-y:auto;}
+.sb-group{font-size:9px;font-weight:700;color:rgba(255,255,255,.28);letter-spacing:1px;padding:6px 8px;margin-bottom:4px;margin-top:10px;}
+.sb-group:first-child{margin-top:0;}
+.nav-item{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:9px;margin-bottom:2px;cursor:pointer;}
+.nav-item.active{background:rgba(200,153,90,.18);border:1px solid rgba(200,153,90,.25);}
+.nav-item.active .nav-label{color:var(--gold);font-weight:700;}
+.nav-label{font-size:12px;font-weight:600;color:rgba(255,255,255,.55);}
+.nav-badge{margin-left:auto;font-size:9px;font-weight:800;padding:1px 7px;border-radius:99px;}
+.nb-gold{background:var(--gold);color:var(--navy);}
+.nb-red{background:rgba(220,38,38,.25);color:#FCA5A5;}
+.nb-v{background:rgba(124,58,237,.3);color:#C4B5FD;}
+.nb-green{background:rgba(22,163,74,.2);color:#6EE7B7;}
+.sb-bottom{padding:10px 14px;border-top:1px solid rgba(255,255,255,.06);}
+
+/* ─── MAIN CONTENT AREA ───────────────── */
+.main{flex:1;background:var(--cream);display:flex;flex-direction:column;overflow:hidden;}
+.topbar{background:#fff;padding:13px 22px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--cream2);flex-shrink:0;}
+.topbar-title{font-family:'Sora',sans-serif;font-size:18px;font-weight:800;color:var(--navy);}
+.topbar-sub{font-size:11px;color:var(--warm2);margin-top:2px;}
+.content{padding:18px 22px;flex:1;overflow-y:auto;}
+.content::-webkit-scrollbar{width:4px;}
+.content::-webkit-scrollbar-thumb{background:var(--cream2);border-radius:99px;}
+
+/* ─── SHARED PRIMITIVES ───────────────── */
+.card{background:#fff;border-radius:14px;border:1.5px solid var(--cream2);padding:16px;}
+.card-gold{background:#fff;border-radius:14px;border:1.5px solid rgba(200,153,90,.3);padding:16px;}
+.card-red{background:#fff;border-radius:14px;border:1.5px solid #FECACA;padding:16px;}
+.card-green{background:#fff;border-radius:14px;border:1.5px solid #D1FAE5;padding:16px;}
+.btn-navy{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;border:none;border-radius:9px;padding:9px 16px;font-size:12px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;box-shadow:0 3px 12px rgba(27,58,107,.25);}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--navy);border:none;border-radius:9px;padding:9px 16px;font-size:12px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;}
+.btn-red{background:linear-gradient(135deg,#991B1B,#DC2626);color:#fff;border:none;border-radius:9px;padding:9px 16px;font-size:12px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;}
+.btn-green{background:linear-gradient(135deg,#047A40,#059669);color:#fff;border:none;border-radius:9px;padding:9px 16px;font-size:12px;font-weight:800;font-family:'Nunito',sans-serif;cursor:pointer;}
+.btn-out{background:transparent;color:var(--navy);border:1.5px solid var(--cream2);border-radius:9px;padding:8px 14px;font-size:12px;font-weight:700;font-family:'Nunito',sans-serif;cursor:pointer;}
+.inp{background:var(--cream);border:1.5px solid var(--cream2);border-radius:9px;padding:9px 12px;font-size:13px;color:var(--navy);font-family:'Nunito',sans-serif;width:100%;}
+.inp:focus{outline:none;border-color:var(--gold);}
+.inp::placeholder{color:var(--warm3);}
+.tag-red{background:#FEE2E2;color:#DC2626;font-size:9px;font-weight:800;padding:3px 9px;border-radius:99px;}
+.tag-warn{background:#FEF3C7;color:#D97706;font-size:9px;font-weight:800;padding:3px 9px;border-radius:99px;}
+.tag-green{background:#DCFCE7;color:#16A34A;font-size:9px;font-weight:800;padding:3px 9px;border-radius:99px;}
+.tag-blue{background:#EBF1FF;color:#1148A4;font-size:9px;font-weight:800;padding:3px 9px;border-radius:99px;}
+.tag-gold{background:#FFF8EE;color:#C8995A;font-size:9px;font-weight:800;padding:3px 9px;border-radius:99px;}
+.sec-title{font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:var(--navy);}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+
+/* ─── SCREEN LABEL ────────────────────── */
+.sl{text-align:center;margin-top:12px;}
+.sn{display:inline-flex;align-items:center;gap:6px;background:rgba(200,153,90,.18);border:1px solid rgba(200,153,90,.35);border-radius:99px;padding:5px 14px;font-size:11px;font-weight:800;color:var(--gold2);}
+.st{font-size:12px;color:rgba(255,255,255,.3);margin-top:5px;font-weight:600;}
+
+/* ─── SECTION DIVIDER ─────────────────── */
+.sdiv{display:flex;align-items:center;gap:14px;margin:44px auto 32px;max-width:1200px;}
+.sdl{flex:1;height:1px;background:rgba(200,153,90,.1);}
+.sdt{font-size:10px;font-weight:800;color:rgba(200,153,90,.3);letter-spacing:2px;white-space:nowrap;}
+
+/* ─── ANIMATIONS ──────────────────────── */
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes ping{0%{transform:scale(1);opacity:.8}100%{transform:scale(2.2);opacity:0}}
+
+/* ─── SIDEBAR REUSABLE COMPONENT ──────── */
+.sidebar-std .sb-group:first-child{margin-top:0;}
+.home-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: inline-block;
+    padding: 12px 28px;
+    color: #fff;
+    text-decoration: none;
+    font-size: 15px;
+    border-radius: 30px;
+    background: linear-gradient(135deg,var(--navy),var(--navy2));
+    overflow: hidden;
+    transition: all 0.4s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* Shine animation */
+.home-btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg,var(--navy),var(--navy2));
+    transition: 0.5s;
+}
+
+.home-btn:hover::before {
+    left: 100%;
+}
+
+/* Hover effect */
+.home-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+/* Click effect */
+.home-btn:active {
+    transform: scale(0.95);
+}
+</style>
+</head>
+<body>
+
+
+    <div>
+      <a href="./index.html" class="home-btn">← Back to Home</a>
+    </div>
+
+<!-- PAGE HEADER -->
+<div class="ph">
+  <div class="phb"><div class="phd"></div><span class="phn">DOCTOR WEB PORTAL — HOME HEALTHCARE</span><div class="phd"></div></div>
+  <div class="pht">Doctor Portal —<br/><span>10 Clinical Screens</span></div>
+  <div class="phs">Every clinical tool a doctor needs — patient queue management, telemedicine video calls, care plan prescription, e-prescriptions with drug interaction AI, RPM alerts, AI audit log, analytics, and scheduling.</div>
+  <div class="fpills">
+    <div class="fp">📋 Dashboard + Queue</div>
+    <div class="fp">📞 Telemedicine</div>
+    <div class="fp">👤 Patient Profile + EMR</div>
+    <div class="fp">🛡 Care Plans</div>
+    <div class="fp">💊 e-Prescriptions</div>
+    <div class="fp">📡 RPM Alerts</div>
+    <div class="fp">🤖 AI Audit Log</div>
+    <div class="fp">📊 Analytics</div>
+    <div class="fp">📅 Schedule</div>
+    <div class="fp">⚙️ Settings</div>
+  </div>
+</div>
+
+<!-- ─────────────────────────────────────── SHARED SIDEBAR HTML (reused across screens) -->
+
+<!-- ═════════════════════════════════════════════════════════
+     SCREEN 1 — DASHBOARD (Main Overview)
+═════════════════════════════════════════════════════════ -->
+<div style="display:flex;flex-direction:column;align-items:center;margin-bottom:32px;">
+<div class="browser full">
+  <div class="bbar"><div class="bdots"><div class="bdot" style="background:#FF5F57;"></div><div class="bdot" style="background:#FFBD2E;"></div><div class="bdot" style="background:#28C840;"></div></div><div class="burl"><span>🔒</span> portal.homehealthcare.ae/doctor/dashboard</div><div class="bacts"><div class="bact">🔔</div><div class="bact">⚙️</div></div></div>
+  <div class="inner with-sidebar">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sb-logo"><div class="sb-logo-name">🏥 HomeHealthcare</div><div class="sb-logo-sub">Doctor Portal</div></div>
+      <div class="sb-profile"><div class="sb-avatar">BH</div><div><div class="sb-name">Dr. Bilal Hussain</div><div class="sb-role">Cardiologist</div><div class="sb-status"><div style="width:6px;height:6px;border-radius:50%;background:#22C55E;"></div><span style="font-size:9px;color:#22C55E;font-weight:600;">Online</span></div></div></div>
+      <div class="sb-nav">
+        <div class="sb-group">CLINICAL</div>
+        <div class="nav-item active"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#C8995A" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg><span class="nav-label" style="color:var(--gold);font-weight:700;">Dashboard</span><div class="nav-badge nb-gold">8</div></div>
+        <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><span class="nav-label">Patient Queue</span><div class="nav-badge nb-red">3 🚨</div></div>
+        <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07"/></svg><span class="nav-label">Telemedicine</span></div>
+        <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span class="nav-label">Care Plans</span></div>
+        <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><rect x="9" y="2" width="6" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg><span class="nav-label">e-Prescriptions</span></div>
+        <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg><span class="nav-label">RPM Alerts</span><div class="nav-badge nb-red">3</div></div>
+        <div class="sb-group">INTELLIGENCE</div>
+        <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><span class="nav-label">AI Audit Log</span><div class="nav-badge nb-v">New</div></div>
+        <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span class="nav-label">Analytics</span></div>
+        <div class="sb-group">PLANNING</div>
+        <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span class="nav-label">Schedule</span></div>
+      </div>
+      <div class="sb-bottom"><div class="nav-item" style="padding:7px 8px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/></svg><span style="font-size:11px;color:rgba(255,255,255,.35);">Settings</span></div></div>
+    </div>
+    <!-- MAIN -->
+    <div class="main">
+      <div class="topbar">
+        <div><div class="topbar-title">Good Morning, Dr. Bilal 👋</div><div class="topbar-sub">Thursday, April 2, 2026 · Dubai · 8 patients waiting · 3 RPM critical alerts</div></div>
+        <div style="display:flex;gap:10px;align-items:center;">
+          <div style="background:#FEE2E2;border:1px solid #FECACA;border-radius:9px;padding:7px 14px;font-size:12px;font-weight:700;color:#DC2626;cursor:pointer;">🚨 3 Critical Alerts</div>
+          <button class="btn-navy">+ New Consultation</button>
+        </div>
+      </div>
+      <div class="content">
+        <!-- KPI cards -->
+        <div class="grid4" style="margin-bottom:18px;">
+          <div class="card"><div style="font-size:10px;color:var(--warm2);font-weight:600;letter-spacing:.5px;margin-bottom:6px;">TODAY'S PATIENTS</div><div style="font-family:'Sora',sans-serif;font-size:28px;font-weight:800;color:var(--navy);">8</div><div style="font-size:11px;color:var(--green);margin-top:4px;">3 completed · 5 pending</div></div>
+          <div class="card-red"><div style="font-size:10px;color:var(--warm2);font-weight:600;letter-spacing:.5px;margin-bottom:6px;">RPM ALERTS</div><div style="font-family:'Sora',sans-serif;font-size:28px;font-weight:800;color:var(--red);">3</div><div style="font-size:11px;color:var(--red);margin-top:4px;">Critical · Needs review</div></div>
+          <div class="card"><div style="font-size:10px;color:var(--warm2);font-weight:600;letter-spacing:.5px;margin-bottom:6px;">PRESCRIPTIONS</div><div style="font-family:'Sora',sans-serif;font-size:28px;font-weight:800;color:var(--gold);">12</div><div style="font-size:11px;color:var(--amb);margin-top:4px;">Issued this week</div></div>
+          <div class="card"><div style="font-size:10px;color:var(--warm2);font-weight:600;letter-spacing:.5px;margin-bottom:6px;">SATISFACTION</div><div style="font-family:'Sora',sans-serif;font-size:28px;font-weight:800;color:var(--green);">4.9 ⭐</div><div style="font-size:11px;color:var(--green);margin-top:4px;">238 reviews this month</div></div>
+        </div>
+        <!-- Queue + RPM side by side -->
+        <div class="grid2">
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;"><div class="sec-title">Patient Queue</div><div style="background:var(--cream2);color:var(--navy);font-size:10px;font-weight:700;padding:3px 10px;border-radius:99px;">5 waiting</div></div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div style="display:flex;gap:9px;align-items:center;padding:10px 11px;background:#FEF2F2;border-radius:11px;border-left:3px solid var(--red);"><div style="width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#DC2626,#EF4444);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0;">MA</div><div style="flex:1;"><div style="font-size:12px;font-weight:700;color:var(--navy);">Muhammad Ali</div><div style="font-size:10px;color:#9A5050;">BP Critical 168/102 · RPM alert</div></div><div class="tag-red">🚨 Now</div></div>
+              <div style="display:flex;gap:9px;align-items:center;padding:10px 11px;background:#FFF8EE;border-radius:11px;border-left:3px solid var(--gold);"><div style="width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--navy);flex-shrink:0;">SK</div><div style="flex:1;"><div style="font-size:12px;font-weight:700;color:var(--navy);">Sara Khalid</div><div style="font-size:10px;color:#8A6A3A;">Tele-consult · HbA1c review</div></div><button class="btn-navy" style="padding:5px 11px;font-size:10px;">Join</button></div>
+              <div style="display:flex;gap:9px;align-items:center;padding:10px 11px;background:var(--cream);border-radius:11px;border-left:3px solid var(--cream2);opacity:.75;"><div style="width:32px;height:32px;border-radius:9px;background:var(--cream2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--warm2);flex-shrink:0;">AH</div><div style="flex:1;"><div style="font-size:12px;font-weight:700;color:var(--navy);">Ahmed Hassan</div><div style="font-size:10px;color:var(--warm2);">Follow-up · Post-discharge</div></div><div style="font-size:10px;color:var(--warm2);">10:30 AM</div></div>
+              <div style="display:flex;gap:9px;align-items:center;padding:10px 11px;background:var(--cream);border-radius:11px;border-left:3px solid var(--cream2);opacity:.65;"><div style="width:32px;height:32px;border-radius:9px;background:var(--cream2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--warm2);flex-shrink:0;">FM</div><div style="flex:1;"><div style="font-size:12px;font-weight:700;color:var(--navy);">Fatima Malik</div><div style="font-size:10px;color:var(--warm2);">Diabetes review · 11:00 AM</div></div><div style="font-size:10px;color:var(--warm2);">11 AM</div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;"><div class="sec-title">Live RPM Alerts</div><div class="tag-red">3 critical</div></div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div class="card-red" style="padding:12px;"><div style="display:flex;justify-content:space-between;margin-bottom:5px;"><div style="font-size:12px;font-weight:700;color:var(--red);">Muhammad Ali</div><div class="tag-red">Critical</div></div><div style="font-size:11px;color:#7F1010;margin-bottom:8px;">BP 168/102 · 3rd reading ↑ · 3 consecutive days trend</div><div style="display:flex;gap:6px;"><button class="btn-red" style="flex:1;padding:6px;font-size:10px;">📞 Call Now</button><button class="btn-out" style="flex:1;padding:5px;font-size:10px;">Adjust Rx</button></div></div>
+              <div class="card" style="border-color:#FCD34D;padding:12px;"><div style="display:flex;justify-content:space-between;margin-bottom:5px;"><div style="font-size:12px;font-weight:700;color:var(--amb);">Fatima Malik</div><div class="tag-warn">Warning</div></div><div style="font-size:11px;color:#92400E;">Glucose 178 mg/dL · Post-meal · 3rd consecutive elevation</div></div>
+              <div class="card" style="border-color:#BFDBFE;padding:12px;"><div style="display:flex;justify-content:space-between;margin-bottom:5px;"><div style="font-size:12px;font-weight:700;color:#1148A4;">Ahmed Hassan</div><div class="tag-blue">Missed reading</div></div><div style="font-size:11px;color:#3A6BC0;">No BP reading logged for 28 hours · Reminder sent</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="sl"><div class="sn">🩺 Screen 1</div><div class="st">Dashboard · KPIs · Patient Queue · Live RPM Alerts</div></div>
+</div>
+
+<!-- ─── SECTION DIVIDER ─── -->
+<div class="sdiv"><div class="sdl"></div><div class="sdt">SCREENS 2 – 4</div><div class="sdl"></div></div>
+
+<!-- ROW: Screens 2, 3 side by side (half width each) -->
+<div class="row">
+
+<!-- ═══════════════ SCREEN 2 — PATIENT QUEUE ═══════════════ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="browser half">
+  <div class="bbar"><div class="bdots"><div class="bdot" style="background:#FF5F57;"></div><div class="bdot" style="background:#FFBD2E;"></div><div class="bdot" style="background:#28C840;"></div></div><div class="burl"><span>🔒</span> portal.homehealthcare.ae/doctor/queue</div><div class="bacts"><div class="bact">🔔</div></div></div>
+  <div class="inner with-sidebar" style="min-height:580px;">
+    <!-- mini sidebar -->
+    <div class="sidebar">
+      <div class="sb-logo"><div class="sb-logo-name">🏥 HomeHealthcare</div><div class="sb-logo-sub">Doctor Portal</div></div>
+      <div class="sb-profile"><div class="sb-avatar">BH</div><div><div class="sb-name">Dr. Bilal Hussain</div><div class="sb-role">Cardiologist</div></div></div>
+      <div class="sb-nav">
+        <div class="sb-group">CLINICAL</div>
+        <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg><span class="nav-label">Dashboard</span></div>
+        <div class="nav-item active"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#C8995A" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><span class="nav-label" style="color:var(--gold);font-weight:700;">Patient Queue</span><div class="nav-badge nb-red">5</div></div>
+        <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2"/></svg><span class="nav-label">Telemedicine</span></div>
+        <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span class="nav-label">Care Plans</span></div>
+        <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><rect x="9" y="2" width="6" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg><span class="nav-label">e-Prescriptions</span></div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="topbar"><div><div class="topbar-title">Patient Queue</div><div class="topbar-sub">Thursday, April 2 · 5 patients waiting · Sorted by priority</div></div><div style="display:flex;gap:8px;"><div style="background:var(--cream);border:1px solid var(--cream2);border-radius:8px;padding:7px 12px;font-size:11px;font-weight:700;color:var(--warm);">🔍 Search</div><button class="btn-navy">+ Add Walk-In</button></div></div>
+      <div class="content">
+        <!-- Filter tabs -->
+        <div style="display:flex;gap:8px;margin-bottom:16px;">
+          <div style="padding:7px 14px;border-radius:99px;background:var(--navy);color:#fff;font-size:12px;font-weight:700;cursor:pointer;">All (5)</div>
+          <div style="padding:7px 14px;border-radius:99px;background:#FEE2E2;color:var(--red);font-size:12px;font-weight:700;cursor:pointer;">🚨 Critical (1)</div>
+          <div style="padding:7px 14px;border-radius:99px;background:#FEF3C7;color:var(--amb);font-size:12px;font-weight:700;cursor:pointer;">⚠ Priority (2)</div>
+          <div style="padding:7px 14px;border-radius:99px;background:var(--cream);color:var(--warm2);font-size:12px;font-weight:700;cursor:pointer;">Routine (2)</div>
+        </div>
+        <!-- Patient rows -->
+        <div style="display:flex;flex-direction:column;gap:9px;">
+          <!-- Critical -->
+          <div class="card-red" style="display:flex;gap:12px;align-items:center;">
+            <div style="width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#DC2626,#EF4444);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0;">MA</div>
+            <div style="flex:1;">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px;"><div style="font-size:14px;font-weight:800;color:var(--navy);">Muhammad Ali</div><div class="tag-red">🚨 Critical · RPM Alert</div></div>
+              <div style="font-size:11px;color:#9A5050;">MRN 226589 · BP 168/102 · Waiting 0 min · Hypertension + Diabetes</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0;"><button class="btn-red" style="padding:8px 16px;font-size:12px;">📞 Call Now</button><button class="btn-out" style="padding:6px 12px;font-size:11px;">View Notes</button></div>
+          </div>
+          <!-- Priority 1 -->
+          <div class="card-gold" style="display:flex;gap:12px;align-items:center;">
+            <div style="width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:var(--navy);flex-shrink:0;">SK</div>
+            <div style="flex:1;">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px;"><div style="font-size:14px;font-weight:800;color:var(--navy);">Sara Khalid</div><div class="tag-warn">Priority · Tele-consult</div></div>
+              <div style="font-size:11px;color:var(--warm2);">MRN 198240 · Waiting 8 min · HbA1c result review · Diabetic management</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0;"><button class="btn-navy" style="padding:8px 16px;font-size:12px;">📹 Join Video</button><button class="btn-out" style="padding:6px 12px;font-size:11px;">View EMR</button></div>
+          </div>
+          <!-- Priority 2 -->
+          <div class="card" style="display:flex;gap:12px;align-items:center;">
+            <div style="width:40px;height:40px;border-radius:12px;background:#EDE5D5;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:var(--warm);flex-shrink:0;">FM</div>
+            <div style="flex:1;">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px;"><div style="font-size:14px;font-weight:800;color:var(--navy);">Fatima Malik</div><div class="tag-warn">Priority · Glucose high</div></div>
+              <div style="font-size:11px;color:var(--warm2);">MRN 204771 · Waiting 14 min · Diabetes T2 · 10:30 AM slot</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0;"><button class="btn-navy" style="padding:8px 16px;font-size:12px;">📹 Start Call</button><button class="btn-out" style="padding:6px 12px;font-size:11px;">Defer 15m</button></div>
+          </div>
+          <!-- Routine -->
+          <div class="card" style="display:flex;gap:12px;align-items:center;opacity:.8;">
+            <div style="width:40px;height:40px;border-radius:12px;background:#EDE5D5;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:var(--warm);flex-shrink:0;">AH</div>
+            <div style="flex:1;"><div style="font-size:14px;font-weight:800;color:var(--navy);">Ahmed Hassan</div><div style="font-size:11px;color:var(--warm2);">MRN 183560 · Post-discharge follow-up · 11:00 AM</div></div>
+            <div style="font-size:12px;color:var(--warm2);">Scheduled</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="sl"><div class="sn">🩺 Screen 2</div><div class="st">Patient Queue · Priority Sorting · Critical Flags · Join / Defer</div></div>
+</div>
+
+<!-- ═══════════════ SCREEN 3 — TELEMEDICINE VIDEO ROOM ═══════════════ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="browser half">
+  <div class="bbar"><div class="bdots"><div class="bdot" style="background:#FF5F57;"></div><div class="bdot" style="background:#FFBD2E;"></div><div class="bdot" style="background:#28C840;"></div></div><div class="burl"><span>🔒</span> portal.homehealthcare.ae/doctor/tele/session-48120</div><div class="bacts"><div class="bact">🔔</div></div></div>
+  <div class="inner" style="min-height:580px;flex-direction:column;">
+    <!-- Full-screen video call layout (no sidebar) -->
+    <div style="background:#0A1015;flex:1;display:flex;flex-direction:column;">
+      <!-- Top bar -->
+      <div style="background:rgba(0,0,0,.4);padding:12px 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.07);">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="font-family:'Sora',sans-serif;font-size:14px;font-weight:800;color:#fff;">Tele-Consultation</div>
+          <div style="display:flex;align-items:center;gap:5px;background:rgba(22,163,74,.2);border:1px solid rgba(22,163,74,.3);border-radius:99px;padding:4px 11px;"><div style="width:6px;height:6px;border-radius:50%;background:#22C55E;animation:blink 1.4s infinite;"></div><span style="font-size:10px;font-weight:700;color:#22C55E;">LIVE · 14:32</span></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="background:rgba(255,255,255,.1);border-radius:8px;padding:6px 12px;font-size:11px;font-weight:700;color:#fff;cursor:pointer;">Sara Khalid · MRN 198240</div>
+          <button style="background:#DC2626;border:none;border-radius:8px;padding:7px 14px;font-size:11px;font-weight:800;color:#fff;font-family:'Nunito',sans-serif;cursor:pointer;">✕ End Call</button>
+        </div>
+      </div>
+
+      <!-- Video area -->
+      <div style="flex:1;display:flex;gap:0;min-height:0;">
+        <!-- Patient video feed -->
+        <div style="flex:1;background:linear-gradient(135deg,#0D1A2E,#1B3A6B);position:relative;display:flex;align-items:center;justify-content:center;min-height:300px;">
+          <div style="text-align:center;"><div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#E8C080,#C8995A);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900;color:var(--navy);font-family:'Sora',sans-serif;margin:0 auto 12px;border:3px solid rgba(255,255,255,.2);">SK</div><div style="font-family:'Sora',sans-serif;font-size:14px;font-weight:700;color:#fff;">Sara Khalid</div><div style="font-size:11px;color:rgba(255,255,255,.6);margin-top:3px;">Patient · Camera Active</div></div>
+          <!-- Doctor's small video -->
+          <div style="position:absolute;bottom:14px;right:14px;width:100px;height:80px;background:linear-gradient(135deg,#022C1A,#047A40);border-radius:10px;border:2px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;">
+            <div style="text-align:center;"><div style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:var(--navy);font-family:'Sora',sans-serif;margin:0 auto 4px;">BH</div><div style="font-size:9px;color:rgba(255,255,255,.7);">Dr. Bilal</div></div>
+          </div>
+        </div>
+        <!-- Right panel: notes + patient data -->
+        <div style="width:220px;background:#fff;border-left:1px solid var(--cream2);display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0;">
+          <div style="padding:12px;border-bottom:1px solid var(--cream2);">
+            <div style="font-size:11px;font-weight:800;color:var(--navy);margin-bottom:8px;">Patient Overview</div>
+            <div style="font-size:10px;color:var(--warm2);line-height:1.8;"><b style="color:var(--navy);">Sara Khalid</b><br/>F · 38 yrs · MRN 198240<br/>Diabetes T2 · Hypertension<br/>HbA1c: 7.8% (Mar 25)</div>
+          </div>
+          <div style="padding:12px;border-bottom:1px solid var(--cream2);">
+            <div style="font-size:11px;font-weight:800;color:var(--navy);margin-bottom:7px;">Live Vitals (RPM)</div>
+            <div style="display:flex;flex-direction:column;gap:5px;">
+              <div style="display:flex;justify-content:space-between;"><span style="font-size:10px;color:var(--warm2);">BP:</span><span style="font-size:10px;font-weight:700;color:var(--amb);">142/88 ⚠</span></div>
+              <div style="display:flex;justify-content:space-between;"><span style="font-size:10px;color:var(--warm2);">Glucose:</span><span style="font-size:10px;font-weight:700;color:var(--red);">178 mg/dL</span></div>
+              <div style="display:flex;justify-content:space-between;"><span style="font-size:10px;color:var(--warm2);">HR:</span><span style="font-size:10px;font-weight:700;color:var(--green);">76 bpm ✓</span></div>
+            </div>
+          </div>
+          <div style="padding:12px;flex:1;">
+            <div style="font-size:11px;font-weight:800;color:var(--navy);margin-bottom:7px;">Consultation Notes</div>
+            <textarea style="width:100%;height:90px;background:var(--cream);border:1px solid var(--cream2);border-radius:8px;padding:8px;font-size:10px;color:var(--navy);font-family:'Nunito',sans-serif;resize:none;" placeholder="Type notes here...">HbA1c still 7.8. Patient reports poor diet compliance. Adjust Metformin dose to 1000mg BD. Recommend dietitian referral.</textarea>
+            <div style="display:flex;flex-direction:column;gap:5px;margin-top:8px;">
+              <button class="btn-navy" style="width:100%;padding:8px;font-size:11px;">💊 Write Rx</button>
+              <button class="btn-out" style="width:100%;padding:7px;font-size:11px;">📋 Add Care Plan</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Call controls -->
+      <div style="background:rgba(0,0,0,.5);padding:12px 18px;display:flex;align-items:center;justify-content:center;gap:14px;border-top:1px solid rgba(255,255,255,.07);">
+        <div style="width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;" title="Mic">🎙</div>
+        <div style="width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;" title="Camera">📷</div>
+        <div style="width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;" title="Screen Share">🖥</div>
+        <div style="width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;" title="Chat">💬</div>
+        <div style="width:52px;height:52px;border-radius:50%;background:#DC2626;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;box-shadow:0 4px 14px rgba(220,38,38,.4);">📵</div>
+        <div style="width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;" title="Record">⏺</div>
+        <div style="width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;" title="Invite">👥</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="sl"><div class="sn">🩺 Screen 3</div><div class="st">Telemedicine · Live Video Room · Notes + Vitals Panel · Controls</div></div>
+</div>
+
+</div><!-- end row -->
+
+<!-- SECTION DIVIDER -->
+<div class="sdiv"><div class="sdl"></div><div class="sdt">SCREENS 4 – 6</div><div class="sdl"></div></div>
+
+<!-- ROW: Screens 4, 5, 6 -->
+<div class="row">
+
+<!-- ═══════════════ SCREEN 4 — PATIENT PROFILE + EMR ═══════════════ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="browser" style="width:680px;max-width:calc(100vw - 48px);">
+  <div class="bbar"><div class="bdots"><div class="bdot" style="background:#FF5F57;"></div><div class="bdot" style="background:#FFBD2E;"></div><div class="bdot" style="background:#28C840;"></div></div><div class="burl"><span>🔒</span> portal.homehealthcare.ae/doctor/patient/226589</div><div class="bacts"><div class="bact">🔔</div></div></div>
+  <div class="inner with-sidebar" style="min-height:600px;">
+    <div class="sidebar">
+      <div class="sb-logo"><div class="sb-logo-name">🏥 HomeHealthcare</div><div class="sb-logo-sub">Doctor Portal</div></div>
+      <div class="sb-profile"><div class="sb-avatar">BH</div><div><div class="sb-name">Dr. Bilal Hussain</div><div class="sb-role">Cardiologist</div></div></div>
+      <div class="sb-nav">
+        <div class="sb-group">CLINICAL</div>
+        <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/></svg><span class="nav-label">Dashboard</span></div>
+        <div class="nav-item active"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#C8995A" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><span class="nav-label" style="color:var(--gold);font-weight:700;">Patient Profile</span></div>
+        <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span class="nav-label">Care Plans</span></div>
+        <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><rect x="9" y="2" width="6" height="4" rx="1"/></svg><span class="nav-label">e-Prescriptions</span></div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="topbar">
+        <div><div class="topbar-title">Muhammad Ali — MRN 226589</div><div class="topbar-sub">Full EMR · Longitudinal health record · Last updated: Today 8:54 AM</div></div>
+        <div style="display:flex;gap:8px;"><button class="btn-navy">💊 Write Rx</button><button class="btn-out">📋 New Care Plan</button></div>
+      </div>
+      <div class="content">
+        <!-- Patient header card -->
+        <div class="card" style="margin-bottom:14px;">
+          <div style="display:flex;gap:14px;align-items:flex-start;">
+            <div style="width:54px;height:54px;border-radius:16px;background:linear-gradient(135deg,#FFD580,#FF9A3C);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900;color:#fff;font-family:'Sora',sans-serif;flex-shrink:0;border:2px solid rgba(255,255,255,.4);">MA</div>
+            <div style="flex:1;">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:5px;"><div style="font-family:'Sora',sans-serif;font-size:17px;font-weight:800;color:var(--navy);">Muhammad Ali</div><div class="tag-red">⚠ BP Critical</div><div class="tag-blue">Hypertension</div><div class="tag-warn">Diabetes T2</div></div>
+              <div style="display:flex;gap:20px;font-size:11px;color:var(--warm2);">
+                <span>🎂 14 Mar 1980 (44 yrs)</span><span>♂ Male</span><span>🩸 B+</span><span>📱 +971-50-XXX-XXXX</span><span>📍 DHA Phase 2, Dubai</span>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0;text-align:right;"><div style="font-size:11px;font-weight:700;color:var(--navy);">Assigned Since</div><div style="font-size:11px;color:var(--warm2);">Jan 15, 2024</div><div style="font-size:11px;font-weight:700;color:var(--navy);margin-top:4px;">Insurance</div><div style="font-size:11px;color:var(--warm2);">DHA Shield Gold</div></div>
+          </div>
+        </div>
+        <!-- Vitals + Conditions side by side -->
+        <div class="grid2" style="margin-bottom:14px;">
+          <div class="card">
+            <div class="sec-title" style="margin-bottom:11px;">📡 Current Vitals (RPM)</div>
+            <div style="display:flex;flex-direction:column;gap:7px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:#FEF3C7;border-radius:9px;"><span style="font-size:12px;color:var(--navy);">Blood Pressure</span><span style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:var(--amb);">158/96 mmHg ⚠</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:var(--cream);border-radius:9px;"><span style="font-size:12px;color:var(--navy);">Heart Rate</span><span style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:var(--green);">72 bpm ✓</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:var(--cream);border-radius:9px;"><span style="font-size:12px;color:var(--navy);">Blood Glucose</span><span style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:var(--amb);">116 mg/dL</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:var(--cream);border-radius:9px;"><span style="font-size:12px;color:var(--navy);">SpO₂</span><span style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:var(--green);">97% ✓</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:var(--cream);border-radius:9px;"><span style="font-size:12px;color:var(--navy);">HbA1c (Mar 25)</span><span style="font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:var(--red);">9.2% 🚨</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="sec-title" style="margin-bottom:11px;">📋 Medical History</div>
+            <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--navy);">
+              <div style="padding:7px 10px;background:#FEE2E2;border-radius:9px;border-left:3px solid var(--red);"><b>Hypertension</b> — Stage 2 · Since 2019</div>
+              <div style="padding:7px 10px;background:#FEF3C7;border-radius:9px;border-left:3px solid var(--amb);"><b>Diabetes T2</b> — Since 2021 · Poor control</div>
+              <div style="padding:7px 10px;background:var(--cream);border-radius:9px;border-left:3px solid var(--cream2);"><b>Surgical wound</b> — Right leg · Apr 2025</div>
+            </div>
+            <div style="margin-top:10px;"><div style="font-size:11px;font-weight:700;color:var(--warm2);margin-bottom:5px;">Allergies</div><div style="font-size:11px;color:var(--red);">Penicillin (anaphylaxis) · Aspirin (GI) · Latex</div></div>
+          </div>
+        </div>
+        <!-- Current medications -->
+        <div class="card">
+          <div class="sec-title" style="margin-bottom:11px;">💊 Current Medications</div>
+          <div style="display:flex;flex-direction:column;gap:7px;">
+            <div style="display:flex;gap:10px;align-items:center;padding:9px 11px;background:var(--cream);border-radius:10px;"><div style="flex:1;font-size:12px;color:var(--navy);"><b>Amlodipine 10mg</b> — Oral · Once daily (AM) · Calcium Channel Blocker</div><div class="tag-green">Active</div></div>
+            <div style="display:flex;gap:10px;align-items:center;padding:9px 11px;background:var(--cream);border-radius:10px;"><div style="flex:1;font-size:12px;color:var(--navy);"><b>Metformin 500mg</b> — Oral · Twice daily (AM + PM) · Biguanide</div><div class="tag-warn">⚠ Missed AM</div></div>
+          </div>
+          <button class="btn-navy" style="margin-top:12px;width:100%;">+ Add / Modify Medications</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="sl"><div class="sn">🩺 Screen 4</div><div class="st">Patient Profile · Full EMR · Vitals · History · Medications</div></div>
+</div>
+
+<!-- ═══════════════ SCREEN 5 — CARE PLANS ═══════════════ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="browser" style="width:680px;max-width:calc(100vw - 48px);">
+  <div class="bbar"><div class="bdots"><div class="bdot" style="background:#FF5F57;"></div><div class="bdot" style="background:#FFBD2E;"></div><div class="bdot" style="background:#28C840;"></div></div><div class="burl"><span>🔒</span> portal.homehealthcare.ae/doctor/care-plans</div><div class="bacts"><div class="bact">🔔</div></div></div>
+  <div class="inner with-sidebar" style="min-height:600px;">
+    <div class="sidebar">
+      <div class="sb-logo"><div class="sb-logo-name">🏥 HomeHealthcare</div><div class="sb-logo-sub">Doctor Portal</div></div>
+      <div class="sb-profile"><div class="sb-avatar">BH</div><div><div class="sb-name">Dr. Bilal Hussain</div><div class="sb-role">Cardiologist</div></div></div>
+      <div class="sb-nav">
+        <div class="sb-group">CLINICAL</div>
+        <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/></svg><span class="nav-label">Dashboard</span></div>
+        <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/></svg><span class="nav-label">Patient Queue</span></div>
+        <div class="nav-item active"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#C8995A" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span class="nav-label" style="color:var(--gold);font-weight:700;">Care Plans</span></div>
+        <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><rect x="9" y="2" width="6" height="4" rx="1"/></svg><span class="nav-label">e-Prescriptions</span></div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="topbar"><div><div class="topbar-title">Care Plans</div><div class="topbar-sub">Prescribe and manage Subscription Plans & Home Admission · AI-assisted configuration</div></div><button class="btn-navy">+ New Care Plan</button></div>
+      <div class="content">
+        <!-- Active plans -->
+        <div class="sec-title" style="margin-bottom:12px;">Active Plans (2)</div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:18px;">
+          <!-- Subscription plan - active -->
+          <div style="background:#fff;border:2px solid rgba(124,58,237,.3);border-radius:14px;padding:15px;position:relative;overflow:hidden;">
+            <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#7C3AED,#A78BFA);"></div>
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:11px;">
+              <div><div style="font-size:10px;font-weight:700;color:#7C3AED;letter-spacing:.5px;margin-bottom:3px;">TIER 2 · SUBSCRIPTION PLAN · ACTIVE</div><div style="font-family:'Sora',sans-serif;font-size:15px;font-weight:800;color:var(--navy);">Daily Wound Dressing — Muhammad Ali</div><div style="font-size:11px;color:var(--warm2);margin-top:2px;">14 visits · Daily · Nurse Aisha Khan RN · AED 120/visit</div></div>
+              <div style="display:flex;gap:6px;"><div style="background:#EDE9FE;color:#7C3AED;font-size:9px;font-weight:800;padding:4px 10px;border-radius:99px;">Active ●</div></div>
+            </div>
+            <div style="height:5px;background:#E8E0F8;border-radius:99px;overflow:hidden;margin-bottom:8px;"><div style="width:50%;height:100%;background:linear-gradient(90deg,#7C3AED,#A78BFA);border-radius:99px;"></div></div>
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:#7C3AED;font-weight:700;margin-bottom:12px;"><span>Visit 7 of 14 · 50% complete</span><span>Ends Apr 12 · AED 1,512 total</span></div>
+            <div style="display:flex;gap:8px;"><button class="btn-out" style="flex:1;font-size:11px;">View Progress</button><button style="background:#EDE9FE;color:#7C3AED;border:none;border-radius:9px;padding:8px 14px;font-size:11px;font-weight:700;font-family:'Nunito',sans-serif;cursor:pointer;flex:1;">Modify Plan</button><button class="btn-out" style="flex:1;font-size:11px;color:var(--red);border-color:#FECACA;">Close Plan</button></div>
+          </div>
+
+          <!-- Home Admission prescribed -->
+          <div style="background:#fff;border:2px solid rgba(220,38,38,.3);border-radius:14px;padding:15px;position:relative;overflow:hidden;">
+            <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#DC2626,#EF4444);"></div>
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:11px;">
+              <div><div style="font-size:10px;font-weight:700;color:#DC2626;letter-spacing:.5px;margin-bottom:3px;">TIER 3 · HOME ADMISSION · PENDING PATIENT ACCEPTANCE</div><div style="font-family:'Sora',sans-serif;font-size:15px;font-weight:800;color:var(--navy);">30-Day Home Admission — Muhammad Ali</div><div style="font-size:11px;color:var(--warm2);margin-top:2px;">24/7 ICU-trained nursing · Daily video review · AED 8,400 total</div></div>
+              <div class="tag-warn">⏳ Awaiting acceptance</div>
+            </div>
+            <div style="background:#FEF2F2;border-radius:10px;padding:10px 12px;font-size:11px;color:#7F1010;margin-bottom:10px;line-height:1.6;border-left:3px solid #DC2626;"><b>Clinical Justification:</b> Stage 2 hypertensive crisis (BP 180/112 on 3 consecutive days), HbA1c 9.2%, compromised mobility. Requires 24/7 supervised home nursing with daily physician review.</div>
+            <div style="display:flex;gap:8px;"><button class="btn-out" style="flex:1;font-size:11px;">Rescind Prescription</button><button class="btn-red" style="flex:1;font-size:11px;">📞 Call Patient to Discuss</button></div>
+          </div>
+        </div>
+
+        <!-- New care plan form -->
+        <div class="card-gold">
+          <div class="sec-title" style="margin-bottom:12px;">➕ Prescribe New Care Plan</div>
+          <div class="grid2" style="margin-bottom:12px;">
+            <div><div style="font-size:11px;font-weight:700;color:var(--warm2);margin-bottom:5px;">PATIENT</div><select class="inp" style="height:36px;"><option>Muhammad Ali — MRN 226589</option></select></div>
+            <div><div style="font-size:11px;font-weight:700;color:var(--warm2);margin-bottom:5px;">PLAN TYPE</div><select class="inp" style="height:36px;"><option>Subscription Plan (Tier 2)</option><option>Home Admission (Tier 3)</option></select></div>
+          </div>
+          <div class="grid2" style="margin-bottom:10px;">
+            <div><div style="font-size:11px;font-weight:700;color:var(--warm2);margin-bottom:5px;">SERVICE</div><select class="inp" style="height:36px;"><option>Home Nursing</option><option>RPM Monitoring</option><option>Physiotherapy</option></select></div>
+            <div><div style="font-size:11px;font-weight:700;color:var(--warm2);margin-bottom:5px;">DURATION</div><select class="inp" style="height:36px;"><option>14 days</option><option>30 days</option><option>90 days</option></select></div>
+          </div>
+          <div style="margin-bottom:10px;"><div style="font-size:11px;font-weight:700;color:var(--warm2);margin-bottom:5px;">CLINICAL JUSTIFICATION</div><textarea class="inp" style="height:60px;resize:none;" placeholder="Enter clinical reasoning for this care plan..."></textarea></div>
+          <div style="display:flex;gap:8px;"><button class="btn-navy" style="flex:1;">🤖 AI Suggest Protocol</button><button class="btn-gold" style="flex:1;">📋 Prescribe Plan</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="sl"><div class="sn">🩺 Screen 5</div><div class="st">Care Plans · Active Subscription + Home Admission · Prescribe New</div></div>
+</div>
+
+</div><!-- end row -->
+
+<!-- SECTION DIVIDER -->
+<div class="sdiv"><div class="sdl"></div><div class="sdt">SCREENS 6 – 8</div><div class="sdl"></div></div>
+
+<!-- ROW: Screens 6, 7, 8 -->
+<div class="row">
+
+<!-- ═══════════════ SCREEN 6 — e-PRESCRIPTIONS ═══════════════ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="browser" style="width:660px;max-width:calc(100vw - 48px);">
+  <div class="bbar"><div class="bdots"><div class="bdot" style="background:#FF5F57;"></div><div class="bdot" style="background:#FFBD2E;"></div><div class="bdot" style="background:#28C840;"></div></div><div class="burl"><span>🔒</span> portal.homehealthcare.ae/doctor/prescriptions/new</div><div class="bacts"><div class="bact">🔔</div></div></div>
+  <div class="inner with-sidebar" style="min-height:640px;">
+    <div class="sidebar">
+      <div class="sb-logo"><div class="sb-logo-name">🏥 HomeHealthcare</div><div class="sb-logo-sub">Doctor Portal</div></div>
+      <div class="sb-profile"><div class="sb-avatar">BH</div><div><div class="sb-name">Dr. Bilal Hussain</div><div class="sb-role">Cardiologist</div></div></div>
+      <div class="sb-nav">
+        <div class="sb-group">CLINICAL</div>
+        <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/></svg><span class="nav-label">Dashboard</span></div>
+        <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/></svg><span class="nav-label">Patient Queue</span></div>
+        <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span class="nav-label">Care Plans</span></div>
+        <div class="nav-item active"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#C8995A" stroke-width="2" stroke-linecap="round"><rect x="9" y="2" width="6" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg><span class="nav-label" style="color:var(--gold);font-weight:700;">e-Prescriptions</span></div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="topbar"><div><div class="topbar-title">Write e-Prescription</div><div class="topbar-sub">Muhammad Ali · MRN 226589 · AI drug interaction check enabled</div></div><div class="tag-green">● AI Interaction Check: Active</div></div>
+      <div class="content">
+        <!-- Drug interaction warning -->
+        <div style="background:#FEF3C7;border:1.5px solid #FCD34D;border-radius:12px;padding:12px 14px;margin-bottom:16px;display:flex;gap:10px;align-items:flex-start;">
+          <div style="font-size:18px;flex-shrink:0;">🤖</div>
+          <div><div style="font-size:12px;font-weight:800;color:#92400E;margin-bottom:4px;">AI Drug Interaction Alert</div><div style="font-size:11px;color:#A16207;line-height:1.6;">Lisinopril (new) + Metformin (existing) — <b>Minor interaction detected</b>. Monitor renal function. Lisinopril may enhance hypoglycaemic effect of Metformin. Not contraindicated but requires monitoring.</div></div>
+        </div>
+
+        <!-- New drug being written -->
+        <div class="card-gold" style="margin-bottom:14px;">
+          <div class="sec-title" style="margin-bottom:12px;">💊 New Medication</div>
+          <div class="grid2" style="margin-bottom:10px;">
+            <div><div style="font-size:11px;font-weight:700;color:var(--warm2);margin-bottom:5px;">DRUG NAME</div><input class="inp" value="Lisinopril" placeholder="Search drug name..."/></div>
+            <div><div style="font-size:11px;font-weight:700;color:var(--warm2);margin-bottom:5px;">STRENGTH</div><input class="inp" value="5 mg"/></div>
+          </div>
+          <div class="grid2" style="margin-bottom:10px;">
+            <div><div style="font-size:11px;font-weight:700;color:var(--warm2);margin-bottom:5px;">ROUTE</div><select class="inp" style="height:36px;"><option>Oral (PO)</option></select></div>
+            <div><div style="font-size:11px;font-weight:700;color:var(--warm2);margin-bottom:5px;">FREQUENCY</div><select class="inp" style="height:36px;"><option>Once daily (OD)</option><option>Twice daily (BD)</option></select></div>
+          </div>
+          <div class="grid2" style="margin-bottom:10px;">
+            <div><div style="font-size:11px;font-weight:700;color:var(--warm2);margin-bottom:5px;">DURATION</div><input class="inp" value="30 days"/></div>
+            <div><div style="font-size:11px;font-weight:700;color:var(--warm2);margin-bottom:5px;">QUANTITY</div><input class="inp" value="30 tablets"/></div>
+          </div>
+          <div style="margin-bottom:10px;"><div style="font-size:11px;font-weight:700;color:var(--warm2);margin-bottom:5px;">INSTRUCTIONS</div><input class="inp" value="Take in the morning with water. Monitor BP and renal function after 2 weeks."/></div>
+          <div style="display:flex;gap:8px;"><button class="btn-navy" style="flex:1;">+ Add Another Drug</button><button class="btn-gold" style="flex:1;">✓ Add to Prescription</button></div>
+        </div>
+
+        <!-- Current prescription -->
+        <div class="card" style="margin-bottom:14px;">
+          <div class="sec-title" style="margin-bottom:11px;">📋 Current Prescription Items (3 drugs)</div>
+          <div style="display:flex;flex-direction:column;gap:7px;">
+            <div style="display:flex;gap:10px;align-items:center;padding:9px 11px;background:var(--cream);border-radius:10px;"><div style="flex:1;font-size:12px;color:var(--navy);"><b>Amlodipine 10mg</b> — Once daily AM · Continuing</div><div class="tag-green">Existing</div><button style="background:var(--cream2);border:none;border-radius:7px;padding:4px 10px;font-size:10px;font-weight:700;color:var(--warm);font-family:'Nunito',sans-serif;cursor:pointer;">Edit</button></div>
+            <div style="display:flex;gap:10px;align-items:center;padding:9px 11px;background:var(--cream);border-radius:10px;"><div style="flex:1;font-size:12px;color:var(--navy);"><b>Metformin 1000mg</b> — Twice daily · <span style="color:var(--amb);">Dose increased</span></div><div class="tag-warn">Modified</div><button style="background:var(--cream2);border:none;border-radius:7px;padding:4px 10px;font-size:10px;font-weight:700;color:var(--warm);font-family:'Nunito',sans-serif;cursor:pointer;">Edit</button></div>
+            <div style="display:flex;gap:10px;align-items:center;padding:9px 11px;background:#FFFBEB;border-radius:10px;border:1px solid #FDE68A;"><div style="flex:1;font-size:12px;color:var(--navy);"><b>Lisinopril 5mg</b> — Once daily AM · New addition</div><div class="tag-blue">New</div><button style="background:#FEF3C7;border:none;border-radius:7px;padding:4px 10px;font-size:10px;font-weight:700;color:var(--amb);font-family:'Nunito',sans-serif;cursor:pointer;">Remove</button></div>
+          </div>
+        </div>
+
+        <!-- Sign + send -->
+        <div style="display:flex;gap:10px;"><button class="btn-navy" style="flex:1;padding:12px;">🖊 Sign with Digital Signature</button><button class="btn-gold" style="flex:1;padding:12px;">📤 Send to Patient + Pharmacy</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="sl"><div class="sn">🩺 Screen 6</div><div class="st">e-Prescriptions · Drug Search · AI Interaction Check · Sign + Send</div></div>
+</div>
+
+<!-- ═══════════════ SCREEN 7 — RPM ALERTS DASHBOARD ═══════════════ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="browser" style="width:660px;max-width:calc(100vw - 48px);">
+  <div class="bbar"><div class="bdots"><div class="bdot" style="background:#FF5F57;"></div><div class="bdot" style="background:#FFBD2E;"></div><div class="bdot" style="background:#28C840;"></div></div><div class="burl"><span>🔒</span> portal.homehealthcare.ae/doctor/rpm-alerts</div><div class="bacts"><div class="bact">🔔</div></div></div>
+  <div class="inner with-sidebar" style="min-height:640px;">
+    <div class="sidebar">
+      <div class="sb-logo"><div class="sb-logo-name">🏥 HomeHealthcare</div><div class="sb-logo-sub">Doctor Portal</div></div>
+      <div class="sb-profile"><div class="sb-avatar">BH</div><div><div class="sb-name">Dr. Bilal Hussain</div><div class="sb-role">Cardiologist</div></div></div>
+      <div class="sb-nav">
+        <div class="sb-group">CLINICAL</div>
+        <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/></svg><span class="nav-label">Dashboard</span></div>
+        <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/></svg><span class="nav-label">Patient Queue</span></div>
+        <div class="nav-item active"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#C8995A" stroke-width="2" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg><span class="nav-label" style="color:var(--gold);font-weight:700;">RPM Alerts</span><div class="nav-badge nb-red">3</div></div>
+        <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><span class="nav-label">AI Audit Log</span></div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="topbar">
+        <div><div class="topbar-title">RPM Alert Dashboard</div><div class="topbar-sub">Real-time patient monitoring · 12 active patients · Auto-refresh every 60s</div></div>
+        <div style="display:flex;gap:8px;align-items:center;"><div style="display:flex;align-items:center;gap:5px;background:#DCFCE7;border-radius:99px;padding:5px 12px;"><div style="width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 1.4s infinite;"></div><span style="font-size:10px;font-weight:700;color:var(--green);">LIVE</span></div><button class="btn-out">Filter</button></div>
+      </div>
+      <div class="content">
+        <!-- Alert summary bar -->
+        <div class="grid3" style="margin-bottom:16px;">
+          <div style="background:#FEF2F2;border:1.5px solid #FECACA;border-radius:12px;padding:12px;text-align:center;"><div style="font-family:'Sora',sans-serif;font-size:24px;font-weight:800;color:var(--red);">3</div><div style="font-size:11px;color:#9A5050;margin-top:3px;">Critical alerts</div></div>
+          <div style="background:#FEF3C7;border:1.5px solid #FCD34D;border-radius:12px;padding:12px;text-align:center;"><div style="font-family:'Sora',sans-serif;font-size:24px;font-weight:800;color:var(--amb);">4</div><div style="font-size:11px;color:#8A5A00;margin-top:3px;">Warning alerts</div></div>
+          <div style="background:#DCFCE7;border:1.5px solid #6EE7B7;border-radius:12px;padding:12px;text-align:center;"><div style="font-family:'Sora',sans-serif;font-size:24px;font-weight:800;color:var(--green);">5</div><div style="font-size:11px;color:#15803D;margin-top:3px;">Normal readings</div></div>
+        </div>
+
+        <!-- Critical alerts -->
+        <div class="sec-title" style="margin-bottom:10px;color:var(--red);">🚨 Critical — Immediate Action Required</div>
+        <div style="display:flex;flex-direction:column;gap:9px;margin-bottom:18px;">
+          <div class="card-red">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;"><div style="font-size:13px;font-weight:800;color:var(--navy);">Muhammad Ali · MRN 226589</div><div style="display:flex;gap:5px;"><div class="tag-red">Critical · BP</div><div style="font-size:9px;color:var(--warm2);">08:15 AM</div></div></div>
+            <div style="background:var(--cream);border-radius:9px;padding:9px 11px;margin-bottom:9px;display:flex;gap:14px;">
+              <div style="text-align:center;"><div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--red);">168/102</div><div style="font-size:9px;color:var(--warm2);">BP mmHg</div></div>
+              <div style="text-align:center;"><div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--green);">72</div><div style="font-size:9px;color:var(--warm2);">HR bpm</div></div>
+              <div style="text-align:center;"><div style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:var(--green);">97%</div><div style="font-size:9px;color:var(--warm2);">SpO₂</div></div>
+              <div style="flex:1;font-size:11px;color:#7F1010;line-height:1.5;text-align:left;">3rd consecutive day BP elevated. Trending upward (118→158→168). Headache reported. Immediate intervention required.</div>
+            </div>
+            <div style="display:flex;gap:7px;"><button class="btn-red" style="flex:1;padding:8px;font-size:11px;">📞 Call Patient Now</button><button class="btn-navy" style="flex:1;padding:8px;font-size:11px;">💊 Adjust Medication</button><button class="btn-out" style="flex:1;padding:7px;font-size:11px;">🏥 Order Home Admission</button></div>
+          </div>
+          <div class="card-red" style="opacity:.85;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:8px;"><div style="font-size:13px;font-weight:800;color:var(--navy);">Khalid Rahman · MRN 211003</div><div class="tag-red">Critical · SpO₂</div></div>
+            <div style="font-size:11px;color:#7F1010;margin-bottom:8px;">SpO₂ dropped to 88% · Chest pain reported · Cardiac history · Auto-alert sent to ER</div>
+            <div style="display:flex;gap:7px;"><button class="btn-red" style="flex:1;padding:8px;font-size:11px;">📞 Emergency Call</button><button class="btn-out" style="flex:1;padding:7px;font-size:11px;">📋 View EMR</button></div>
+          </div>
+        </div>
+
+        <!-- Warning alerts -->
+        <div class="sec-title" style="margin-bottom:10px;color:var(--amb);">⚠️ Warning — Review When Possible</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div class="card" style="border-color:#FCD34D;display:flex;gap:10px;align-items:center;padding:12px;">
+            <div style="flex:1;"><div style="font-size:12px;font-weight:700;color:var(--navy);">Fatima Malik</div><div style="font-size:11px;color:var(--warm2);margin-top:2px;">Glucose 178 mg/dL post-meal · 3rd consecutive day · Diabetes management review needed</div></div>
+            <div class="tag-warn">Warning</div>
+            <button class="btn-out" style="padding:6px 12px;font-size:11px;flex-shrink:0;">Review</button>
+          </div>
+          <div class="card" style="border-color:#BFDBFE;display:flex;gap:10px;align-items:center;padding:12px;">
+            <div style="flex:1;"><div style="font-size:12px;font-weight:700;color:var(--navy);">Ahmed Hassan</div><div style="font-size:11px;color:var(--warm2);margin-top:2px;">No BP reading for 28 hours · Patient may have missed readings · Nurse follow-up scheduled</div></div>
+            <div class="tag-blue">Missed</div>
+            <button class="btn-out" style="padding:6px 12px;font-size:11px;flex-shrink:0;">Follow Up</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="sl"><div class="sn">🩺 Screen 7</div><div class="st">RPM Alerts · Critical / Warning / Normal · Live Dashboard · Action Buttons</div></div>
+</div>
+
+</div><!-- end row -->
+
+<!-- SECTION DIVIDER -->
+<div class="sdiv"><div class="sdl"></div><div class="sdt">SCREENS 8 – 10</div><div class="sdl"></div></div>
+
+<!-- ROW: Screens 8, 9, 10 -->
+<div class="row">
+
+<!-- ═══════════════ SCREEN 8 — AI AUDIT LOG ═══════════════ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="browser" style="width:620px;max-width:calc(100vw - 48px);">
+  <div class="bbar"><div class="bdots"><div class="bdot" style="background:#FF5F57;"></div><div class="bdot" style="background:#FFBD2E;"></div><div class="bdot" style="background:#28C840;"></div></div><div class="burl"><span>🔒</span> portal.homehealthcare.ae/doctor/ai-audit</div><div class="bacts"><div class="bact">🔔</div></div></div>
+  <div class="inner with-sidebar" style="min-height:600px;">
+    <div class="sidebar">
+      <div class="sb-logo"><div class="sb-logo-name">🏥 HomeHealthcare</div><div class="sb-logo-sub">Doctor Portal</div></div>
+      <div class="sb-profile"><div class="sb-avatar">BH</div><div><div class="sb-name">Dr. Bilal Hussain</div><div class="sb-role">Cardiologist</div></div></div>
+      <div class="sb-nav">
+        <div class="sb-group">INTELLIGENCE</div>
+        <div class="nav-item active"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#C8995A" stroke-width="2" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><span class="nav-label" style="color:var(--gold);font-weight:700;">AI Audit Log</span><div class="nav-badge nb-v">New</div></div>
+        <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span class="nav-label">Analytics</span></div>
+        <div class="sb-group">CLINICAL</div>
+        <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/></svg><span class="nav-label">Dashboard</span></div>
+        <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg><span class="nav-label">RPM Alerts</span></div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="topbar"><div><div class="topbar-title">AI Audit Log</div><div class="topbar-sub">All AI-generated recommendations, triage decisions, and care plan suggestions — doctor review required</div></div><div style="font-size:11px;font-weight:700;color:var(--v);background:#EDE9FE;padding:5px 12px;border-radius:99px;">12 pending review</div></div>
+      <div class="content">
+        <!-- What is this -->
+        <div style="background:#EDE9FE;border:1.5px solid #DDD0FF;border-radius:12px;padding:12px 14px;margin-bottom:16px;display:flex;gap:10px;align-items:center;">
+          <div style="font-size:18px;flex-shrink:0;">🤖</div>
+          <div><div style="font-size:12px;font-weight:800;color:#4C1D95;margin-bottom:3px;">AI Clinical Decision Support</div><div style="font-size:11px;color:#6D3BD0;line-height:1.6;">The AI Engine has analysed patient data and generated the recommendations below. Each item requires your review before it is actioned. AI never acts autonomously on clinical decisions.</div></div>
+        </div>
+
+        <!-- AI log entries -->
+        <div style="display:flex;flex-direction:column;gap:10px;">
+
+          <!-- Entry 1: Care plan suggested -->
+          <div class="card-gold" style="border-color:#DDD0FF;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:9px;">
+              <div style="display:flex;align-items:center;gap:8px;"><div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#7C3AED,#A78BFA);display:flex;align-items:center;justify-content:center;font-size:13px;">🤖</div><div><div style="font-size:12px;font-weight:800;color:var(--navy);">Care Plan Recommendation</div><div style="font-size:10px;color:var(--warm2);">Muhammad Ali · Today 07:30 AM</div></div></div>
+              <div style="display:flex;gap:5px;"><div style="background:#EDE9FE;color:#7C3AED;font-size:9px;font-weight:800;padding:3px 9px;border-radius:99px;">Pending Review</div></div>
+            </div>
+            <div style="background:var(--cream);border-radius:9px;padding:10px 12px;margin-bottom:10px;border-left:3px solid #7C3AED;font-size:11px;color:var(--navy);line-height:1.7;"><b>AI Reasoning:</b> Patient BP trending 118→168 mmHg over 7 days. HbA1c 9.2% (uncontrolled). Missed medications 3× this week. Suggests <b>Home Admission (30-day) with 24/7 nurse supervision, daily RPM review, and medication adjustment protocol.</b></div>
+            <div style="display:flex;gap:8px;"><button class="btn-gold" style="flex:1;padding:8px;font-size:11px;">✓ Approve &amp; Prescribe</button><button style="flex:1;background:#EDE9FE;color:#7C3AED;border:none;border-radius:9px;padding:8px;font-size:11px;font-weight:700;font-family:'Nunito',sans-serif;cursor:pointer;">✏️ Modify First</button><button class="btn-out" style="flex:1;padding:7px;font-size:11px;color:var(--red);border-color:#FECACA;">✕ Decline</button></div>
+          </div>
+
+          <!-- Entry 2: Rx suggestion -->
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:9px;">
+              <div style="display:flex;align-items:center;gap:8px;"><div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#047A40,#059669);display:flex;align-items:center;justify-content:center;font-size:13px;">🤖</div><div><div style="font-size:12px;font-weight:800;color:var(--navy);">Medication Adjustment Suggestion</div><div style="font-size:10px;color:var(--warm2);">Sara Khalid · Yesterday 4:15 PM</div></div></div>
+              <div class="tag-green">Approved by you</div>
+            </div>
+            <div style="background:var(--cream);border-radius:9px;padding:9px 11px;border-left:3px solid var(--green);font-size:11px;color:var(--navy);line-height:1.6;">AI suggested: Increase Metformin from 500mg → 1000mg BD given HbA1c 7.8% not improving. <b>You approved: ✓ Apr 1, 2026 · 10:22 AM</b></div>
+          </div>
+
+          <!-- Entry 3: Lab recommendation -->
+          <div class="card" style="border-color:#BFDBFE;">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:9px;">
+              <div style="display:flex;align-items:center;gap:8px;"><div style="width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#1148A4,#2273E8);display:flex;align-items:center;justify-content:center;font-size:13px;">🤖</div><div><div style="font-size:12px;font-weight:800;color:var(--navy);">Diagnostic Test Recommendation</div><div style="font-size:10px;color:var(--warm2);">Muhammad Ali · Today 08:30 AM</div></div></div>
+              <div style="background:#EDE9FE;color:#7C3AED;font-size:9px;font-weight:800;padding:3px 9px;border-radius:99px;">Pending</div>
+            </div>
+            <div style="background:var(--cream);border-radius:9px;padding:9px 11px;border-left:3px solid var(--blue);font-size:11px;color:var(--navy);line-height:1.6;">AI suggests: HbA1c test overdue (last: 5 weeks ago). Renal function panel (eGFR, creatinine) recommended due to new Lisinopril addition. Suggest lab visit Apr 5.</div>
+            <div style="display:flex;gap:8px;margin-top:9px;"><button class="btn-navy" style="flex:1;padding:7px;font-size:11px;">✓ Order Lab Tests</button><button class="btn-out" style="flex:1;padding:6px;font-size:11px;">✕ Skip</button></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="sl"><div class="sn">🩺 Screen 8</div><div class="st">AI Audit Log · AI Recommendations · Doctor Approve / Modify / Decline</div></div>
+</div>
+
+<!-- ═══════════════ SCREEN 9 — ANALYTICS ═══════════════ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="browser" style="width:620px;max-width:calc(100vw - 48px);">
+  <div class="bbar"><div class="bdots"><div class="bdot" style="background:#FF5F57;"></div><div class="bdot" style="background:#FFBD2E;"></div><div class="bdot" style="background:#28C840;"></div></div><div class="burl"><span>🔒</span> portal.homehealthcare.ae/doctor/analytics</div><div class="bacts"><div class="bact">🔔</div></div></div>
+  <div class="inner with-sidebar" style="min-height:600px;">
+    <div class="sidebar">
+      <div class="sb-logo"><div class="sb-logo-name">🏥 HomeHealthcare</div><div class="sb-logo-sub">Doctor Portal</div></div>
+      <div class="sb-profile"><div class="sb-avatar">BH</div><div><div class="sb-name">Dr. Bilal Hussain</div><div class="sb-role">Cardiologist</div></div></div>
+      <div class="sb-nav">
+        <div class="sb-group">INTELLIGENCE</div>
+        <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg><span class="nav-label">AI Audit Log</span></div>
+        <div class="nav-item active"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#C8995A" stroke-width="2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span class="nav-label" style="color:var(--gold);font-weight:700;">Analytics</span></div>
+        <div class="sb-group">CLINICAL</div>
+        <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/></svg><span class="nav-label">Dashboard</span></div>
+        <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/></svg><span class="nav-label">Schedule</span></div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="topbar">
+        <div><div class="topbar-title">Clinical Analytics</div><div class="topbar-sub">April 2026 · Dr. Bilal Hussain · 42 patients under care</div></div>
+        <div style="display:flex;gap:8px;"><div style="background:var(--cream);border:1px solid var(--cream2);border-radius:8px;padding:7px 12px;font-size:11px;font-weight:700;color:var(--warm);">April 2026 ▾</div><button class="btn-out">📥 Export PDF</button></div>
+      </div>
+      <div class="content">
+        <!-- KPI row -->
+        <div class="grid3" style="margin-bottom:16px;">
+          <div class="card"><div style="font-size:10px;font-weight:600;color:var(--warm2);letter-spacing:.5px;margin-bottom:5px;">TOTAL CONSULTATIONS</div><div style="font-family:'Sora',sans-serif;font-size:26px;font-weight:800;color:var(--navy);">128</div><div style="font-size:11px;color:var(--green);margin-top:3px;">↑ 14% vs Mar</div></div>
+          <div class="card"><div style="font-size:10px;font-weight:600;color:var(--warm2);letter-spacing:.5px;margin-bottom:5px;">AVG. CONSULTATION</div><div style="font-family:'Sora',sans-serif;font-size:26px;font-weight:800;color:var(--gold);">18 min</div><div style="font-size:11px;color:var(--amb);margin-top:3px;">↓ 2 min vs last month</div></div>
+          <div class="card"><div style="font-size:10px;font-weight:600;color:var(--warm2);letter-spacing:.5px;margin-bottom:5px;">PATIENT OUTCOMES</div><div style="font-family:'Sora',sans-serif;font-size:26px;font-weight:800;color:var(--green);">88%</div><div style="font-size:11px;color:var(--green);margin-top:3px;">Improved condition</div></div>
+        </div>
+
+        <!-- Consultation type breakdown -->
+        <div class="card" style="margin-bottom:14px;">
+          <div class="sec-title" style="margin-bottom:14px;">Consultations by Type — April</div>
+          <div style="display:flex;align-items:flex-end;gap:10px;height:100px;margin-bottom:8px;padding:0 4px;">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;"><div style="width:100%;border-radius:6px 6px 0 0;background:linear-gradient(0deg,var(--navy),var(--navy2));height:85px;"></div><div style="font-size:9px;color:var(--warm2);">Tele</div><div style="font-size:10px;font-weight:700;color:var(--navy);">68</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;"><div style="width:100%;border-radius:6px 6px 0 0;background:linear-gradient(0deg,var(--gold),var(--gold2));height:55px;"></div><div style="font-size:9px;color:var(--warm2);">RPM Review</div><div style="font-size:10px;font-weight:700;color:var(--navy);">32</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;"><div style="width:100%;border-radius:6px 6px 0 0;background:linear-gradient(0deg,#7C3AED,#A78BFA);height:28px;"></div><div style="font-size:9px;color:var(--warm2);">Care Plan</div><div style="font-size:10px;font-weight:700;color:var(--navy);">18</div></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;"><div style="width:100%;border-radius:6px 6px 0 0;background:linear-gradient(0deg:#DC2626,#EF4444)" style="background:linear-gradient(0deg,#DC2626,#EF4444);height:15px;border-radius:6px 6px 0 0;width:100%;"></div><div style="font-size:9px;color:var(--warm2);">Emergency</div><div style="font-size:10px;font-weight:700;color:var(--navy);">10</div></div>
+          </div>
+        </div>
+
+        <!-- Patient outcomes + satisfaction -->
+        <div class="grid2">
+          <div class="card">
+            <div class="sec-title" style="margin-bottom:11px;">Patient Condition Improvement</div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div><div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:11px;"><span style="color:var(--navy);">BP controlled</span><span style="font-weight:700;color:var(--green);">74%</span></div><div style="height:6px;background:var(--cream2);border-radius:99px;overflow:hidden;"><div style="width:74%;height:100%;background:linear-gradient(90deg,var(--green),#22C55E);border-radius:99px;"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:11px;"><span style="color:var(--navy);">HbA1c improved</span><span style="font-weight:700;color:var(--amb);">61%</span></div><div style="height:6px;background:var(--cream2);border-radius:99px;overflow:hidden;"><div style="width:61%;height:100%;background:linear-gradient(90deg,var(--amb),#FCD34D);border-radius:99px;"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:11px;"><span style="color:var(--navy);">Wound healed</span><span style="font-weight:700;color:var(--green);">89%</span></div><div style="height:6px;background:var(--cream2);border-radius:99px;overflow:hidden;"><div style="width:89%;height:100%;background:linear-gradient(90deg,var(--green),#22C55E);border-radius:99px;"></div></div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="sec-title" style="margin-bottom:11px;">Patient Satisfaction</div>
+            <div style="text-align:center;margin-bottom:10px;"><div style="font-family:'Sora',sans-serif;font-size:38px;font-weight:800;color:var(--navy);">4.9 ⭐</div><div style="font-size:11px;color:var(--warm2);">Based on 238 reviews</div></div>
+            <div style="display:flex;flex-direction:column;gap:5px;font-size:11px;">
+              <div style="display:flex;justify-content:space-between;"><span>Communication</span><span style="font-weight:700;color:var(--green);">4.9</span></div>
+              <div style="display:flex;justify-content:space-between;"><span>Diagnosis accuracy</span><span style="font-weight:700;color:var(--green);">4.8</span></div>
+              <div style="display:flex;justify-content:space-between;"><span>Treatment outcome</span><span style="font-weight:700;color:var(--green);">4.9</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="sl"><div class="sn">🩺 Screen 9</div><div class="st">Analytics · Consultations · Patient Outcomes · Satisfaction</div></div>
+</div>
+
+<!-- ═══════════════ SCREEN 10 — SCHEDULE ═══════════════ -->
+<div style="display:flex;flex-direction:column;align-items:center;gap:10px;">
+<div class="browser" style="width:620px;max-width:calc(100vw - 48px);">
+  <div class="bbar"><div class="bdots"><div class="bdot" style="background:#FF5F57;"></div><div class="bdot" style="background:#FFBD2E;"></div><div class="bdot" style="background:#28C840;"></div></div><div class="burl"><span>🔒</span> portal.homehealthcare.ae/doctor/schedule</div><div class="bacts"><div class="bact">🔔</div></div></div>
+  <div class="inner with-sidebar" style="min-height:600px;">
+    <div class="sidebar">
+      <div class="sb-logo"><div class="sb-logo-name">🏥 HomeHealthcare</div><div class="sb-logo-sub">Doctor Portal</div></div>
+      <div class="sb-profile"><div class="sb-avatar">BH</div><div><div class="sb-name">Dr. Bilal Hussain</div><div class="sb-role">Cardiologist</div></div></div>
+      <div class="sb-nav">
+        <div class="sb-group">PLANNING</div>
+        <div class="nav-item active"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#C8995A" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span class="nav-label" style="color:var(--gold);font-weight:700;">Schedule</span></div>
+        <div class="sb-group">CLINICAL</div>
+        <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7" rx="1"/></svg><span class="nav-label">Dashboard</span></div>
+        <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/></svg><span class="nav-label">Patient Queue</span></div>
+        <div class="nav-item"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.45)" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2"/></svg><span class="nav-label">Telemedicine</span></div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="topbar">
+        <div><div class="topbar-title">My Schedule</div><div class="topbar-sub">Week of April 2–6, 2026 · 24 appointments · 4 slots available</div></div>
+        <div style="display:flex;gap:8px;"><button class="btn-out">Set Availability</button><button class="btn-navy">+ New Appointment</button></div>
+      </div>
+      <div class="content">
+        <!-- Week nav -->
+        <div style="display:flex;gap:6px;margin-bottom:16px;overflow-x:auto;">
+          <div style="flex-shrink:0;text-align:center;padding:10px 12px;border-radius:12px;background:var(--cream);border:1.5px solid var(--cream2);cursor:pointer;min-width:58px;"><div style="font-size:9px;font-weight:700;color:var(--warm2);">MON</div><div style="font-family:'Sora',sans-serif;font-size:17px;font-weight:800;color:var(--navy);">2</div><div style="font-size:9px;color:var(--warm2);margin-top:1px;">5 appts</div></div>
+          <div style="flex-shrink:0;text-align:center;padding:10px 12px;border-radius:12px;background:var(--navy);border:none;cursor:pointer;min-width:58px;box-shadow:0 4px 14px rgba(27,58,107,.28);"><div style="font-size:9px;font-weight:700;color:rgba(255,255,255,.6);">TUE</div><div style="font-family:'Sora',sans-serif;font-size:17px;font-weight:800;color:#fff;">3</div><div style="font-size:9px;color:var(--gold);margin-top:1px;font-weight:700;">Today</div></div>
+          <div style="flex-shrink:0;text-align:center;padding:10px 12px;border-radius:12px;background:var(--cream);border:1.5px solid var(--cream2);cursor:pointer;min-width:58px;"><div style="font-size:9px;font-weight:700;color:var(--warm2);">WED</div><div style="font-family:'Sora',sans-serif;font-size:17px;font-weight:800;color:var(--navy);">4</div><div style="font-size:9px;color:var(--warm2);margin-top:1px;">6 appts</div></div>
+          <div style="flex-shrink:0;text-align:center;padding:10px 12px;border-radius:12px;background:var(--cream);border:1.5px solid var(--cream2);cursor:pointer;min-width:58px;"><div style="font-size:9px;font-weight:700;color:var(--warm2);">THU</div><div style="font-family:'Sora',sans-serif;font-size:17px;font-weight:800;color:var(--navy);">5</div><div style="font-size:9px;color:var(--warm2);margin-top:1px;">4 appts</div></div>
+          <div style="flex-shrink:0;text-align:center;padding:10px 12px;border-radius:12px;background:var(--cream);border:1.5px solid var(--cream2);cursor:pointer;min-width:58px;"><div style="font-size:9px;font-weight:700;color:var(--warm2);">FRI</div><div style="font-family:'Sora',sans-serif;font-size:17px;font-weight:800;color:var(--navy);">6</div><div style="font-size:9px;color:var(--green);margin-top:1px;">2 slots</div></div>
+        </div>
+
+        <!-- Today's appointments -->
+        <div class="sec-title" style="margin-bottom:11px;">Tuesday, April 3 — Today's Appointments</div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;gap:10px;align-items:center;padding:11px 13px;background:var(--cream);border-radius:12px;border-left:3px solid var(--cream2);opacity:.7;"><div style="font-size:10px;font-weight:700;color:var(--warm2);flex-shrink:0;width:52px;">08:00</div><div style="width:32px;height:32px;border-radius:9px;background:#EDE5D5;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--warm);flex-shrink:0;">SK</div><div style="flex:1;"><div style="font-size:12px;font-weight:700;color:var(--navy);">Sara Khalid</div><div style="font-size:10px;color:var(--warm2);">Tele-consult · HbA1c review · 20 min</div></div><div class="tag-green">Completed</div></div>
+          <div style="display:flex;gap:10px;align-items:center;padding:11px 13px;background:#FEF2F2;border-radius:12px;border-left:3px solid var(--red);"><div style="font-size:10px;font-weight:700;color:var(--red);flex-shrink:0;width:52px;">09:00</div><div style="width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--red),#EF4444);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0;">MA</div><div style="flex:1;"><div style="font-size:12px;font-weight:800;color:var(--navy);">Muhammad Ali</div><div style="font-size:10px;color:#9A5050;">URGENT · BP crisis · RPM-triggered consultation</div></div><div class="tag-red">🚨 Now</div></div>
+          <div style="display:flex;gap:10px;align-items:center;padding:11px 13px;background:#FFF8EE;border-radius:12px;border-left:3px solid var(--gold);"><div style="font-size:10px;font-weight:700;color:var(--gold);flex-shrink:0;width:52px;">10:30</div><div style="width:32px;height:32px;border-radius:9px;background:#EDE5D5;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--warm);flex-shrink:0;">AH</div><div style="flex:1;"><div style="font-size:12px;font-weight:700;color:var(--navy);">Ahmed Hassan</div><div style="font-size:10px;color:var(--warm2);">Post-discharge follow-up · 15 min</div></div><div class="tag-gold">Next</div></div>
+          <div style="display:flex;gap:10px;align-items:center;padding:11px 13px;background:var(--cream);border-radius:12px;border-left:3px solid var(--cream2);opacity:.8;"><div style="font-size:10px;font-weight:700;color:var(--warm2);flex-shrink:0;width:52px;">11:00</div><div style="width:32px;height:32px;border-radius:9px;background:#EDE5D5;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--warm);flex-shrink:0;">FM</div><div style="flex:1;"><div style="font-size:12px;font-weight:700;color:var(--navy);">Fatima Malik</div><div style="font-size:10px;color:var(--warm2);">Diabetes management review · 20 min</div></div><div class="tag-blue">Scheduled</div></div>
+          <!-- Available slot -->
+          <div style="display:flex;gap:10px;align-items:center;padding:11px 13px;background:#F0FDF4;border-radius:12px;border:1.5px dashed #6EE7B7;cursor:pointer;"><div style="font-size:10px;font-weight:700;color:var(--green);flex-shrink:0;width:52px;">12:00</div><div style="flex:1;font-size:12px;font-weight:600;color:var(--green);">+ Available Slot · Click to book</div><button class="btn-green" style="padding:6px 12px;font-size:11px;flex-shrink:0;">Book</button></div>
+          <div style="display:flex;gap:10px;align-items:center;padding:11px 13px;background:var(--cream);border-radius:12px;border-left:3px solid var(--cream2);opacity:.75;"><div style="font-size:10px;font-weight:700;color:var(--warm2);flex-shrink:0;width:52px;">14:00</div><div style="width:32px;height:32px;border-radius:9px;background:#EDE5D5;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--warm);flex-shrink:0;">ZA</div><div style="flex:1;"><div style="font-size:12px;font-weight:700;color:var(--navy);">Zaid Amer</div><div style="font-size:10px;color:var(--warm2);">New patient intake · Cardiac workup · 30 min</div></div><div class="tag-blue">Scheduled</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="sl"><div class="sn">🩺 Screen 10</div><div class="st">Schedule · Week View · Appointment States · Available Slots</div></div>
+</div>
+
+</div><!-- end row 3 -->
+
+</body>
+</html>
